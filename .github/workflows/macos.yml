@@ -1,0 +1,41 @@
+name: Manual native app verification
+on:
+  workflow_dispatch:
+    inputs:
+      runner:
+        description: 'Runner image (artifact label is detected from actual machine)'
+        required: true
+        type: choice
+        default: macos-14
+        options:
+          - macos-14
+          - macos-15
+          - macos-15-intel
+permissions:
+  contents: read
+concurrency:
+  group: macos-${{ github.ref }}-${{ inputs.runner }}
+  cancel-in-progress: true
+jobs:
+  native:
+    runs-on: ${{ inputs.runner }}
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.14'
+      - name: Build, native tests, relocation and real embedded fixture smoke
+        env:
+          PYTHON: python
+        run: bash scripts/build-macos.sh
+      - name: Retain local development artifacts and exact build evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: local-development-${{ runner.arch }}-${{ github.sha }}
+          path: |
+            build/macos-*/verified.*/*.zip
+            build/macos-*/verified.*/*.sha256
+            build/macos-*/verified.*/zudo-stl-fix.app/Contents/Resources/BUILD-INFO.txt
+          retention-days: 7
+          if-no-files-found: error

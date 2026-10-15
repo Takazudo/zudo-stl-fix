@@ -29,7 +29,6 @@ from typing import Any
 try:
     import numpy as np
     import scipy
-    from scipy.spatial import cKDTree
     import trimesh
     import shapely
     from shapely.geometry import Polygon
@@ -38,6 +37,10 @@ except ImportError as exc:
 
 VERSION = "1.0.0"
 DTYPE = np.dtype([("normal", "<f4", (3,)), ("verts", "<f4", (3, 3)), ("attr", "<u2")])
+
+
+class ResourceLimit(ValueError):
+    """A bounded scan/parser could not finish; never a clean audit."""
 
 
 class UnsafeRepair(ValueError):
@@ -62,11 +65,13 @@ def index_triangles(triangles: Any) -> Any:
     return trimesh.Trimesh(vertices, inverse.reshape(-1, 3), process=False)
 
 
-def load_stl_bytes(raw: bytes) -> STL:
+def load_stl_bytes(raw: bytes, max_faces: int | None = None) -> STL:
     """Strict binary or line-oriented ASCII parser; no tolerance-based welding."""
     if len(raw) >= 84:
         count = struct.unpack_from("<I", raw, 80)[0]
         if len(raw) == 84 + 50 * count:
+            if max_faces is not None and count > max_faces:
+                raise ResourceLimit("Binary STL exceeds the face limit")
             data = np.frombuffer(raw, DTYPE, count=count, offset=84)
             return STL(index_triangles(data["verts"]), data["normal"].astype(float), raw, "binary STL")
     # An ASCII STL is parsed explicitly rather than asking a loader to repair it.
@@ -104,6 +109,8 @@ def load_stl_bytes(raw: bytes) -> STL:
                 tri.append([float(x) for x in row[1:]])
             if [s.lower() for s in lines[i+5]] != ["endloop"] or [s.lower() for s in lines[i+6]] != ["endfacet"]:
                 raise ValueError("Missing ASCII endloop/endfacet")
+            if max_faces is not None and len(triangles) >= max_faces:
+                raise ResourceLimit("ASCII STL exceeds the face limit")
             triangles.append(tri)
             normals.append(normal)
             i += 7
@@ -264,7 +271,7 @@ def classify_pair(ex: ExactMesh, i: int, j: int):
 
 def intersections(mesh, max_faces=20_000, max_pairs=2_000_000):
     if len(mesh.faces) > max_faces:
-        raise ValueError(f"Exact scan limit: {len(mesh.faces)} faces exceeds --max-faces {max_faces}; NOT certified clean")
+        raise ResourceLimit(f"Exact scan limit: {len(mesh.faces)} faces exceeds --max-faces {max_faces}; NOT certified clean")
     ex = ExactMesh(mesh)
     lo, hi = mesh.triangles.min(axis=1), mesh.triangles.max(axis=1)
     defects, candidates = [], 0
@@ -272,7 +279,7 @@ def intersections(mesh, max_faces=20_000, max_pairs=2_000_000):
         js = np.flatnonzero(np.all(lo[i] <= hi[i+1:], axis=1) & np.all(hi[i] >= lo[i+1:], axis=1)) + i+1
         candidates += len(js)
         if candidates > max_pairs:
-            raise ValueError(f"Exact scan exceeds --max-pairs {max_pairs}; NOT certified clean")
+            raise ResourceLimit(f"Exact scan exceeds --max-pairs {max_pairs}; NOT certified clean")
         for j in js:
             item = classify_pair(ex, i, int(j))
             if item:
@@ -578,9 +585,11 @@ def collapse_tiny_edges(mesh, tolerance):
     """Opt-in only: merge short EXISTING edges, not arbitrary close opposing walls."""
     if tolerance <= 0:
         return mesh.copy(), {"tolerance": 0.0, "vertices_merged": 0, "maximum_vertex_displacement": 0.0}
-    pairs = cKDTree(mesh.vertices).query_pairs(tolerance, output_type="ndarray")
-    adjacent = {tuple(sorted(map(int, edge))) for edge in mesh.edges_unique}
-    pairs = sorted(tuple(map(int, p)) for p in pairs if tuple(map(int, p)) in adjacent)
+    # Only existing edges are eligible. Enumerating every nearby vertex pair
+    # first can allocate quadratic memory even though nonedges are discarded.
+    adjacent = np.asarray(mesh.edges_unique)
+    lengths = np.linalg.norm(mesh.vertices[adjacent[:, 0]]-mesh.vertices[adjacent[:, 1]], axis=1)
+    pairs = sorted(tuple(sorted(map(int, edge))) for edge in adjacent[lengths <= tolerance])
     parent = list(range(len(mesh.vertices)))
     def root(i):
         while parent[i] != i:

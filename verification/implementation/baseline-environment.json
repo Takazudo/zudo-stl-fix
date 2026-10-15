@@ -1,0 +1,17 @@
+{
+  "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+  "machine": "x86_64",
+  "python": "3.12.14",
+  "numpy": "2.5.4",
+  "scipy": "1.18.1",
+  "trimesh": "4.12.2",
+  "shapely": "2.2.0",
+  "GEOS": "3.14.1",
+  "handoff_commit": "8737f55",
+  "checks": {
+    "sha256_manifest": "42/42 entries matched before implementation",
+    "test_engine": "17 passed",
+    "verify_fixtures": "17/17 passed"
+  },
+  "native_macos_tested": false
+}

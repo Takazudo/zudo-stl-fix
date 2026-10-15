@@ -25,7 +25,24 @@ The current CLI uses text stdout, batch JSON reports, and exit codes 0 (success/
 
 The baseline does not automatically repair open/nonmanifold meshes after exact cleanup, unresolved general noncoplanar intersections, invalid/branching patch boundaries, or multiple/nested shells. These are deliberate scope limits. A stopped/resource-limited scan is not a valid clean scan. The broad phase has quadratic worst-case behavior, so respect bounded work.
 
-## Proposed app worker v1 — TO IMPLEMENT
+## App worker v1 — implemented in `engine/worker.py`
+
+The native consumer is in `app/Sources/ZudoSTLFixCore/Protocol.swift` and
+`WorkerProcess.swift`. The adapter accepts at most 16 KiB of request JSON;
+native requests are capped at 4 KiB. Inputs are capped at 64 MiB, reports at
+16 MiB, and individual event lines at 256 KiB. The native reader caps stdout
+at 4 MiB/512 events and stderr at 1 MiB. Default timeout is 120 seconds, followed
+by SIGTERM and at most two seconds of grace before SIGKILL.
+
+Artifact descriptors use `relative_path`, `sha256`, and `byte_size`. Warnings
+are `{code, message}` objects. Summary fields are `before`, `after`,
+`repair_details`, `engine_version`, `input_sha256`, and `options`. Large face-ID
+and intersection-detail lists stay in the separate verified JSON report.
+Tiny-edge tolerance is bounded to 0–1 STL coordinate units; its default is zero.
+Snapshot paths are canonical absolute paths within one private job directory.
+
+See `verification/implementation/README.md` for executed checks and pending
+native verification. The requirements below remain the integration contract.
 
 Launch one helper per job. Send one size-bounded JSON request on stdin and close stdin. The helper emits UTF-8 newline-delimited JSON on stdout; diagnostic text goes only to stderr. Introduce a protocol version independent of the engine version. Add a `--self-test` or equivalent build-smoke command.
 

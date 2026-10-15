@@ -1,0 +1,1 @@
+{"protocol_version":1,"self_test":"passed","environment":{"python":"3.12.14","architecture":"x86_64","numpy":"2.5.4","scipy":"1.18.1","trimesh":"4.12.2","shapely":"2.2.0","GEOS":"3.14.1","engine":"1.0.0"}}

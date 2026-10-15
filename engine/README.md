@@ -1,13 +1,19 @@
 # Existing geometry engine
 
-`stl_doctor.py` and `test_stl_doctor.py` are unchanged copies from the preceding STL repair toolkit. The engine is working code; no app worker adapter is implemented yet.
+`stl_doctor.py` preserves the preceding toolkit's geometry predicates and CLI.
+`test_stl_doctor.py` is the unchanged original regression suite. The native app
+uses `worker.py`, a bounded v1 NDJSON adapter; it does not parse CLI output or use
+the CLI's file writer for final saves. Implementation changes add typed resource
+limits, bounded parsing, and existing-edge enumeration for optional cleanup.
 
 From repository root:
 
 ```bash
 python -m pip install -r engine/requirements.txt
 make test-engine
+make test-worker
 make verify-fixtures
+python engine/worker.py --self-test
 ```
 
 Use `python engine/stl_doctor.py --help` for CLI options. The original standalone README is at `../reference/engine-original-README.md`; its relative paths refer to the old toolkit. The current app integration design is `../docs/ENGINE-CONTRACT.md`.
