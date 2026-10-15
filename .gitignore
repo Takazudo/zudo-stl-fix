@@ -1,0 +1,28 @@
+# Local development
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
+.env
+.env.*
+!.env.example
+
+# Swift / Xcode / packaging
+.build/
+.swiftpm/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+build/
+dist/
+local-output/
+artifacts/
+
+# Signing credentials must never enter git
+*.p12
+*.pfx
+*.mobileprovision
+*.provisionprofile
+
+# STL fixtures are deliberately tracked. Do not add a blanket *.stl ignore.

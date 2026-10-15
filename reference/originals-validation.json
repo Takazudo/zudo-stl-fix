@@ -1,0 +1,2236 @@
+{
+  "tool": "stl_doctor",
+  "version": "1.0.0",
+  "mode": "check",
+  "units": "STL coordinate units; no unit conversion",
+  "environment": {
+    "python": "3.13.5",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "trimesh": "4.11.1",
+    "shapely": "2.1.2",
+    "GEOS": "3.13.1"
+  },
+  "scope": "Exact intersection predicates on parsed coordinates; floating-point geometric metrics; conservative single-shell planar repair.",
+  "limitations": [
+    "No certification of wall thickness, hardware fit, strength, source-CAD intent or slicing.",
+    "No generalized noncoplanar reconstruction, automatic hole filling, voxelization, smoothing, or nested-shell orientation repair.",
+    "ASCII decimal values are first parsed as binary64. Binary STL is checked on its exact stored float32 coordinates.",
+    "Worst-case quadratic broad phase; explicit resource limits fail closed, never report an incomplete scan as clean."
+  ],
+  "files": [
+    {
+      "input": "originals-not-bundled/bar-30hp.stl",
+      "output": null,
+      "before": {
+        "status": "PASS",
+        "failures": [],
+        "warnings": [],
+        "sha256": "a6cd696a68c0c0cdcef1c7d2e57c43fc4f8828389d37110c6b515576ee14bc7b",
+        "format": "binary STL",
+        "triangles": 3376,
+        "vertices": 1630,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            152.33187866210938,
+            5.50341796875,
+            4.5
+          ]
+        ],
+        "dimensions_xyz": [
+          152.33187866210938,
+          5.50341796875,
+          4.5
+        ],
+        "signed_volume": 2969.8434396127705,
+        "surface_area": 3979.155924851415,
+        "watertight": true,
+        "winding_consistent": true,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "nonmanifold_vertex_ids": [],
+        "inconsistent_edge_windings": 0,
+        "connected_shells": 1,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "minimum_triangle_altitude": 0.0007103117630192707,
+        "sliver_triangles_below_1e_5": 0,
+        "invalid_stored_normals": 0,
+        "stored_normal_mismatches_gt_1deg": 0,
+        "surface_intersections": {
+          "complete": true,
+          "candidate_pairs": 35961,
+          "defect_pair_count": 0,
+          "affected_face_count": 0,
+          "counts_by_type": {},
+          "defects": [],
+          "degenerate_faces_excluded_from_pair_test": 0
+        },
+        "runtime_seconds": 0.9182981599999493
+      },
+      "action": "checked"
+    },
+    {
+      "input": "originals-not-bundled/bar-40hp.stl",
+      "output": null,
+      "before": {
+        "status": "PASS",
+        "failures": [],
+        "warnings": [],
+        "sha256": "622635ff84092a8b2ebfd8fb49c1e71656c4351f12cc6ef08ec68fcf7efb0a3b",
+        "format": "binary STL",
+        "triangles": 4492,
+        "vertices": 2168,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            203.20327758789062,
+            5.5034332275390625,
+            4.5
+          ]
+        ],
+        "dimensions_xyz": [
+          203.20327758789062,
+          5.5034332275390625,
+          4.5
+        ],
+        "signed_volume": 3960.805464101373,
+        "surface_area": 5288.418887467125,
+        "watertight": true,
+        "winding_consistent": true,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "nonmanifold_vertex_ids": [],
+        "inconsistent_edge_windings": 0,
+        "connected_shells": 1,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "minimum_triangle_altitude": 0.01813648542198794,
+        "sliver_triangles_below_1e_5": 0,
+        "invalid_stored_normals": 0,
+        "stored_normal_mismatches_gt_1deg": 0,
+        "surface_intersections": {
+          "complete": true,
+          "candidate_pairs": 50810,
+          "defect_pair_count": 0,
+          "affected_face_count": 0,
+          "counts_by_type": {},
+          "defects": [],
+          "degenerate_faces_excluded_from_pair_test": 0
+        },
+        "runtime_seconds": 1.451406292999991
+      },
+      "action": "checked"
+    },
+    {
+      "input": "originals-not-bundled/bar-60hp.stl",
+      "output": null,
+      "before": {
+        "status": "PASS",
+        "failures": [],
+        "warnings": [],
+        "sha256": "c9e91b4bd540e4236d29ba1369d2c866031079db13ba855d2956ed3f55d12639",
+        "format": "binary STL",
+        "triangles": 5772,
+        "vertices": 2768,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            304.7180480957031,
+            5.502998352050781,
+            4.5
+          ]
+        ],
+        "dimensions_xyz": [
+          304.7180480957031,
+          5.502998352050781,
+          4.5
+        ],
+        "signed_volume": 5951.103298403614,
+        "surface_area": 7901.288687026745,
+        "watertight": true,
+        "winding_consistent": true,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "nonmanifold_vertex_ids": [],
+        "inconsistent_edge_windings": 0,
+        "connected_shells": 1,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "minimum_triangle_altitude": 0.018119553484434538,
+        "sliver_triangles_below_1e_5": 0,
+        "invalid_stored_normals": 0,
+        "stored_normal_mismatches_gt_1deg": 0,
+        "surface_intersections": {
+          "complete": true,
+          "candidate_pairs": 76506,
+          "defect_pair_count": 0,
+          "affected_face_count": 0,
+          "counts_by_type": {},
+          "defects": [],
+          "degenerate_faces_excluded_from_pair_test": 0
+        },
+        "runtime_seconds": 2.2291473729999325
+      },
+      "action": "checked"
+    },
+    {
+      "input": "originals-not-bundled/nuts-v2-40hp-double.stl",
+      "output": null,
+      "before": {
+        "status": "FAIL",
+        "failures": [
+          "surface_intersections_or_invalid_contacts"
+        ],
+        "warnings": [
+          "6 triangles have altitude < 1e-5 coordinate units (not a wall thickness measurement)"
+        ],
+        "sha256": "1e1d470c9d46d1a75d72463e2a9d5c9c93dfa2426f160579e6b5e8c375c62afb",
+        "format": "binary STL",
+        "triangles": 1710,
+        "vertices": 857,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            25.338760375976562,
+            20.132003784179688,
+            204.0
+          ]
+        ],
+        "dimensions_xyz": [
+          25.338760375976562,
+          20.132003784179688,
+          204.0
+        ],
+        "signed_volume": 39647.971778538405,
+        "surface_area": 38537.473870995804,
+        "watertight": true,
+        "winding_consistent": true,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "nonmanifold_vertex_ids": [],
+        "inconsistent_edge_windings": 0,
+        "connected_shells": 1,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "minimum_triangle_altitude": 3.321391939914449e-09,
+        "sliver_triangles_below_1e_5": 6,
+        "invalid_stored_normals": 0,
+        "stored_normal_mismatches_gt_1deg": 0,
+        "surface_intersections": {
+          "complete": true,
+          "candidate_pairs": 20718,
+          "defect_pair_count": 62,
+          "affected_face_count": 24,
+          "counts_by_type": {
+            "coplanar_shared_edge_foldback": 12,
+            "coplanar_overlap": 19,
+            "coplanar_contact_beyond_topological_join": 22,
+            "noncoplanar_intersection": 9
+          },
+          "defects": [
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.5785837447537389,
+              "faces": [
+                161,
+                162
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.014189523954264083,
+              "faces": [
+                161,
+                189
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.00034778308032714923,
+              "faces": [
+                161,
+                190
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 6.733715809573562,
+              "faces": [
+                162,
+                187
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 16.293874437829682,
+              "faces": [
+                162,
+                188
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                162,
+                758
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                162,
+                765
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                162,
+                795
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                162,
+                797
+              ]
+            },
+            {
+              "type": "noncoplanar_intersection",
+              "shared_vertices": 1,
+              "intersection_axis": 2,
+              "intersection_axis_span": 2.9241947321573973,
+              "faces": [
+                186,
+                187
+              ]
+            },
+            {
+              "type": "noncoplanar_intersection",
+              "shared_vertices": 0,
+              "intersection_axis": 2,
+              "intersection_axis_span": 6.515934070198098,
+              "faces": [
+                186,
+                188
+              ]
+            },
+            {
+              "type": "noncoplanar_intersection",
+              "shared_vertices": 1,
+              "intersection_axis": 2,
+              "intersection_axis_span": 0.5598711976445049,
+              "faces": [
+                186,
+                191
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.2870357495007102,
+              "faces": [
+                187,
+                189
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.05559354986847708,
+              "faces": [
+                187,
+                190
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.2901351772297457,
+              "faces": [
+                188,
+                189
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.5057331805818459,
+              "faces": [
+                188,
+                190
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                188,
+                758
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                188,
+                765
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                188,
+                795
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                188,
+                797
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0017606011036101028,
+              "faces": [
+                189,
+                191
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.03144653825767997,
+              "faces": [
+                190,
+                191
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                190,
+                758
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                190,
+                765
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                191,
+                758
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                191,
+                765
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 74.21117146809895,
+              "faces": [
+                758,
+                765
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 111.31675720214844,
+              "faces": [
+                758,
+                795
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 37.10558573404948,
+              "faces": [
+                758,
+                797
+              ]
+            },
+            {
+              "type": "noncoplanar_intersection",
+              "shared_vertices": 1,
+              "intersection_axis": 2,
+              "intersection_axis_span": 53.805183071696106,
+              "faces": [
+                763,
+                764
+              ]
+            },
+            {
+              "type": "noncoplanar_intersection",
+              "shared_vertices": 0,
+              "intersection_axis": 2,
+              "intersection_axis_span": 29.457541123909646,
+              "faces": [
+                763,
+                796
+              ]
+            },
+            {
+              "type": "noncoplanar_intersection",
+              "shared_vertices": 1,
+              "intersection_axis": 2,
+              "intersection_axis_span": 100.73727580439424,
+              "faces": [
+                763,
+                803
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 66.08612763227526,
+              "faces": [
+                764,
+                765
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 32.551187501136646,
+              "faces": [
+                764,
+                795
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 31.56743487113468,
+              "faces": [
+                764,
+                797
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 39.21323204924296,
+              "faces": [
+                765,
+                796
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 43.12298325467969,
+              "faces": [
+                765,
+                803
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 78.76556970101178,
+              "faces": [
+                795,
+                796
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                795,
+                1154
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                795,
+                1155
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                795,
+                1156
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 75.19492409810093,
+              "faces": [
+                796,
+                797
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                796,
+                1154
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                796,
+                1155
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                796,
+                1156
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 78.76556970101178,
+              "faces": [
+                797,
+                803
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                797,
+                1155
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                797,
+                1156
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                803,
+                1155
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                803,
+                1156
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.5785826110968167,
+              "faces": [
+                1154,
+                1155
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.010286274021403712,
+              "faces": [
+                1154,
+                1157
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.00425097457721406,
+              "faces": [
+                1154,
+                1182
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 23.02759257315306,
+              "faces": [
+                1155,
+                1156
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.022920735592994304,
+              "faces": [
+                1156,
+                1157
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.5556618755038225,
+              "faces": [
+                1156,
+                1182
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.5083005821934191,
+              "faces": [
+                1157,
+                1158
+              ]
+            },
+            {
+              "type": "noncoplanar_intersection",
+              "shared_vertices": 0,
+              "intersection_axis": 2,
+              "intersection_axis_span": 0.05160833048447374,
+              "faces": [
+                1157,
+                1184
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 6.5164322588617125,
+              "faces": [
+                1158,
+                1182
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 16.581442343194745,
+              "faces": [
+                1158,
+                1183
+              ]
+            },
+            {
+              "type": "noncoplanar_intersection",
+              "shared_vertices": 1,
+              "intersection_axis": 2,
+              "intersection_axis_span": 2.9241947321573973,
+              "faces": [
+                1182,
+                1184
+              ]
+            },
+            {
+              "type": "noncoplanar_intersection",
+              "shared_vertices": 1,
+              "intersection_axis": 2,
+              "intersection_axis_span": 7.024196937358129,
+              "faces": [
+                1183,
+                1184
+              ]
+            }
+          ],
+          "degenerate_faces_excluded_from_pair_test": 0
+        },
+        "runtime_seconds": 0.4657294239999601
+      },
+      "action": "checked"
+    },
+    {
+      "input": "originals-not-bundled/nuts-v2-60hp-double.stl",
+      "output": null,
+      "before": {
+        "status": "FAIL",
+        "failures": [
+          "surface_intersections_or_invalid_contacts"
+        ],
+        "warnings": [
+          "4 triangles have altitude < 1e-5 coordinate units (not a wall thickness measurement)"
+        ],
+        "sha256": "7ee057fcb437906613a3ca3e09344050c0e32d33d1a3365ddeff6bc00fc8eb84",
+        "format": "binary STL",
+        "triangles": 1694,
+        "vertices": 849,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            25.338760375976562,
+            20.132003784179688,
+            305.0
+          ]
+        ],
+        "dimensions_xyz": [
+          25.338760375976562,
+          20.132003784179688,
+          305.0
+        ],
+        "signed_volume": 59183.48833056939,
+        "surface_area": 57364.02952964515,
+        "watertight": true,
+        "winding_consistent": true,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "nonmanifold_vertex_ids": [],
+        "inconsistent_edge_windings": 0,
+        "connected_shells": 1,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "minimum_triangle_altitude": 1.1015781533338695e-08,
+        "sliver_triangles_below_1e_5": 4,
+        "invalid_stored_normals": 0,
+        "stored_normal_mismatches_gt_1deg": 0,
+        "surface_intersections": {
+          "complete": true,
+          "candidate_pairs": 20645,
+          "defect_pair_count": 62,
+          "affected_face_count": 24,
+          "counts_by_type": {
+            "coplanar_shared_edge_foldback": 12,
+            "coplanar_overlap": 19,
+            "coplanar_contact_beyond_topological_join": 22,
+            "noncoplanar_intersection": 9
+          },
+          "defects": [
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.390206013786888,
+              "faces": [
+                160,
+                161
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.006398534427452164,
+              "faces": [
+                160,
+                188
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.00010489392433168148,
+              "faces": [
+                160,
+                189
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 6.8462357058556735,
+              "faces": [
+                161,
+                186
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 16.56614388216408,
+              "faces": [
+                161,
+                187
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                161,
+                754
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                161,
+                761
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                161,
+                790
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                161,
+                792
+              ]
+            },
+            {
+              "type": "noncoplanar_intersection",
+              "shared_vertices": 1,
+              "intersection_axis": 2,
+              "intersection_axis_span": 2.9241947321573973,
+              "faces": [
+                185,
+                186
+              ]
+            },
+            {
+              "type": "noncoplanar_intersection",
+              "shared_vertices": 0,
+              "intersection_axis": 2,
+              "intersection_axis_span": 6.694261150600199,
+              "faces": [
+                185,
+                187
+              ]
+            },
+            {
+              "type": "noncoplanar_intersection",
+              "shared_vertices": 1,
+              "intersection_axis": 2,
+              "intersection_axis_span": 0.38154411724240406,
+              "faces": [
+                185,
+                190
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.19396782649406416,
+              "faces": [
+                186,
+                188
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.03614157659301173,
+              "faces": [
+                186,
+                189
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.195786792684906,
+              "faces": [
+                187,
+                188
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.34588304476332543,
+              "faces": [
+                187,
+                189
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                187,
+                754
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                187,
+                761
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                187,
+                790
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                187,
+                792
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0005562885322495594,
+              "faces": [
+                188,
+                190
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.014579926858003054,
+              "faces": [
+                189,
+                190
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                189,
+                754
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                189,
+                761
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                190,
+                754
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                190,
+                761
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 111.81983993819567,
+              "faces": [
+                754,
+                761
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 172.3736402611039,
+              "faces": [
+                754,
+                790
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 54.99336462644507,
+              "faces": [
+                754,
+                792
+              ]
+            },
+            {
+              "type": "noncoplanar_intersection",
+              "shared_vertices": 1,
+              "intersection_axis": 2,
+              "intersection_axis_span": 83.33954986648583,
+              "faces": [
+                759,
+                760
+              ]
+            },
+            {
+              "type": "noncoplanar_intersection",
+              "shared_vertices": 0,
+              "intersection_axis": 2,
+              "intersection_axis_span": 46.79514942990793,
+              "faces": [
+                759,
+                791
+              ]
+            },
+            {
+              "type": "noncoplanar_intersection",
+              "shared_vertices": 1,
+              "intersection_axis": 2,
+              "intersection_axis_span": 154.86530070360624,
+              "faces": [
+                759,
+                798
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 101.3863283182979,
+              "faces": [
+                760,
+                761
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 52.085588037783836,
+              "faces": [
+                760,
+                790
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 48.20391924878662,
+              "faces": [
+                760,
+                792
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 61.08994403513279,
+              "faces": [
+                761,
+                791
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 64.89073253411827,
+              "faces": [
+                761,
+                798
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 126.03383562780905,
+              "faces": [
+                790,
+                791
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                790,
+                1141
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                790,
+                1142
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                790,
+                1143
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 116.57056464727552,
+              "faces": [
+                791,
+                792
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                791,
+                1141
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                791,
+                1142
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 0,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                791,
+                1143
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 119.41899630323742,
+              "faces": [
+                792,
+                798
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                792,
+                1142
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                792,
+                1143
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                798,
+                1142
+              ]
+            },
+            {
+              "type": "coplanar_contact_beyond_topological_join",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0,
+              "faces": [
+                798,
+                1143
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.39020659029083005,
+              "faces": [
+                1141,
+                1142
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.004601713086955428,
+              "faces": [
+                1141,
+                1144
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.0019017348073341789,
+              "faces": [
+                1141,
+                1169
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 23.412378415469362,
+              "faces": [
+                1142,
+                1143
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.010534546919231884,
+              "faces": [
+                1143,
+                1144
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.37967204337159816,
+              "faces": [
+                1143,
+                1169
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 0.3472533342071897,
+              "faces": [
+                1144,
+                1145
+              ]
+            },
+            {
+              "type": "noncoplanar_intersection",
+              "shared_vertices": 0,
+              "intersection_axis": 2,
+              "intersection_axis_span": 0.034317825729423206,
+              "faces": [
+                1144,
+                1171
+              ]
+            },
+            {
+              "type": "coplanar_overlap",
+              "shared_vertices": 1,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 6.6947713307638175,
+              "faces": [
+                1145,
+                1169
+              ]
+            },
+            {
+              "type": "coplanar_shared_edge_foldback",
+              "shared_vertices": 2,
+              "projection_axes": [
+                1,
+                2
+              ],
+              "projected_overlap_area": 16.760560340789187,
+              "faces": [
+                1145,
+                1170
+              ]
+            },
+            {
+              "type": "noncoplanar_intersection",
+              "shared_vertices": 1,
+              "intersection_axis": 2,
+              "intersection_axis_span": 2.9241947321573973,
+              "faces": [
+                1169,
+                1171
+              ]
+            },
+            {
+              "type": "noncoplanar_intersection",
+              "shared_vertices": 1,
+              "intersection_axis": 2,
+              "intersection_axis_span": 7.04148744211318,
+              "faces": [
+                1170,
+                1171
+              ]
+            }
+          ],
+          "degenerate_faces_excluded_from_pair_test": 0
+        },
+        "runtime_seconds": 0.4387137649999886
+      },
+      "action": "checked"
+    },
+    {
+      "input": "originals-not-bundled/nuts-v3-40hp-single.stl",
+      "output": null,
+      "before": {
+        "status": "PASS_WITH_WARNINGS",
+        "failures": [],
+        "warnings": [
+          "Geometry extends below Z=0; placement unchanged"
+        ],
+        "sha256": "2c48edace51dec306e7ebf968edd0e9c86a1e44f8efb72a7ca5904db557e5dfd",
+        "format": "binary STL",
+        "triangles": 320,
+        "vertices": 162,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            -3.1999969482421875
+          ],
+          [
+            20.131988525390625,
+            14.886871337890625,
+            207.1999969482422
+          ]
+        ],
+        "dimensions_xyz": [
+          20.131988525390625,
+          14.886871337890625,
+          210.39999389648438
+        ],
+        "signed_volume": 23558.813465810323,
+        "surface_area": 23439.438366490092,
+        "watertight": true,
+        "winding_consistent": true,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "nonmanifold_vertex_ids": [],
+        "inconsistent_edge_windings": 0,
+        "connected_shells": 1,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "minimum_triangle_altitude": 0.0004247858862066666,
+        "sliver_triangles_below_1e_5": 0,
+        "invalid_stored_normals": 0,
+        "stored_normal_mismatches_gt_1deg": 0,
+        "surface_intersections": {
+          "complete": true,
+          "candidate_pairs": 2692,
+          "defect_pair_count": 0,
+          "affected_face_count": 0,
+          "counts_by_type": {},
+          "defects": [],
+          "degenerate_faces_excluded_from_pair_test": 0
+        },
+        "runtime_seconds": 0.04471484199996212
+      },
+      "action": "checked"
+    },
+    {
+      "input": "originals-not-bundled/nuts-v3-60hp-single.stl",
+      "output": null,
+      "before": {
+        "status": "PASS_WITH_WARNINGS",
+        "failures": [],
+        "warnings": [
+          "Geometry extends below Z=0; placement unchanged"
+        ],
+        "sha256": "ec4ab963eace2fbc61ef72f35ba678cc8c908c1a94b06cb85a33ebf745ae04c3",
+        "format": "binary STL",
+        "triangles": 324,
+        "vertices": 164,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            -3.1999969482421875
+          ],
+          [
+            20.131988525390625,
+            14.886871337890625,
+            308.20001220703125
+          ]
+        ],
+        "dimensions_xyz": [
+          20.131988525390625,
+          14.886871337890625,
+          311.40000915527344
+        ],
+        "signed_volume": 34652.55427754173,
+        "surface_area": 34658.26473381369,
+        "watertight": true,
+        "winding_consistent": true,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "nonmanifold_vertex_ids": [],
+        "inconsistent_edge_windings": 0,
+        "connected_shells": 1,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "minimum_triangle_altitude": 2.705490375564125e-05,
+        "sliver_triangles_below_1e_5": 0,
+        "invalid_stored_normals": 0,
+        "stored_normal_mismatches_gt_1deg": 0,
+        "surface_intersections": {
+          "complete": true,
+          "candidate_pairs": 2740,
+          "defect_pair_count": 0,
+          "affected_face_count": 0,
+          "counts_by_type": {},
+          "defects": [],
+          "degenerate_faces_excluded_from_pair_test": 0
+        },
+        "runtime_seconds": 0.047267867999948976
+      },
+      "action": "checked"
+    },
+    {
+      "input": "originals-not-bundled/nylon-double-v2-40hp-double.stl",
+      "output": null,
+      "before": {
+        "status": "PASS",
+        "failures": [],
+        "warnings": [],
+        "sha256": "855568b8a573dc889d391c27249db6d24a28573c23277d29524546a8c455dba3",
+        "format": "binary STL",
+        "triangles": 340,
+        "vertices": 172,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            22.223892211914062,
+            20.131999969482422,
+            204.0
+          ]
+        ],
+        "dimensions_xyz": [
+          22.223892211914062,
+          20.131999969482422,
+          204.0
+        ],
+        "signed_volume": 42144.080974211036,
+        "surface_area": 35310.57037050491,
+        "watertight": true,
+        "winding_consistent": true,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "nonmanifold_vertex_ids": [],
+        "inconsistent_edge_windings": 0,
+        "connected_shells": 1,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "minimum_triangle_altitude": 0.02306730671961648,
+        "sliver_triangles_below_1e_5": 0,
+        "invalid_stored_normals": 0,
+        "stored_normal_mismatches_gt_1deg": 0,
+        "surface_intersections": {
+          "complete": true,
+          "candidate_pairs": 3380,
+          "defect_pair_count": 0,
+          "affected_face_count": 0,
+          "counts_by_type": {},
+          "defects": [],
+          "degenerate_faces_excluded_from_pair_test": 0
+        },
+        "runtime_seconds": 0.06022124200001144
+      },
+      "action": "checked"
+    },
+    {
+      "input": "originals-not-bundled/nylon-double-v2-60hp-double.stl",
+      "output": null,
+      "before": {
+        "status": "PASS",
+        "failures": [],
+        "warnings": [],
+        "sha256": "89011bf6c566f7541e232e07368ad4bbbdf69d3f07f2cd9a90e5507ca947ee09",
+        "format": "binary STL",
+        "triangles": 340,
+        "vertices": 172,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            22.223892211914062,
+            20.131999969482422,
+            305.0
+          ]
+        ],
+        "dimensions_xyz": [
+          22.223892211914062,
+          20.131999969482422,
+          305.0
+        ],
+        "signed_volume": 63009.53282909004,
+        "surface_area": 52588.20127105019,
+        "watertight": true,
+        "winding_consistent": true,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "nonmanifold_vertex_ids": [],
+        "inconsistent_edge_windings": 0,
+        "connected_shells": 1,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "minimum_triangle_altitude": 0.02306730671961648,
+        "sliver_triangles_below_1e_5": 0,
+        "invalid_stored_normals": 0,
+        "stored_normal_mismatches_gt_1deg": 0,
+        "surface_intersections": {
+          "complete": true,
+          "candidate_pairs": 3380,
+          "defect_pair_count": 0,
+          "affected_face_count": 0,
+          "counts_by_type": {},
+          "defects": [],
+          "degenerate_faces_excluded_from_pair_test": 0
+        },
+        "runtime_seconds": 0.058275922000007085
+      },
+      "action": "checked"
+    },
+    {
+      "input": "originals-not-bundled/nylon-single-v3-40hp.stl",
+      "output": null,
+      "before": {
+        "status": "PASS_WITH_WARNINGS",
+        "failures": [],
+        "warnings": [
+          "Geometry extends below Z=0; placement unchanged"
+        ],
+        "sha256": "fc8933e2bc746a1db79135308d31e1d085c4d6d61cd728cd29c73c171632de4e",
+        "format": "binary STL",
+        "triangles": 244,
+        "vertices": 124,
+        "bounds": [
+          [
+            0.0,
+            9.225471496582031,
+            -3.1999969482421875
+          ],
+          [
+            13.333389282226562,
+            29.35700225830078,
+            207.1999969482422
+          ]
+        ],
+        "dimensions_xyz": [
+          13.333389282226562,
+          20.13153076171875,
+          210.39999389648438
+        ],
+        "signed_volume": 23639.46867242666,
+        "surface_area": 22432.054844602906,
+        "watertight": true,
+        "winding_consistent": true,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "nonmanifold_vertex_ids": [],
+        "inconsistent_edge_windings": 0,
+        "connected_shells": 1,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "minimum_triangle_altitude": 0.000709533688314263,
+        "sliver_triangles_below_1e_5": 0,
+        "invalid_stored_normals": 0,
+        "stored_normal_mismatches_gt_1deg": 0,
+        "surface_intersections": {
+          "complete": true,
+          "candidate_pairs": 2040,
+          "defect_pair_count": 0,
+          "affected_face_count": 0,
+          "counts_by_type": {},
+          "defects": [],
+          "degenerate_faces_excluded_from_pair_test": 0
+        },
+        "runtime_seconds": 0.032498418000045604
+      },
+      "action": "checked"
+    },
+    {
+      "input": "originals-not-bundled/nylon-single-v3-60hp.stl",
+      "output": null,
+      "before": {
+        "status": "PASS_WITH_WARNINGS",
+        "failures": [],
+        "warnings": [
+          "Geometry extends below Z=0; placement unchanged"
+        ],
+        "sha256": "c84d244165500acd8f555eb3f28aa4770443c40835b1ad11fad383633364e137",
+        "format": "binary STL",
+        "triangles": 244,
+        "vertices": 124,
+        "bounds": [
+          [
+            0.0,
+            9.225479125976562,
+            -3.1999969482421875
+          ],
+          [
+            13.333389282226562,
+            29.357009887695312,
+            308.20001220703125
+          ]
+        ],
+        "dimensions_xyz": [
+          13.333389282226562,
+          20.13153076171875,
+          311.40000915527344
+        ],
+        "signed_volume": 34760.486290422974,
+        "surface_area": 33159.86155804458,
+        "watertight": true,
+        "winding_consistent": true,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "nonmanifold_vertex_ids": [],
+        "inconsistent_edge_windings": 0,
+        "connected_shells": 1,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "minimum_triangle_altitude": 0.0007095336883142693,
+        "sliver_triangles_below_1e_5": 0,
+        "invalid_stored_normals": 0,
+        "stored_normal_mismatches_gt_1deg": 0,
+        "surface_intersections": {
+          "complete": true,
+          "candidate_pairs": 2040,
+          "defect_pair_count": 0,
+          "affected_face_count": 0,
+          "counts_by_type": {},
+          "defects": [],
+          "degenerate_faces_excluded_from_pair_test": 0
+        },
+        "runtime_seconds": 0.045515468000076
+      },
+      "action": "checked"
+    }
+  ]
+}

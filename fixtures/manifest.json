@@ -1,0 +1,518 @@
+{
+  "schema_version": 1,
+  "project": "zudo-stl-fix",
+  "target_repository": "takazudo/zudo-stl-fix",
+  "coordinate_units": "Unspecified STL coordinate units; no conversions",
+  "provenance": "Original conversation uploads and previously repaired reference files. Historical expectations are rechecked by scripts/verify_fixtures.py.",
+  "files": [
+    {
+      "path": "fixtures/originals/bar-30hp.stl",
+      "kind": "original",
+      "sha256": "a6cd696a68c0c0cdcef1c7d2e57c43fc4f8828389d37110c6b515576ee14bc7b",
+      "size_bytes": 168884,
+      "expected": {
+        "status": "PASS",
+        "triangles": 3376,
+        "connected_shells": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "inconsistent_edge_windings": 0,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            152.33187866210938,
+            5.50341796875,
+            4.5
+          ]
+        ],
+        "dimensions_xyz": [
+          152.33187866210938,
+          5.50341796875,
+          4.5
+        ],
+        "failures": [],
+        "sliver_triangles_below_1e_5": 0
+      },
+      "expected_invalid_triangle_pairs": 0
+    },
+    {
+      "path": "fixtures/originals/bar-40hp.stl",
+      "kind": "original",
+      "sha256": "622635ff84092a8b2ebfd8fb49c1e71656c4351f12cc6ef08ec68fcf7efb0a3b",
+      "size_bytes": 224684,
+      "expected": {
+        "status": "PASS",
+        "triangles": 4492,
+        "connected_shells": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "inconsistent_edge_windings": 0,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            203.20327758789062,
+            5.5034332275390625,
+            4.5
+          ]
+        ],
+        "dimensions_xyz": [
+          203.20327758789062,
+          5.5034332275390625,
+          4.5
+        ],
+        "failures": [],
+        "sliver_triangles_below_1e_5": 0
+      },
+      "expected_invalid_triangle_pairs": 0
+    },
+    {
+      "path": "fixtures/originals/bar-60hp.stl",
+      "kind": "original",
+      "sha256": "c9e91b4bd540e4236d29ba1369d2c866031079db13ba855d2956ed3f55d12639",
+      "size_bytes": 288684,
+      "expected": {
+        "status": "PASS",
+        "triangles": 5772,
+        "connected_shells": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "inconsistent_edge_windings": 0,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            304.7180480957031,
+            5.502998352050781,
+            4.5
+          ]
+        ],
+        "dimensions_xyz": [
+          304.7180480957031,
+          5.502998352050781,
+          4.5
+        ],
+        "failures": [],
+        "sliver_triangles_below_1e_5": 0
+      },
+      "expected_invalid_triangle_pairs": 0
+    },
+    {
+      "path": "fixtures/originals/nuts-v2-40hp-double.stl",
+      "kind": "original",
+      "sha256": "1e1d470c9d46d1a75d72463e2a9d5c9c93dfa2426f160579e6b5e8c375c62afb",
+      "size_bytes": 85584,
+      "expected": {
+        "status": "FAIL",
+        "triangles": 1710,
+        "connected_shells": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "inconsistent_edge_windings": 0,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            25.338760375976562,
+            20.132003784179688,
+            204.0
+          ]
+        ],
+        "dimensions_xyz": [
+          25.338760375976562,
+          20.132003784179688,
+          204.0
+        ],
+        "failures": [
+          "surface_intersections_or_invalid_contacts"
+        ],
+        "sliver_triangles_below_1e_5": 6
+      },
+      "expected_invalid_triangle_pairs": 62
+    },
+    {
+      "path": "fixtures/originals/nuts-v2-60hp-double.stl",
+      "kind": "original",
+      "sha256": "7ee057fcb437906613a3ca3e09344050c0e32d33d1a3365ddeff6bc00fc8eb84",
+      "size_bytes": 84784,
+      "expected": {
+        "status": "FAIL",
+        "triangles": 1694,
+        "connected_shells": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "inconsistent_edge_windings": 0,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            25.338760375976562,
+            20.132003784179688,
+            305.0
+          ]
+        ],
+        "dimensions_xyz": [
+          25.338760375976562,
+          20.132003784179688,
+          305.0
+        ],
+        "failures": [
+          "surface_intersections_or_invalid_contacts"
+        ],
+        "sliver_triangles_below_1e_5": 4
+      },
+      "expected_invalid_triangle_pairs": 62
+    },
+    {
+      "path": "fixtures/originals/nuts-v3-40hp-single.stl",
+      "kind": "original",
+      "sha256": "2c48edace51dec306e7ebf968edd0e9c86a1e44f8efb72a7ca5904db557e5dfd",
+      "size_bytes": 16084,
+      "expected": {
+        "status": "PASS_WITH_WARNINGS",
+        "triangles": 320,
+        "connected_shells": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "inconsistent_edge_windings": 0,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            -3.1999969482421875
+          ],
+          [
+            20.131988525390625,
+            14.886871337890625,
+            207.1999969482422
+          ]
+        ],
+        "dimensions_xyz": [
+          20.131988525390625,
+          14.886871337890625,
+          210.39999389648438
+        ],
+        "failures": [],
+        "sliver_triangles_below_1e_5": 0
+      },
+      "expected_invalid_triangle_pairs": 0
+    },
+    {
+      "path": "fixtures/originals/nuts-v3-60hp-single.stl",
+      "kind": "original",
+      "sha256": "ec4ab963eace2fbc61ef72f35ba678cc8c908c1a94b06cb85a33ebf745ae04c3",
+      "size_bytes": 16284,
+      "expected": {
+        "status": "PASS_WITH_WARNINGS",
+        "triangles": 324,
+        "connected_shells": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "inconsistent_edge_windings": 0,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            -3.1999969482421875
+          ],
+          [
+            20.131988525390625,
+            14.886871337890625,
+            308.20001220703125
+          ]
+        ],
+        "dimensions_xyz": [
+          20.131988525390625,
+          14.886871337890625,
+          311.40000915527344
+        ],
+        "failures": [],
+        "sliver_triangles_below_1e_5": 0
+      },
+      "expected_invalid_triangle_pairs": 0
+    },
+    {
+      "path": "fixtures/originals/nylon-double-v2-40hp-double.stl",
+      "kind": "original",
+      "sha256": "855568b8a573dc889d391c27249db6d24a28573c23277d29524546a8c455dba3",
+      "size_bytes": 17084,
+      "expected": {
+        "status": "PASS",
+        "triangles": 340,
+        "connected_shells": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "inconsistent_edge_windings": 0,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            22.223892211914062,
+            20.131999969482422,
+            204.0
+          ]
+        ],
+        "dimensions_xyz": [
+          22.223892211914062,
+          20.131999969482422,
+          204.0
+        ],
+        "failures": [],
+        "sliver_triangles_below_1e_5": 0
+      },
+      "expected_invalid_triangle_pairs": 0
+    },
+    {
+      "path": "fixtures/originals/nylon-double-v2-60hp-double.stl",
+      "kind": "original",
+      "sha256": "89011bf6c566f7541e232e07368ad4bbbdf69d3f07f2cd9a90e5507ca947ee09",
+      "size_bytes": 17084,
+      "expected": {
+        "status": "PASS",
+        "triangles": 340,
+        "connected_shells": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "inconsistent_edge_windings": 0,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            22.223892211914062,
+            20.131999969482422,
+            305.0
+          ]
+        ],
+        "dimensions_xyz": [
+          22.223892211914062,
+          20.131999969482422,
+          305.0
+        ],
+        "failures": [],
+        "sliver_triangles_below_1e_5": 0
+      },
+      "expected_invalid_triangle_pairs": 0
+    },
+    {
+      "path": "fixtures/originals/nylon-single-v3-40hp.stl",
+      "kind": "original",
+      "sha256": "fc8933e2bc746a1db79135308d31e1d085c4d6d61cd728cd29c73c171632de4e",
+      "size_bytes": 12284,
+      "expected": {
+        "status": "PASS_WITH_WARNINGS",
+        "triangles": 244,
+        "connected_shells": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "inconsistent_edge_windings": 0,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "bounds": [
+          [
+            0.0,
+            9.225471496582031,
+            -3.1999969482421875
+          ],
+          [
+            13.333389282226562,
+            29.35700225830078,
+            207.1999969482422
+          ]
+        ],
+        "dimensions_xyz": [
+          13.333389282226562,
+          20.13153076171875,
+          210.39999389648438
+        ],
+        "failures": [],
+        "sliver_triangles_below_1e_5": 0
+      },
+      "expected_invalid_triangle_pairs": 0
+    },
+    {
+      "path": "fixtures/originals/nylon-single-v3-60hp.stl",
+      "kind": "original",
+      "sha256": "c84d244165500acd8f555eb3f28aa4770443c40835b1ad11fad383633364e137",
+      "size_bytes": 12284,
+      "expected": {
+        "status": "PASS_WITH_WARNINGS",
+        "triangles": 244,
+        "connected_shells": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "inconsistent_edge_windings": 0,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "bounds": [
+          [
+            0.0,
+            9.225479125976562,
+            -3.1999969482421875
+          ],
+          [
+            13.333389282226562,
+            29.357009887695312,
+            308.20001220703125
+          ]
+        ],
+        "dimensions_xyz": [
+          13.333389282226562,
+          20.13153076171875,
+          311.40000915527344
+        ],
+        "failures": [],
+        "sliver_triangles_below_1e_5": 0
+      },
+      "expected_invalid_triangle_pairs": 0
+    },
+    {
+      "path": "fixtures/expected/nuts-v2-40hp-double-fixed.stl",
+      "kind": "repaired_reference",
+      "sha256": "d5d30f918a8c4bb1ec81665aca90763a0fce1ec5d98e6168c872df373436afd1",
+      "size_bytes": 84384,
+      "expected": {
+        "status": "PASS",
+        "triangles": 1686,
+        "connected_shells": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "inconsistent_edge_windings": 0,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            25.338760375976562,
+            20.132003784179688,
+            204.0
+          ]
+        ],
+        "dimensions_xyz": [
+          25.338760375976562,
+          20.132003784179688,
+          204.0
+        ],
+        "failures": [],
+        "sliver_triangles_below_1e_5": 0
+      },
+      "expected_invalid_triangle_pairs": 0
+    },
+    {
+      "path": "fixtures/expected/nuts-v2-60hp-double-fixed.stl",
+      "kind": "repaired_reference",
+      "sha256": "7a3c80939d1f347449ec8392fd186582b6f306f2e024d09b70dbac9607a1513f",
+      "size_bytes": 83684,
+      "expected": {
+        "status": "PASS",
+        "triangles": 1672,
+        "connected_shells": 1,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "inconsistent_edge_windings": 0,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            25.338760375976562,
+            20.132003784179688,
+            305.0
+          ]
+        ],
+        "dimensions_xyz": [
+          25.338760375976562,
+          20.132003784179688,
+          305.0
+        ],
+        "failures": [],
+        "sliver_triangles_below_1e_5": 0
+      },
+      "expected_invalid_triangle_pairs": 0
+    }
+  ],
+  "repair_cases": [
+    {
+      "input": "fixtures/originals/nuts-v2-40hp-double.stl",
+      "reference_output": "fixtures/expected/nuts-v2-40hp-double-fixed.stl",
+      "weld_tolerance": 1e-05,
+      "expected_triangle_count": 1686,
+      "expected_invalid_triangle_pairs": 0,
+      "expected_sliver_triangles": 0,
+      "expected_bounds_max_change": 0.0,
+      "reference_sha256": "d5d30f918a8c4bb1ec81665aca90763a0fce1ec5d98e6168c872df373436afd1",
+      "hash_policy": "Reference integrity only. New repairs are compared geometrically, not by byte equality or face ordering."
+    },
+    {
+      "input": "fixtures/originals/nuts-v2-60hp-double.stl",
+      "reference_output": "fixtures/expected/nuts-v2-60hp-double-fixed.stl",
+      "weld_tolerance": 1e-05,
+      "expected_triangle_count": 1672,
+      "expected_invalid_triangle_pairs": 0,
+      "expected_sliver_triangles": 0,
+      "expected_bounds_max_change": 0.0,
+      "reference_sha256": "7a3c80939d1f347449ec8392fd186582b6f306f2e024d09b70dbac9607a1513f",
+      "hash_policy": "Reference integrity only. New repairs are compared geometrically, not by byte equality or face ordering."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+test_ascii_parse (test_stl_doctor.STLDoctorTests.test_ascii_parse) ... ok
+test_binary_roundtrip (test_stl_doctor.STLDoctorTests.test_binary_roundtrip) ... ok
+test_clean_box (test_stl_doctor.STLDoctorTests.test_clean_box) ... ok
+test_cli_preserves_input_and_refuses_destination_overwrite (test_stl_doctor.STLDoctorTests.test_cli_preserves_input_and_refuses_destination_overwrite) ... ok
+test_cli_refusal_does_not_write_fixed_file (test_stl_doctor.STLDoctorTests.test_cli_refusal_does_not_write_fixed_file) ... ok
+test_crossing_multiple_shells_refused (test_stl_doctor.STLDoctorTests.test_crossing_multiple_shells_refused) ... ok
+test_duplicate_and_zero_area_faces (test_stl_doctor.STLDoctorTests.test_duplicate_and_zero_area_faces) ... ok
+test_hole_boundary_preserved_by_patch_triangulation (test_stl_doctor.STLDoctorTests.test_hole_boundary_preserved_by_patch_triangulation) ... ok
+test_inverted_shell_reoriented (test_stl_doctor.STLDoctorTests.test_inverted_shell_reoriented) ... ok
+test_malformed_input (test_stl_doctor.STLDoctorTests.test_malformed_input) ... ok
+test_non_axis_aligned_planar_fold (test_stl_doctor.STLDoctorTests.test_non_axis_aligned_planar_fold) ... ok
+test_nonmanifold_point_contact (test_stl_doctor.STLDoctorTests.test_nonmanifold_point_contact) ... ok
+test_nonplanar_single_shell_intersection_refused (test_stl_doctor.STLDoctorTests.test_nonplanar_single_shell_intersection_refused) ... ok
+test_open_mesh_refused (test_stl_doctor.STLDoctorTests.test_open_mesh_refused) ... ok
+test_optional_short_edge_cleanup (test_stl_doctor.STLDoctorTests.test_optional_short_edge_cleanup) ... ok
+test_planar_fold_detected_and_repaired (test_stl_doctor.STLDoctorTests.test_planar_fold_detected_and_repaired) ... ok
+test_resource_limit_is_not_pass (test_stl_doctor.STLDoctorTests.test_resource_limit_is_not_pass) ... ok
+
+----------------------------------------------------------------------
+Ran 17 tests in 0.102s
+
+OK

@@ -1,0 +1,137 @@
+{
+  "tool": "stl_doctor",
+  "version": "1.0.0",
+  "mode": "check",
+  "units": "STL coordinate units; no unit conversion",
+  "environment": {
+    "python": "3.13.5",
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "trimesh": "4.11.1",
+    "shapely": "2.1.2",
+    "GEOS": "3.13.1"
+  },
+  "scope": "Exact intersection predicates on parsed coordinates; floating-point geometric metrics; conservative single-shell planar repair.",
+  "limitations": [
+    "No certification of wall thickness, hardware fit, strength, source-CAD intent or slicing.",
+    "No generalized noncoplanar reconstruction, automatic hole filling, voxelization, smoothing, or nested-shell orientation repair.",
+    "ASCII decimal values are first parsed as binary64. Binary STL is checked on its exact stored float32 coordinates.",
+    "Worst-case quadratic broad phase; explicit resource limits fail closed, never report an incomplete scan as clean."
+  ],
+  "files": [
+    {
+      "input": "fixed/nuts-v2-40hp-double-fixed.stl",
+      "output": null,
+      "before": {
+        "status": "PASS",
+        "failures": [],
+        "warnings": [],
+        "sha256": "d5d30f918a8c4bb1ec81665aca90763a0fce1ec5d98e6168c872df373436afd1",
+        "format": "binary STL",
+        "triangles": 1686,
+        "vertices": 845,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            25.338760375976562,
+            20.132003784179688,
+            204.0
+          ]
+        ],
+        "dimensions_xyz": [
+          25.338760375976562,
+          20.132003784179688,
+          204.0
+        ],
+        "signed_volume": 39647.97177843583,
+        "surface_area": 37056.477011793766,
+        "watertight": true,
+        "winding_consistent": true,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "nonmanifold_vertex_ids": [],
+        "inconsistent_edge_windings": 0,
+        "connected_shells": 1,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "minimum_triangle_altitude": 1.52587890625e-05,
+        "sliver_triangles_below_1e_5": 0,
+        "invalid_stored_normals": 0,
+        "stored_normal_mismatches_gt_1deg": 0,
+        "surface_intersections": {
+          "complete": true,
+          "candidate_pairs": 20235,
+          "defect_pair_count": 0,
+          "affected_face_count": 0,
+          "counts_by_type": {},
+          "defects": [],
+          "degenerate_faces_excluded_from_pair_test": 0
+        },
+        "runtime_seconds": 0.44544085799998356
+      },
+      "action": "checked"
+    },
+    {
+      "input": "fixed/nuts-v2-60hp-double-fixed.stl",
+      "output": null,
+      "before": {
+        "status": "PASS",
+        "failures": [],
+        "warnings": [],
+        "sha256": "7a3c80939d1f347449ec8392fd186582b6f306f2e024d09b70dbac9607a1513f",
+        "format": "binary STL",
+        "triangles": 1672,
+        "vertices": 838,
+        "bounds": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            25.338760375976562,
+            20.132003784179688,
+            305.0
+          ]
+        ],
+        "dimensions_xyz": [
+          25.338760375976562,
+          20.132003784179688,
+          305.0
+        ],
+        "signed_volume": 59183.48833056946,
+        "surface_area": 55161.10025329038,
+        "watertight": true,
+        "winding_consistent": true,
+        "boundary_edges": 0,
+        "nonmanifold_edges": 0,
+        "nonmanifold_vertex_count": 0,
+        "nonmanifold_vertex_ids": [],
+        "inconsistent_edge_windings": 0,
+        "connected_shells": 1,
+        "duplicate_triangles": 0,
+        "zero_area_triangles": 0,
+        "minimum_triangle_altitude": 2.876524650451978e-05,
+        "sliver_triangles_below_1e_5": 0,
+        "invalid_stored_normals": 0,
+        "stored_normal_mismatches_gt_1deg": 0,
+        "surface_intersections": {
+          "complete": true,
+          "candidate_pairs": 20189,
+          "defect_pair_count": 0,
+          "affected_face_count": 0,
+          "counts_by_type": {},
+          "defects": [],
+          "degenerate_faces_excluded_from_pair_test": 0
+        },
+        "runtime_seconds": 0.4019902009999896
+      },
+      "action": "checked"
+    }
+  ]
+}

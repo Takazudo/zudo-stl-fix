@@ -1,0 +1,6 @@
+# Versions used for the supplied repaired files (Python 3.13.5, Linux).
+# Use requirements.txt instead for compatible releases on older Python versions.
+numpy==2.3.5
+scipy==1.17.0
+trimesh==4.11.1
+shapely==2.1.2

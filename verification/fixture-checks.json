@@ -1,0 +1,174 @@
+{
+  "project": "zudo-stl-fix",
+  "scope": "Development asset and baseline-engine verification; not a macOS app test",
+  "environment": {
+    "python": "3.13.5",
+    "platform": "Linux-6.18.44-x86_64-with-glibc2.41",
+    "np": "2.3.5",
+    "scipy": "1.17.0",
+    "trimesh": "4.11.1",
+    "shapely": "2.1.2",
+    "GEOS": "3.13.1"
+  },
+  "runtime_seconds": 14.338835707999976,
+  "checks": 17,
+  "failed": 0,
+  "results": [
+    {
+      "path": "fixtures/originals/bar-30hp.stl",
+      "kind": "audit",
+      "mesh_status": "PASS",
+      "triangles": 3376,
+      "invalid_pairs": 0,
+      "passed": true
+    },
+    {
+      "path": "fixtures/originals/bar-40hp.stl",
+      "kind": "audit",
+      "mesh_status": "PASS",
+      "triangles": 4492,
+      "invalid_pairs": 0,
+      "passed": true
+    },
+    {
+      "path": "fixtures/originals/bar-60hp.stl",
+      "kind": "audit",
+      "mesh_status": "PASS",
+      "triangles": 5772,
+      "invalid_pairs": 0,
+      "passed": true
+    },
+    {
+      "path": "fixtures/originals/nuts-v2-40hp-double.stl",
+      "kind": "audit",
+      "mesh_status": "FAIL",
+      "triangles": 1710,
+      "invalid_pairs": 62,
+      "passed": true
+    },
+    {
+      "path": "fixtures/originals/nuts-v2-60hp-double.stl",
+      "kind": "audit",
+      "mesh_status": "FAIL",
+      "triangles": 1694,
+      "invalid_pairs": 62,
+      "passed": true
+    },
+    {
+      "path": "fixtures/originals/nuts-v3-40hp-single.stl",
+      "kind": "audit",
+      "mesh_status": "PASS_WITH_WARNINGS",
+      "triangles": 320,
+      "invalid_pairs": 0,
+      "passed": true
+    },
+    {
+      "path": "fixtures/originals/nuts-v3-60hp-single.stl",
+      "kind": "audit",
+      "mesh_status": "PASS_WITH_WARNINGS",
+      "triangles": 324,
+      "invalid_pairs": 0,
+      "passed": true
+    },
+    {
+      "path": "fixtures/originals/nylon-double-v2-40hp-double.stl",
+      "kind": "audit",
+      "mesh_status": "PASS",
+      "triangles": 340,
+      "invalid_pairs": 0,
+      "passed": true
+    },
+    {
+      "path": "fixtures/originals/nylon-double-v2-60hp-double.stl",
+      "kind": "audit",
+      "mesh_status": "PASS",
+      "triangles": 340,
+      "invalid_pairs": 0,
+      "passed": true
+    },
+    {
+      "path": "fixtures/originals/nylon-single-v3-40hp.stl",
+      "kind": "audit",
+      "mesh_status": "PASS_WITH_WARNINGS",
+      "triangles": 244,
+      "invalid_pairs": 0,
+      "passed": true
+    },
+    {
+      "path": "fixtures/originals/nylon-single-v3-60hp.stl",
+      "kind": "audit",
+      "mesh_status": "PASS_WITH_WARNINGS",
+      "triangles": 244,
+      "invalid_pairs": 0,
+      "passed": true
+    },
+    {
+      "path": "fixtures/expected/nuts-v2-40hp-double-fixed.stl",
+      "kind": "audit",
+      "mesh_status": "PASS",
+      "triangles": 1686,
+      "invalid_pairs": 0,
+      "passed": true
+    },
+    {
+      "path": "fixtures/expected/nuts-v2-60hp-double-fixed.stl",
+      "kind": "audit",
+      "mesh_status": "PASS",
+      "triangles": 1672,
+      "invalid_pairs": 0,
+      "passed": true
+    },
+    {
+      "path": "fixtures/originals/nuts-v2-40hp-double.stl",
+      "kind": "repair",
+      "weld_tolerance": 0.0,
+      "passed": true,
+      "mesh_status": "PASS_WITH_WARNINGS",
+      "triangles": 1692,
+      "invalid_pairs": 0,
+      "warnings": [
+        "6 triangles have altitude < 1e-5 coordinate units (not a wall thickness measurement)"
+      ],
+      "bounds_changed": false,
+      "candidate_sha256": "057302f9d6ba9194df9a43ffed91982c65a97b3f18e7d2713405317e568f9837"
+    },
+    {
+      "path": "fixtures/originals/nuts-v2-40hp-double.stl",
+      "kind": "repair",
+      "weld_tolerance": 1e-05,
+      "passed": true,
+      "mesh_status": "PASS",
+      "triangles": 1686,
+      "invalid_pairs": 0,
+      "warnings": [],
+      "bounds_changed": false,
+      "candidate_sha256": "d5d30f918a8c4bb1ec81665aca90763a0fce1ec5d98e6168c872df373436afd1"
+    },
+    {
+      "path": "fixtures/originals/nuts-v2-60hp-double.stl",
+      "kind": "repair",
+      "weld_tolerance": 0.0,
+      "passed": true,
+      "mesh_status": "PASS_WITH_WARNINGS",
+      "triangles": 1676,
+      "invalid_pairs": 0,
+      "warnings": [
+        "4 triangles have altitude < 1e-5 coordinate units (not a wall thickness measurement)"
+      ],
+      "bounds_changed": false,
+      "candidate_sha256": "cbcf8a7a8cfadc44cf69cdead5efb15011d38aa7f3cbdbc2641d851312001327"
+    },
+    {
+      "path": "fixtures/originals/nuts-v2-60hp-double.stl",
+      "kind": "repair",
+      "weld_tolerance": 1e-05,
+      "passed": true,
+      "mesh_status": "PASS",
+      "triangles": 1672,
+      "invalid_pairs": 0,
+      "warnings": [],
+      "bounds_changed": false,
+      "candidate_sha256": "7a3c80939d1f347449ec8392fd186582b6f306f2e024d09b70dbac9607a1513f"
+    }
+  ]
+}
