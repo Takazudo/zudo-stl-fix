@@ -1,0 +1,19 @@
+.venv/bin/python scripts/verify_fixtures.py --repair
+PASS fixtures/originals/bar-30hp.stl
+PASS fixtures/originals/bar-40hp.stl
+PASS fixtures/originals/bar-60hp.stl
+PASS fixtures/originals/nuts-v2-40hp-double.stl
+PASS fixtures/originals/nuts-v2-60hp-double.stl
+PASS fixtures/originals/nuts-v3-40hp-single.stl
+PASS fixtures/originals/nuts-v3-60hp-single.stl
+PASS fixtures/originals/nylon-double-v2-40hp-double.stl
+PASS fixtures/originals/nylon-double-v2-60hp-double.stl
+PASS fixtures/originals/nylon-single-v3-40hp.stl
+PASS fixtures/originals/nylon-single-v3-60hp.stl
+PASS fixtures/expected/nuts-v2-40hp-double-fixed.stl
+PASS fixtures/expected/nuts-v2-60hp-double-fixed.stl
+PASS repair fixtures/originals/nuts-v2-40hp-double.stl weld=0
+PASS repair fixtures/originals/nuts-v2-40hp-double.stl weld=1e-05
+PASS repair fixtures/originals/nuts-v2-60hp-double.stl weld=0
+PASS repair fixtures/originals/nuts-v2-60hp-double.stl weld=1e-05
+17/17 checks passed
