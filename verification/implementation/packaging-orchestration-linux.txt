@@ -1,0 +1,12 @@
+test_drains_both_streams_and_closes_input (test_smoke_tools.SmokeProcessTests.test_drains_both_streams_and_closes_input) ... ok
+test_invalid_utf8_is_rejected (test_smoke_tools.SmokeProcessTests.test_invalid_utf8_is_rejected) ... ok
+test_oversized_request_is_rejected_before_launch (test_smoke_tools.SmokeProcessTests.test_oversized_request_is_rejected_before_launch) ... ok
+test_stderr_flood_fails_while_process_is_alive (test_smoke_tools.SmokeProcessTests.test_stderr_flood_fails_while_process_is_alive) ... ok
+test_stdout_flood_fails_while_process_is_alive (test_smoke_tools.SmokeProcessTests.test_stdout_flood_fails_while_process_is_alive) ... ok
+test_success_looking_text_with_abnormal_exit_raises (test_smoke_tools.SmokeProcessTests.test_success_looking_text_with_abnormal_exit_raises) ... ok
+test_timeout_kills_worker (test_smoke_tools.SmokeProcessTests.test_timeout_kills_worker) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.166s
+
+OK

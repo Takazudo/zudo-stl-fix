@@ -1,0 +1,36 @@
+name: Engine and protocol
+on:
+  push:
+    paths:
+      - 'engine/**'
+      - 'tests/**'
+      - 'fixtures/**'
+      - 'scripts/**'
+      - 'packaging/**'
+      - 'Makefile'
+      - '.github/workflows/checks.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: engine-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.14'
+          cache: pip
+          cache-dependency-path: engine/requirements.txt
+      - run: python -m pip install -r engine/requirements.txt
+      - run: python -m pip freeze
+      - run: python -m unittest discover -s engine -p 'test_*.py' -v
+      - run: python -m unittest discover -s tests -p 'test_*.py' -v
+      - run: python scripts/verify_fixtures.py --repair
+      - run: python engine/worker.py --self-test
+      - run: python -m py_compile scripts/generate_notices.py scripts/smoke_bundle.py
+      - run: bash -n scripts/build-macos.sh
