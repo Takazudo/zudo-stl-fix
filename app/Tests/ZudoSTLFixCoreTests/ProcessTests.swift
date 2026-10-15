@@ -143,4 +143,22 @@ final class ProcessTests: XCTestCase {
             } catch { XCTAssertTrue(error.localizedDescription.contains("tolerance")) }
         }
     }
+
+    // Fake-worker tests cannot catch path disagreements with the real worker; this runs
+    // engine/worker.py when a Python with the engine dependencies is configured.
+    func testRealWorkerRepairsDefectiveRailFromDefaultTemporaryStore() async throws {
+        let python = ProcessInfo.processInfo.environment["ZUDO_WORKER_PYTHON"] ?? ""
+        try XCTSkipIf(python.isEmpty, "Set ZUDO_WORKER_PYTHON to a Python with engine/requirements.txt installed")
+        let repo = URL(fileURLWithPath: #filePath).deletingLastPathComponent().deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let rail = repo.appendingPathComponent("fixtures/originals/nuts-v2-40hp-double.stl")
+        let store = try SnapshotStore()
+        let snapshot = try await store.snapshot(rail)
+        let worker = ProcessWorker(executable: URL(fileURLWithPath: python),
+                                   arguments: [repo.appendingPathComponent("engine/worker.py").path], timeout: 120)
+        let result = try await worker.run(snapshot: snapshot, tolerance: 0, progress: { _ in })
+        XCTAssertEqual(result.event.outcome, "repaired")
+        XCTAssertNotNil(result.candidate)
+        try await store.cleanup()
+    }
 }

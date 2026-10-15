@@ -59,6 +59,10 @@ cleanup, and subprocess termination.
 
 ## Native implementation and checks still requiring a Mac
 
+> **Update:** the arm64 native build, Swift tests, packaged-helper smoke and a partial
+> interactive run were later performed on a Mac and found two defects, now fixed.
+> See [`macos-arm64.md`](macos-arm64.md). The text below is the original Linux record.
+
 Swift tests cover fragmented/coalesced NDJSON, invalid streams and abnormal exits,
 TERM-resistant cancellation/timeout, sequential queue and stale completion,
 input identity/snapshot isolation, save state, collisions, hard-link and symlink

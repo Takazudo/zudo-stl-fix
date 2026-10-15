@@ -35,6 +35,13 @@ public struct VerifiedArtifact: Sendable {
 
 private let maximumBytes = 64 * 1024 * 1024
 private func failure(_ operation: String) -> LocalFileError { .system(operation, errno) }
+// Foundation's resolvingSymlinksInPath strips a leading /private, yielding /var or /tmp
+// symlink paths that the worker rightly rejects; realpath(3) keeps the physical path.
+func physicalDirectory(_ url: URL) throws -> URL {
+    guard let resolved = realpath(url.path, nil) else { throw failure("Resolve folder") }
+    defer { free(resolved) }
+    return URL(fileURLWithPath: String(cString: resolved), isDirectory: true)
+}
 private func metadata(_ fd: Int32) throws -> stat {
     var value = stat()
     guard fstat(fd, &value) == 0 else { throw failure("Inspect file") }
@@ -188,7 +195,7 @@ public actor SnapshotStore {
     private let lease: RootLease
     public init(root: URL? = nil, afterRead: (@Sendable (URL) throws -> Void)? = nil) throws {
         // Always create a new owned child, even when a caller supplies a parent.
-        let parent = (root ?? FileManager.default.temporaryDirectory).resolvingSymlinksInPath()
+        let parent = try physicalDirectory(root ?? FileManager.default.temporaryDirectory)
         reapStaleRoots(parent: parent)
         let id = UUID()
         let newRoot = parent.appendingPathComponent("\(RootOwnership.prefix)\(id.uuidString)", isDirectory: true)
@@ -274,7 +281,7 @@ public actor Exporter {
               !stem.isEmpty, !stem.contains("/"), !stem.contains("\0") else {
             throw LocalFileError.invalidInput("Choose a local output folder and valid filename.")
         }
-        let folder = directory.resolvingSymlinksInPath().standardizedFileURL
+        let folder = try physicalDirectory(directory)
         let resource = try folder.resourceValues(forKeys: [.isAliasFileKey, .volumeIsLocalKey])
         guard resource.isAliasFile != true, resource.volumeIsLocal == true else {
             throw LocalFileError.invalidInput("Choose a local output folder.")

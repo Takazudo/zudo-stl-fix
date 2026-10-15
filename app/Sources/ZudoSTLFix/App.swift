@@ -47,7 +47,8 @@ import ZudoSTLFixCore
     @NSApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject private var startup = Startup()
     var body: some Scene {
-        WindowGroup("zudo-stl-fix") {
+        // A single Window: WindowGroup spawns one extra window per Finder-opened file.
+        Window("zudo-stl-fix", id: "main") {
             if let queue = startup.queue {
                 MainView(queue: queue)
                 .frame(minWidth: 620, minHeight: 440)

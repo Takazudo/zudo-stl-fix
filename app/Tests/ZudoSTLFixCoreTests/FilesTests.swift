@@ -19,6 +19,19 @@ final class FilesTests: XCTestCase {
         return VerifiedArtifact(url: url, sha256: hash, byteSize: data.count)
     }
 
+    func testDefaultStoreRootIsPhysicalPathTheWorkerAccepts() async throws {
+        let store = try SnapshotStore()
+        let root = await store.root
+        addTeardownBlock { try? FileManager.default.removeItem(at: root) }
+        let resolved = try XCTUnwrap(realpath(root.path, nil)); defer { free(resolved) }
+        XCTAssertEqual(root.path, String(cString: resolved))
+        XCTAssertTrue(root.path.hasPrefix("/private/"), "temporary root lost its /private component: \(root.path)")
+    }
+
+    func testPhysicalDirectoryKeepsPrivatePrefixForSymlinkedTmp() throws {
+        XCTAssertEqual(try physicalDirectory(URL(fileURLWithPath: "/tmp")).path, "/private/tmp")
+    }
+
     func testSnapshotCopiesUnusualUppercaseNameAndRecordsHardLinkIdentity() async throws {
         let folder = try temporaryDirectory()
         let original = try artifact(in: folder, name: "- 日本語 ' rail.STL")
@@ -50,8 +63,9 @@ final class FilesTests: XCTestCase {
         let source = try artifact(in: actual)
         let store = try SnapshotStore(root: link)
         let snapshot = try await store.snapshot(source.url)
-        XCTAssertEqual(snapshot.directory.path, snapshot.directory.resolvingSymlinksInPath().path)
-        XCTAssertEqual(snapshot.input.path, snapshot.input.resolvingSymlinksInPath().path)
+        XCTAssertEqual(snapshot.directory.path, try physicalDirectory(snapshot.directory).path)
+        XCTAssertTrue(snapshot.directory.path.hasPrefix(try physicalDirectory(actual).path + "/"))
+        XCTAssertEqual(snapshot.input.deletingLastPathComponent().path, snapshot.directory.path)
         try await store.cleanup()
     }
 
