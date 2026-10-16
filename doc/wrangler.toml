@@ -1,5 +1,5 @@
 name = "zudo-stl-fix-doc"
-compatibility_date = "2026-10-16"
+compatibility_date = "2026-10-01"
 workers_dev = true
 
 [assets]

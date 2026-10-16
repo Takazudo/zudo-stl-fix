@@ -14,13 +14,9 @@
 // The route-injection build test covers the corresponding package-owned route;
 // this kept file remains the explicit host-owned seam.
 //
-// docHistory note: when the docHistory feature is selected, the generator
-// patches this file to statically import DocHistory from
-// "@takazudo/zudo-doc/doc-history" and merge it over chromeBindings in
-// createChrome's hostBindings (second) argument —
-// DocHistory's chrome-derive default is a no-op stub (unlike
-// DesignTokenPanelBootstrap server boundary, which the package auto-defaults), so without
-// that patch the doc-history button never hydrates on this route.
+// docHistory note: DocHistory is imported from "@takazudo/zudo-doc/doc-history-area"
+// and merged over chromeBindings below because its chrome-derive default is a
+// no-op stub; without it the doc-history button never hydrates on this route.
 
 import type { JSX } from "@takazudo/zfb/zudo-react/jsx-runtime";
 import { routeContext } from "virtual:zudo-doc-route-context";

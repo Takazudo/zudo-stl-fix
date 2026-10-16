@@ -27,7 +27,7 @@ The worker requires exactly these fields and rejects anything else.
 | `job_id` | A UUID string. Every event echoes it. |
 | `operation` | Only `check_and_repair`. |
 | `input_path`, `staging_directory` | Normalized absolute paths with no `..`; the input is an `.stl` directly inside the staging directory and cannot be named `candidate.stl` or `report.json`. |
-| `options.weld_tolerance` | Finite number from 0 to 1 STL units. Default and app value: 0. |
+| `options.weld_tolerance` | Finite number from 0 to 1 STL units. Default 0; the app sends 0 unless **Merge tiny existing edges** is on. |
 | `options.max_faces` | Integer, 1 to 20000. |
 | `options.max_pairs` | Integer, 1 to 2000000. |
 
@@ -48,7 +48,7 @@ Every event carries `protocol_version`, `job_id` and `event`.
 | Field | Meaning |
 | --- | --- |
 | `outcome` | `unchanged`, `repaired`, `refused`, `incomplete` or `error`. |
-| `validation_status` | The final audit status (`PASS`, `PASS_WITH_WARNINGS`), or null when no complete audit exists. For `refused` it carries the status of the input audit when available. |
+| `validation_status` | The final audit status (`PASS`, `PASS_WITH_WARNINGS`), or null when no complete audit exists. For `refused` it carries the status of the input audit when available, which is usually `FAIL`. |
 | `summary` | `before`, `after`, `repair_details`, `engine_version`, `input_sha256`, `options`. Large face-ID and intersection-detail lists are left to the report file. |
 | `warnings` | Objects `{code, message}`. Codes: `tiny_triangles`, `below_zero_z`, `multiple_shells`, `stored_normals`. |
 | `candidate` | Only for `repaired`: `{relative_path, sha256, byte_size}` of the staged `candidate.stl`. |

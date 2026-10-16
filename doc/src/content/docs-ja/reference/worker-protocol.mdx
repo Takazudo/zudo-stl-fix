@@ -27,7 +27,7 @@ sidebar_position: 2
 | `job_id` | UUID 文字列。すべてのイベントでこの値がそのまま返されます。 |
 | `operation` | `check_and_repair` のみ。 |
 | `input_path`, `staging_directory` | `..` を含まない、正規化された絶対パス。入力はステージングディレクトリ直下にある `.stl` で、`candidate.stl` や `report.json` という名前にはできません。 |
-| `options.weld_tolerance` | 0 から 1 STL 単位までの有限の数値。デフォルトおよびアプリが使う値は 0 です。 |
+| `options.weld_tolerance` | 0 から 1 STL 単位までの有限の数値。デフォルトは 0 で、アプリは **Merge tiny existing edges** がオンのときを除き 0 を送ります。 |
 | `options.max_faces` | 1 から 20000 までの整数。 |
 | `options.max_pairs` | 1 から 2000000 までの整数。 |
 
@@ -48,7 +48,7 @@ JSON メンバーの重複や有限でない数値はプロトコルエラーに
 | フィールド | 意味 |
 | --- | --- |
 | `outcome` | `unchanged`、`repaired`、`refused`、`incomplete`、`error` のいずれか。 |
-| `validation_status` | 最終的な監査ステータス（`PASS`、`PASS_WITH_WARNINGS`）。完全な監査が存在しない場合は null です。`refused` の場合は、入手できれば入力の監査ステータスが入ります。 |
+| `validation_status` | 最終的な監査ステータス（`PASS`、`PASS_WITH_WARNINGS`）。完全な監査が存在しない場合は null です。`refused` の場合は、入手できれば入力の監査ステータス（通常は `FAIL`）が入ります。 |
 | `summary` | `before`、`after`、`repair_details`、`engine_version`、`input_sha256`、`options`。大きな面 ID のリストや交差の詳細リストはレポートファイルに任せます。 |
 | `warnings` | `{code, message}` のオブジェクト。コードは `tiny_triangles`、`below_zero_z`、`multiple_shells`、`stored_normals` です。 |
 | `candidate` | `repaired` の場合のみ。ステージングされた `candidate.stl` の `{relative_path, sha256, byte_size}`。 |
