@@ -29,35 +29,59 @@ export default defineConfig(
     headerNav: [
       {
         label: "Getting Started",
+        labelKey: "nav.getting-started",
         path: "/docs/getting-started",
         categoryMatch: "getting-started",
       },
       {
         label: "App Guide",
+        labelKey: "nav.app-guide",
         path: "/docs/app-guide",
         categoryMatch: "app-guide",
       },
       {
         label: "Concepts",
+        labelKey: "nav.concepts",
         path: "/docs/concepts",
         categoryMatch: "concepts",
       },
       {
         label: "CLI",
+        labelKey: "nav.cli",
         path: "/docs/cli",
         categoryMatch: "cli",
       },
       {
         label: "Reference",
+        labelKey: "nav.reference",
         path: "/docs/reference",
         categoryMatch: "reference",
       },
       {
         label: "Develop",
+        labelKey: "nav.develop",
         path: "/docs/develop",
         categoryMatch: "develop",
       },
     ],
+    translations: {
+      en: {
+        "nav.getting-started": "Getting Started",
+        "nav.app-guide": "App Guide",
+        "nav.concepts": "Concepts",
+        "nav.cli": "CLI",
+        "nav.reference": "Reference",
+        "nav.develop": "Develop",
+      },
+      ja: {
+        "nav.getting-started": "はじめに",
+        "nav.app-guide": "アプリの使い方",
+        "nav.concepts": "基本概念",
+        "nav.cli": "CLI",
+        "nav.reference": "リファレンス",
+        "nav.develop": "開発",
+      },
+    },
     headerRightItems: [
       {
         type: "component",
