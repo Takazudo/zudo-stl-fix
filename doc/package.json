@@ -1,0 +1,38 @@
+{
+  "name": "zudo-stl-fix-doc",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "run-parallel dev:zfb dev:history",
+    "build": "zfb build",
+    "preview": "zfb preview",
+    "check": "zfb check",
+    "check:links": "linkinator ./dist --recurse --skip '^https?://(?!(localhost|127\\.0\\.0\\.1)[:/])'",
+    "check:images": "zudo-doc check images",
+    "dev:zfb": "zfb dev",
+    "dev:zfb:network": "zfb dev --host 0.0.0.0",
+    "dev:network": "run-parallel dev:zfb:network dev:history",
+    "dev:history": "doc-history-server --port 4322 --content-dir src/content/docs --locale ja:src/content/docs-ja",
+    "check:html": "html-validate \"dist/**/*.html\""
+  },
+  "dependencies": {
+    "@takazudo/zfb": "4.5.2",
+    "@takazudo/zfb-runtime": "4.5.2",
+    "@takazudo/zfb-md-wasm": "4.5.2",
+    "@takazudo/zudo-doc": "^7.0.0",
+    "zod": "^4.3.6",
+    "diff": "^8.0.3",
+    "@takazudo/zudo-doc-history-server": "^7.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.0",
+    "@types/node": "^22.0.0",
+    "html-validate": "^11.16.2",
+    "linkinator": "^8.1.0"
+  },
+  "packageManager": "pnpm@10.30.3"
+}
