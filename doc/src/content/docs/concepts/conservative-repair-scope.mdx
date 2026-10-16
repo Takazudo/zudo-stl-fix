@@ -1,0 +1,23 @@
+---
+title: Conservative Repair Scope
+description: What the engine repairs, what it refuses, and why unsupported is a normal result.
+sidebar_position: 1
+---
+
+## What is repaired
+
+The engine removes exact duplicate and degenerate faces where that is safe, fixes the orientation of a supported single shell, and retriangulates suitable exactly planar folded or overlapping patches using their existing oriented boundaries. It can optionally collapse short existing edges when you turn on [Merge tiny existing edges](../app-guide/queue-and-quitting.mdx).
+
+Before a repair is offered, the result is written as binary STL, reloaded, and fully re-validated, and guards on shell count, bounds, and volume must pass.
+
+## What is refused
+
+The engine does not automatically repair open or non-manifold meshes after exact cleanup, general non-coplanar self-intersections, invalid or branching patch boundaries, or multiple or nested shells. It does not fill arbitrary holes, smooth, voxelize, decimate, or weld nearby walls.
+
+## Unsupported is an expected outcome
+
+When the engine cannot fix a mesh conservatively, the app reports **Cannot repair safely** and offers nothing to save. Guessing a solid would risk silently changing your model, so refusal is the correct behavior, not a bug. Likewise, a scan stopped by a limit or timeout is **Check incomplete**, never a clean pass.
+
+## Defaults
+
+Weld tolerance is zero by default. The two supplied defective rail test models repair in default mode with their tiny-triangle warnings retained: intersections are removed, and the remaining warnings are still shown.

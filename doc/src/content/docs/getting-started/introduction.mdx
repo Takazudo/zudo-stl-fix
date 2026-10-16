@@ -1,0 +1,32 @@
+---
+title: Introduction
+description: What zudo-stl-fix does, what it deliberately does not do, and where it runs.
+sidebar_position: 1
+---
+
+## What it does
+
+zudo-stl-fix is a native macOS app (SwiftUI/AppKit) that follows one workflow: **drop STL files, automatic check and conservative repair, Save Fixed Files**.
+
+- Accepts binary and ASCII STL files dropped from Finder or chosen with **Choose Files…**.
+- Checks each file, including a scan for intersecting triangle pairs, rather than trusting that a watertight-looking mesh is valid.
+- Repairs only what the engine can fix conservatively, then re-checks the exact bytes it would write.
+- Saves a verified copy named `<original-stem>-fixed.stl`. Files that need no repair produce no copy.
+
+All processing happens on your Mac. There is no account, no upload, and the packaged app does not need a Python installation. The geometry engine runs as a separate bundled helper process.
+
+## What it does not do
+
+- It does not scale, rotate, translate, smooth, voxelize, fill arbitrary holes, or weld nearby walls.
+- It does not tell you whether a model is printable, fits, or is strong enough. See [Validation is not printability](../concepts/validation-is-not-printability.mdx).
+- It has no 3D preview, no mesh editor, and no slicer integration.
+- It does not process folders, archives, remote URLs, or non-STL files.
+- It does not repair everything. "Cannot repair safely" is an expected outcome. See [Conservative repair scope](../concepts/conservative-repair-scope.mdx).
+
+:::note[Verification status]
+The app has been built and run on an Apple-silicon Mac, but several interactive checks (Finder drag-and-drop, the save panel, cancellation in the UI, and others) are still pending. Progress is tracked in [issue #1](https://github.com/Takazudo/zudo-stl-fix/issues/1).
+:::
+
+## Command-line engine
+
+The original Python engine remains usable from the command line. See the [CLI section](../cli/index.mdx).

@@ -1,0 +1,21 @@
+---
+title: Originals and Copies
+description: Originals are never modified, geometry is never silently transformed, and healthy files make no copies.
+sidebar_position: 3
+---
+
+## Originals are never modified
+
+Dropping a file changes nothing in it or its folder. The app copies each file into a private workspace, records its hash, and works on that copy. Saved results are always new files; originals, other queued inputs, and existing files are never overwritten.
+
+## No silent transformation
+
+The app does not scale, rotate, translate, or infer units, and it does not smooth or voxelize. ASCII coordinates are parsed at double precision and binary output uses 32-bit floats, so tiny quantization is possible; it is reported in [Details](../app-guide/details-and-reports.mdx) rather than hidden.
+
+## Healthy files produce no copies
+
+If a check finds nothing to repair, the status is **No repair needed** and there is nothing to save. If only a warning remains, the status is **Checked — review needed**, again with no copy. Redundant `-fixed` files are never created.
+
+## Only verified output is offered
+
+Saving is only enabled for a repair whose stored bytes were verified against the validated bytes. A canceled, crashed, timed-out, incomplete, or malformed run never enables saving.
