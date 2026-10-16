@@ -1,0 +1,92 @@
+---
+title: ワーカープロトコル
+description: アプリと engine/worker.py の間で使うバージョン 1 のリクエストと NDJSON イベントのプロトコル。
+sidebar_position: 2
+---
+
+`engine/worker.py` は 1 プロセスにつきちょうど 1 つのジョブを実行します。アプリ（`ZudoSTLFixCore` の `ProcessWorker` と `WorkerProtocolParser`）は標準入力にリクエストを 1 つ送ってから標準入力を閉じ、標準出力から UTF-8 の改行区切り JSON を読み取ります。診断メッセージは標準エラー出力にのみ出力されます。また、`python engine/worker.py --self-test` というビルド用のスモークテストもあり、実際の折り重なったパッチの修復を実行して JSON を 1 行出力します。
+
+## リクエスト
+
+```json
+{
+  "protocol_version": 1,
+  "job_id": "3f2b8c1e-5a0d-4c33-9a57-0d1e6b7a9c10",
+  "operation": "check_and_repair",
+  "input_path": "<job directory>/input.stl",
+  "staging_directory": "<job directory>",
+  "options": { "weld_tolerance": 0.0, "max_faces": 20000, "max_pairs": 2000000 }
+}
+```
+
+ワーカーはちょうどこれらのフィールドだけを要求し、それ以外はすべて拒否します。
+
+| フィールド | ルール |
+| --- | --- |
+| `protocol_version` | 整数 `1`。 |
+| `job_id` | UUID 文字列。すべてのイベントでこの値がそのまま返されます。 |
+| `operation` | `check_and_repair` のみ。 |
+| `input_path`, `staging_directory` | `..` を含まない、正規化された絶対パス。入力はステージングディレクトリ直下にある `.stl` で、`candidate.stl` や `report.json` という名前にはできません。 |
+| `options.weld_tolerance` | 0 から 1 STL 単位までの有限の数値。デフォルトおよびアプリが使う値は 0 です。 |
+| `options.max_faces` | 1 から 20000 までの整数。 |
+| `options.max_pairs` | 1 から 2000000 までの整数。 |
+
+JSON メンバーの重複や有限でない数値はプロトコルエラーになります。リクエストはワーカー側で 16 KiB までに制限されます（アプリは 4 KiB 未満に収めています）。
+
+## イベント
+
+すべてのイベントは `protocol_version`、`job_id`、`event` を持ちます。
+
+| イベント | フィールド | 補足 |
+| --- | --- | --- |
+| `started` | 共通フィールド以外なし | ちょうど 1 つで、最初に送られます。 |
+| `progress` | `phase`、`message` | `phase` は `checking`、`repairing`、`verifying` のいずれかで、フェーズが逆戻りすることはありません。根拠のない進捗率は出しません。`repairing` と `verifying` は修復を試みる場合にのみ現れます。 |
+| `result` | 下記参照 | ちょうど 1 つの終端イベントで、最後に送られます。 |
+
+### result のフィールド
+
+| フィールド | 意味 |
+| --- | --- |
+| `outcome` | `unchanged`、`repaired`、`refused`、`incomplete`、`error` のいずれか。 |
+| `validation_status` | 最終的な監査ステータス（`PASS`、`PASS_WITH_WARNINGS`）。完全な監査が存在しない場合は null です。`refused` の場合は、入手できれば入力の監査ステータスが入ります。 |
+| `summary` | `before`、`after`、`repair_details`、`engine_version`、`input_sha256`、`options`。大きな面 ID のリストや交差の詳細リストはレポートファイルに任せます。 |
+| `warnings` | `{code, message}` のオブジェクト。コードは `tiny_triangles`、`below_zero_z`、`multiple_shells`、`stored_normals` です。 |
+| `candidate` | `repaired` の場合のみ。ステージングされた `candidate.stl` の `{relative_path, sha256, byte_size}`。 |
+| `report` | 任意。`report.json` の `{relative_path, sha256, byte_size}`。 |
+| `error` | 該当する場合は `{code, message}`。 |
+
+使用中のエラーコードは `unsupported_geometry`、`invalid_input`、`resource_limit`、`permission_denied`、`input_changed`、`verification_failed`、`protocol_error`、`worker_crashed` です。
+
+## 上限
+
+| 項目 | 値 |
+| --- | --- |
+| リクエスト（ワーカー側） | 16 KiB |
+| 入力スナップショット | 64 MiB |
+| レポート | 16 MiB |
+| イベント 1 行 | 256 KiB |
+| アプリ側の標準出力の合計 | 4 MiB、最大 512 イベント |
+| アプリ側の標準エラー出力 | 1 MiB |
+| デフォルトのジョブタイムアウト | 120 秒 |
+| 終了時の猶予 | SIGTERM を送り、2 秒後に SIGKILL |
+
+## 成功の条件
+
+アプリがジョブを成功（`unchanged` または `repaired`）として扱うのは、次のすべてが成り立つ場合に限ります。
+
+- ちょうど 1 つの `started`、順序が正しい `progress` イベント、そして 1 つの `result` が続き、末尾に改行があり、余分な出力がないこと。
+- すべての行で `job_id` とプロトコルバージョンが一致し、JSON オブジェクトのメンバーが重複していないこと。
+- `validation_status` が `PASS` または `PASS_WITH_WARNINGS` であり、`after` の監査に失敗がなく、表面交差スキャンが完了しており、欠陥ペアがゼロであること。
+- outcome が `repaired` のときに限り `candidate` が存在し、そのハッシュがシリアライズ後のバイト列の監査におけるハッシュと一致すること。
+- 候補ファイルとレポートファイルが、ジョブディレクトリ内の単一の通常ファイルとして存在し、宣言された SHA-256 とサイズに一致すること。
+- 非公開の入力スナップショットが変更されておらず、プロセスがステータス 0 で正常終了したこと。
+
+それ以外はすべてプロトコルエラーです。ファイルが存在するだけ、あるいは終了コードが 0 であるだけでは、決して十分ではありません。
+
+## 終了コード
+
+ワーカーは、完了した outcome である `unchanged`、`repaired`、`refused`、`incomplete` について有効な終端の result を出したあと、`0` で終了します。`error` の result、または運用上の失敗やプロトコル上の失敗では 0 以外で終了し、アプリはその error の result を失敗として報告します。これは [CLI の終了コード](../cli/output-and-exit-codes.mdx)とは異なります。
+
+## キャンセルとタイムアウト
+
+エンジンの厳密演算のループは協調的にキャンセルできないため、終了処理はアプリが担当します。キャンセルまたはタイムアウトの際には SIGTERM を送り、最大 2 秒待ってからワーカーを SIGKILL します。キャンセルすると Canceled 状態になり、保存できる出力は残りません。タイムアウトすると「Check incomplete」になります。ワーカーが異常終了した場合、ストリームが途中で切れた場合、標準出力や標準エラー出力をあふれさせた場合、終了後もパイプを開いたままにした場合、result を出さなかった場合は、いずれも成功として扱われることはありません。キャンセルや突然の終了では終端イベントが出ないこともあり、その場合の状態はアプリが判断します。
