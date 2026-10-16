@@ -1,0 +1,43 @@
+---
+title: Continuous integration
+description: The checks, macOS, and docs GitHub Actions workflows.
+sidebar_position: 3
+---
+
+## Overview
+
+Three workflows live in `.github/workflows/`. CI is kept inexpensive: fast Linux checks run on relevant pushes, and the heavy macOS build runs only on demand.
+
+## checks.yml: Linux push checks
+
+Runs on pushes that touch `engine/`, `tests/`, `fixtures/`, `scripts/`, `packaging/`, the `Makefile`, or the workflow itself (and on manual dispatch). It has no pull-request trigger, to avoid duplicate runs. In-progress runs on the same ref are cancelled.
+
+On Ubuntu with Python 3.12.14 it:
+
+- installs `engine/requirements.txt` and prints `pip freeze`;
+- runs the engine and worker test suites;
+- runs `scripts/verify_fixtures.py --repair`;
+- runs `engine/worker.py --self-test`;
+- byte-compiles the packaging scripts and syntax-checks `scripts/build-macos.sh`.
+
+## macos.yml: manual native build
+
+Triggered by `workflow_dispatch` only, with a `runner` choice of `macos-14`, `macos-15`, or `macos-15-intel`. It runs `bash scripts/build-macos.sh` and uploads the local zip, its checksum, and `BUILD-INFO.txt` as a 7-day artifact. The artifact label uses the detected machine architecture, because a runner label is not an architecture guarantee.
+
+```sh
+gh workflow run macos.yml --ref <branch> -f runner=macos-14
+gh run list --workflow macos.yml
+gh run watch <run-id> --exit-status
+```
+
+:::note
+GitHub may not allow dispatching a newly added workflow until it exists on the default branch. Do not merge just to get around that; run the local Mac commands, or report native verification as pending.
+:::
+
+No workflow signs with credentials, deploys the app, creates a release, or changes repository protection.
+
+## docs.yml: documentation site
+
+This workflow builds this documentation site. On pull requests and pushes to `main` that touch `doc/**`, it builds the site and runs `check:html`, `check:links`, and a `wrangler` dry run.
+
+Deployment is configured for Cloudflare Workers Static Assets, but **live deployment is pending credentials**. The deploy step skips with a notice until the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets exist. The setup guide is `docs/cloudflare-setup.md` in the repository.

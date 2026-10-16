@@ -1,0 +1,19 @@
+---
+title: Third-party sources and licences
+description: Pinned dependencies, notices, and provenance of the fixtures.
+sidebar_position: 5
+---
+
+## Dependencies and notices
+
+The helper bundles CPython 3.12.14 and the pinned packages from `packaging/requirements-macos.lock`. Each build generates `ThirdPartyNotices` from the distributions actually installed, including license and copyright material, package metadata and versions, wheel-vendored notices (GEOS, BLAS, Qhull), and the Python license. Build tools are included in the inventory conservatively. The full Python license text is stored as `packaging/PYTHON-LICENSE.txt`.
+
+No licence for the project or its models is inferred from dependency licences. Review licence and source obligations for the exact shipped dependencies before any public release.
+
+## Fixture provenance
+
+The 11 original STLs in `fixtures/originals/` were user-supplied mechanical designs and are not assumed to be public-domain or freely redistributable. Review visibility and rights before publishing the repository or a release. Nothing contacts external services with model data at runtime.
+
+## External references
+
+The design drew on Apple's documentation for SwiftUI drag and drop and for Developer ID distribution and notarization, and on PyInstaller's documentation for the bundled-interpreter approach and for macOS architectures and signing. `docs/SOURCES.md` lists the exact links and states that the macOS 14 floor, caps, queue policy and layout are project decisions, not measured properties.

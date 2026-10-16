@@ -1,0 +1,52 @@
+---
+title: Testing
+description: The make targets, Swift tests, and the opt-in real-worker test.
+sidebar_position: 2
+---
+
+## Make targets
+
+| Command | What it runs |
+|---|---|
+| `make test-engine` | The original 17 engine regression tests (`engine/test_stl_doctor.py`). |
+| `make test-worker` | The worker, protocol and packaging-tool tests under `tests/`. |
+| `make verify-fixtures` | `scripts/verify_fixtures.py --repair`: audits every reference file and repairs the two defective rails in both tolerance modes. |
+| `make verify-hashes` | `scripts/verify_fixtures.py --hashes-only`: checks the immutable fixture hashes. |
+| `make verify` | All four of the above. |
+| `make test-app` | `swift test --package-path app`. |
+
+Pass `PYTHON=.venv/bin/python` to use a virtual environment. The default is `python3`.
+
+Run `make test-engine` and `make verify-fixtures` before and after any engine change. The original fixtures and golden files are immutable inputs: never change them to make a test pass.
+
+## Worker self-test
+
+```sh
+python engine/worker.py --self-test
+```
+
+This exercises the real geometry dependencies, including Shapely constrained triangulation.
+
+## Swift tests
+
+```sh
+swift test --package-path app
+```
+
+These cover the protocol, queue, cancellation, and safe-export logic. They run on macOS only.
+
+## The opt-in real-worker test
+
+One Swift test, `testRealWorker`, drives the actual Python worker instead of a fake. It is skipped unless `ZUDO_WORKER_PYTHON` points to a Python that has `engine/requirements.txt` installed:
+
+```sh
+ZUDO_WORKER_PYTHON=.venv/bin/python swift test --package-path app --filter testRealWorker
+```
+
+:::tip
+Run this test whenever you touch path handling or the worker protocol. A real defect (symlinked job directories) slipped past fake-worker tests and was only caught by running the real app; see [Verification status](./verification-status.mdx).
+:::
+
+## What the tests do not prove
+
+Passing tests do not show that a repaired mesh is printable, fits, or is strong. Real fixtures and real intersection validation are required: mocks and topology-only checks are not evidence of geometry correctness.
