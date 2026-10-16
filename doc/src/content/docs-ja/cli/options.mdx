@@ -27,7 +27,7 @@ stl_doctor.py [-h] [--out-dir OUT_DIR] [--report REPORT]
 | オプション | デフォルト | 意味 |
 | --- | --- | --- |
 | `-h`, `--help` | | ヘルプを表示して終了します。 |
-| `--out-dir OUT_DIR` | `repaired` | 修復済みファイルの出力先ディレクトリ。各出力は `<入力ファイルの stem>-fixed.stl` という名前になります。 |
+| `--out-dir OUT_DIR` | `repaired` | 修復済みファイルの出力先ディレクトリ。各出力は `<input stem>-fixed.stl`（入力ファイル名から拡張子を除いた部分に `-fixed.stl` を付けたもの）という名前になります。 |
 | `--report REPORT` | `stl-report.json` | バッチ JSON レポートのパス。末尾は `.json` でなければならず、入力ファイルのいずれとも一致してはいけません。 |
 | `--weld-tolerance WELD_TOLERANCE` | `0.0` | メッシュに**既存の**短いエッジを潰す処理を明示的に有効にします。単位は STL の座標単位です。`0` は近似的な溶接を行わないことを意味します。repair モード専用です。 |
 | `--max-faces MAX_FACES` | `20000` | 厳密な交差スキャンは、面数がこの値を超えるメッシュを拒否します。 |
