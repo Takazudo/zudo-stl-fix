@@ -1,0 +1,51 @@
+---
+title: Arguments and options
+description: Every argument and option of stl_doctor.py, with defaults and validation rules.
+sidebar_position: 1
+---
+
+## Synopsis
+
+```text
+stl_doctor.py [-h] [--out-dir OUT_DIR] [--report REPORT]
+              [--weld-tolerance WELD_TOLERANCE] [--max-faces MAX_FACES]
+              [--max-pairs MAX_PAIRS] [--overwrite]
+              {check,repair} files [files ...]
+```
+
+## Positional arguments
+
+| Argument | Meaning |
+| --- | --- |
+| `mode` | `check` or `repair`. `check` only audits; `repair` audits and then writes a repaired copy when supported work is needed. |
+| `files` | One or more STL paths, quoted globs, or directories. Directories are scanned non-recursively for files with a `.stl` suffix (case-insensitive). Duplicate resolved paths are processed once. |
+
+A glob that matches nothing, or a directory without STL files, is an error before any file is processed.
+
+## Options
+
+| Option | Default | Meaning |
+| --- | --- | --- |
+| `-h`, `--help` | | Show help and exit. |
+| `--out-dir OUT_DIR` | `repaired` | Directory for repaired files. Each output is named `<input stem>-fixed.stl`. |
+| `--report REPORT` | `stl-report.json` | Path of the batch JSON report. Must end in `.json` and must not be one of the inputs. |
+| `--weld-tolerance WELD_TOLERANCE` | `0.0` | Opt-in collapse of short **existing** mesh edges, in STL coordinate units. `0` means no approximate welding. Repair mode only. |
+| `--max-faces MAX_FACES` | `20000` | Exact intersection scans refuse meshes with more faces than this. |
+| `--max-pairs MAX_PAIRS` | `2000000` | Exact intersection scans stop when the number of candidate triangle pairs exceeds this. |
+| `--overwrite` | off | Allow replacing an existing report or output file. Never allowed to replace an input STL. |
+
+## Validation rules
+
+- `--weld-tolerance` must be finite and non-negative; `--max-faces` and `--max-pairs` must be at least 1.
+- `--weld-tolerance` with `check` is rejected: it is a repair option.
+- The report path must end in `.json`, must differ from every input, and must not already exist unless `--overwrite` is given.
+- If an output path (`<out-dir>/<stem>-fixed.stl`) would equal an input, or two inputs share a base name, the run is refused before processing.
+- The output file must not already exist unless `--overwrite` is given (checked only for files that need repair).
+
+:::note
+Hitting `--max-faces` or `--max-pairs` is never reported as a clean scan. The file is recorded as an error and the run exits with code 2. See [Output and exit codes](./output-and-exit-codes.mdx).
+:::
+
+## Weld tolerance
+
+With the default of `0`, no vertices are merged. A positive value collapses edges that already exist in the mesh and are no longer than the tolerance; it never merges unconnected nearby walls. Clusters whose members would move further than the tolerance are skipped. When a positive tolerance is given and the mesh has triangles with altitude below `1e-5`, the file counts as needing work. The applied tolerance, merge count and maximum displacement are recorded in the report under `repair_details`.

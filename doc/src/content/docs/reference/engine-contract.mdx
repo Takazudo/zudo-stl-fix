@@ -1,0 +1,62 @@
+---
+title: Engine contract
+description: What the engine checks, what it repairs, and what each outcome means.
+sidebar_position: 3
+---
+
+The engine (`engine/stl_doctor.py`, version 1.0.0) is conservative by design. Unsupported geometry is an expected outcome, not a reason to guess a solid.
+
+:::warning
+A validated mesh is not proof of printability, fit, wall thickness, strength or design intent. Coordinates are in unspecified STL units and the engine performs no unit conversion.
+:::
+
+## Checks
+
+Every file is audited, reading the stored coordinates without silent welding. Binary STL is checked on its exact float32 coordinates; ASCII decimals are first parsed as binary64.
+
+**Failures** (any one makes the status `FAIL`):
+
+- `boundary_edges`, `nonmanifold_edges`, `nonmanifold_vertex_count`
+- `inconsistent_edge_windings`
+- `duplicate_triangles`, `zero_area_triangles`
+- `surface_intersections_or_invalid_contacts`, from an exact-predicate scan of triangle pairs
+- `nonpositive_total_signed_volume`
+
+**Warnings** (status `PASS_WITH_WARNINGS`, visible and not failures):
+
+- Triangles with altitude below `1e-5` coordinate units (a sliver check, not a wall thickness measurement)
+- Geometry below Z=0 (placement is unchanged)
+- More than one connected shell (containment and cavity orientation are not certified; automatic repair is refused)
+- Stored facet normals missing, invalid or more than 1 degree off (regenerated on export)
+
+Watertight connectivity alone is not enough: the intersection scan must also complete. The scan is bounded by `max_faces` (default 20000) and `max_pairs` (default 2000000) and fails closed, since it has quadratic worst-case behavior. A resource-limited scan is never a clean audit.
+
+## Repair operations
+
+Repair applies only to a single closed shell, in this order:
+
+1. Remove exact zero-area and exact duplicate triangles.
+2. Re-orient faces of the single shell.
+3. Retriangulate suitable exactly planar folded or overlapping patches from their existing oriented boundaries.
+4. Optionally collapse short existing edges when a positive weld tolerance was requested. The default tolerance is zero, and the application is reported.
+5. Serialize binary STL, reload it, and audit those exact coordinates.
+
+The candidate is refused unless it has no failures, still has one shell, keeps its bounding box within the allowed displacement, and stays within a 1e-6 relative signed-volume guard. Nothing is rescaled, rotated, translated, smoothed, voxelized or hole-filled.
+
+The engine does not automatically repair open or non-manifold meshes after exact cleanup, unresolved general non-coplanar intersections, invalid or branching patch boundaries, or multiple or nested shells.
+
+## Outcomes
+
+| Outcome | Meaning | Output |
+| --- | --- | --- |
+| `unchanged` | A complete check found nothing needing supported work. Warnings stay visible. | No `-fixed` copy. |
+| `repaired` | Repair succeeded and the serialized bytes passed a complete audit. | Verified candidate STL. |
+| `refused` | The geometry is outside the supported scope (`unsupported_geometry`). | No candidate. |
+| `incomplete` | A resource limit stopped the scan, so no clean result exists. | No candidate. |
+| `error` | Invalid input, permission, changed input, verification, protocol or crash failure. | No candidate. |
+
+In the app these map to "No repair needed" (or "Checked, review needed" when warnings exist), "Repair ready", "Cannot repair safely", "Check incomplete" and "Error".
+
+## Reference expectations
+
+Both original `nuts-v2-*-double.stl` fixtures contain 62 invalid triangle-pair interactions; the other nine have no mesh failures under the performed checks. With welding disabled, both reach zero invalid pairs with unchanged bounding boxes and keep tiny-triangle warnings. Fixtures are verified by `make verify-fixtures` against `fixtures/manifest.json`, not by file names inside repair logic.
