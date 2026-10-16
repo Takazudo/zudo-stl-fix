@@ -1,0 +1,78 @@
+---
+title: macOS でのビルド
+description: 前提条件、ビルドスクリプト、生成物、BUILD-INFO について。
+sidebar_position: 1
+---
+
+## 前提条件
+
+ソースは macOS 14 を対象としています。テストしたいアーキテクチャごとに、それぞれのマシンでビルドしてください。universal2 の成果物はなく、Python ヘルパーのクロスコンパイルも行いません。
+
+必要なものは次のとおりです。
+
+- Xcode とそのコマンドラインツールが選択された macOS。
+- 現在のシェルと同じアーキテクチャの CPython **3.12.14**。
+
+初回のビルドでは、バージョンを固定した依存関係をダウンロードします。ビルドしたアプリの実行には、Python、Homebrew、ターミナル、アカウント、ネットワーク接続、依存関係のインストールはいずれも不要です。
+
+`packaging/requirements-macos.lock` は、ヘルパーとビルドで使う解決済みのすべてのディストリビューションを、macOS 用 wheel の SHA-256 とともに固定しています。固定バージョンには NumPy 2.5.4、SciPy 1.18.1、Shapely 2.2.0、Trimesh 4.12.2、PyInstaller 6.22.3 が含まれます。
+
+:::note
+arm64 と x86_64 の両方について、CPython 3.12 用の wheel が Linux 上で正常にダウンロードできることは確認済みです。これは入手可能であることを示すだけで、実行時の互換性を示すものではありません。また、universal2 の PyInstaller wheel を使っても、最終的なアプリが universal2 になるわけではありません。
+:::
+
+## ビルドコマンド
+
+リポジトリのルートで実行します。
+
+```sh
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -r engine/requirements.txt
+make PYTHON=.venv/bin/python test-engine test-worker verify-fixtures
+.venv/bin/python engine/worker.py --self-test
+swift test --package-path app
+PYTHON=python3.12 bash scripts/build-macos.sh
+```
+
+`scripts/build-macos.sh` は、1 回の実行ですべての作業を行います。
+
+1. 新しいビルド用仮想環境を作成し、固定された wheel のハッシュを検証します。
+2. PyInstaller で実際のワーカーをフリーズします。
+3. Swift のテストを実行し、ネイティブ実行ファイルをビルドします。
+4. `.app` を作成し、サードパーティ通知とビルドの来歴情報を生成します。
+5. ネストされたアドホック署名を検証します。
+6. 再配置したヘルパーのスモークテストを実行します。
+
+Makefile のターゲット `build-helper`、`build-app`、`package-local` はすべてこの同じスクリプトのエイリアスです。そのため、ヘルパーとネイティブアプリは常に一緒に検証されます。
+
+## 生成物
+
+すべてのステップが通った場合にのみ、スクリプトは一意な名前のディレクトリ `build/macos-<actual-architecture>/verified.XXXXXX/` を書き出します。中身は次のとおりです。
+
+- `zudo-stl-fix.app`
+- `zudo-stl-fix-macos-<actual-architecture>-local.zip`
+- アーカイブの `.sha256` ファイル
+
+実行のたびに新しいディレクトリが作られるため、以前のビルドの古いライブラリがテスト対象のアプリに紛れ込むことはありません。
+
+:::warning
+このアーカイブはローカル開発用の生成物です。アドホック署名のみで、公証（notarization）はされておらず、公開リリースでもありません。[リリース状況](./release-status.mdx)を参照してください。
+:::
+
+## BUILD-INFO
+
+アプリ内の `Contents/Resources/BUILD-INFO.txt` には、ビルド環境が記録されます。macOS、Xcode、SDK のバージョンとパス、Swift、Python、インストール済みのディストリビューション、ソースのコミット、作業ツリーに未コミットの変更があったかどうか、実際のアーキテクチャ、設定されたターゲットです。証跡として生成物と一緒に保管してください。
+
+## 組み込みヘルパーとスモークテスト
+
+ネイティブ実行ファイルは `Contents/MacOS/ZudoSTLFix` です。ヘルパーは `Contents/Helpers/STLWorker.app/Contents/MacOS/stl-worker` から見つけ、`PATH` やシステムの Python を経由することはありません。
+
+既存のアプリに対してスモークテストを再実行するには、次のようにします。
+
+```sh
+.venv/bin/python scripts/smoke_bundle.py '/absolute/path/zudo-stl-fix.app'
+```
+
+スモークテストは、スペースと日本語を含む一時パスにアプリをコピーし、ネストされた署名を検証し、Mach-O のアーキテクチャスライスを確認し、バンドルとシステムライブラリ以外にあるネイティブ依存関係を拒否します。ヘルパーは `PATH=/usr/bin:/bin`、Python 関連の環境変数を引き継がない状態、一時的なホームディレクトリで起動します。
+
+続いて、11 個の元のフィクスチャすべてをチェックし、欠陥のある 2 本のレールだけが修復候補になること（微小三角形の警告は保持されたまま）を確認します。さらに、ステージングされたファイルのハッシュとバウンディングボックス、交差スキャンが完了していることを検証し、シリアライズされた出力を別の 2 つのワーカープロセスで再読み込みします。これはヘルパーのパッケージングをテストするもので、Finder を使った対話的なワークフローはテストしません。

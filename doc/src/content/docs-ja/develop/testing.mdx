@@ -1,0 +1,52 @@
+---
+title: テスト
+description: make ターゲット、Swift のテスト、オプトインの実ワーカーテスト。
+sidebar_position: 2
+---
+
+## make ターゲット
+
+| コマンド | 実行内容 |
+|---|---|
+| `make test-engine` | 元からある 17 個のエンジン回帰テスト（`engine/test_stl_doctor.py`）。 |
+| `make test-worker` | `tests/` 以下のワーカー、プロトコル、パッケージングツールのテスト。 |
+| `make verify-fixtures` | `scripts/verify_fixtures.py --repair`：すべての参照ファイルを監査し、欠陥のある 2 本のレールを両方の許容誤差モードで修復します。 |
+| `make verify-hashes` | `scripts/verify_fixtures.py --hashes-only`：不変のフィクスチャのハッシュを確認します。 |
+| `make verify` | 上記 4 つすべて。 |
+| `make test-app` | `swift test --package-path app`。 |
+
+仮想環境を使うには `PYTHON=.venv/bin/python` を渡します。デフォルトは `python3` です。
+
+エンジンを変更するときは、その前後に `make test-engine` と `make verify-fixtures` を実行してください。元のフィクスチャとゴールデンファイルは不変の入力です。テストを通すためにこれらを変更してはいけません。
+
+## ワーカーのセルフテスト
+
+```sh
+python engine/worker.py --self-test
+```
+
+Shapely の制約付き三角形分割を含め、実際のジオメトリ依存関係を動かして確認します。
+
+## Swift のテスト
+
+```sh
+swift test --package-path app
+```
+
+プロトコル、キュー、キャンセル、安全な書き出しのロジックをカバーします。macOS でのみ実行できます。
+
+## オプトインの実ワーカーテスト
+
+Swift のテストのうち `testRealWorker` だけは、フェイクではなく実際の Python ワーカーを動かします。`ZUDO_WORKER_PYTHON` が `engine/requirements.txt` をインストール済みの Python を指していない限り、このテストはスキップされます。
+
+```sh
+ZUDO_WORKER_PYTHON=.venv/bin/python swift test --package-path app --filter testRealWorker
+```
+
+:::tip
+パスの扱いやワーカープロトコルに手を入れたときは、必ずこのテストを実行してください。実際の不具合（シンボリックリンクされたジョブディレクトリ）がフェイクワーカーのテストをすり抜け、実際のアプリを動かして初めて見つかったことがあります。[検証状況](./verification-status.mdx)を参照してください。
+:::
+
+## テストで証明できないこと
+
+テストが通っても、修復したメッシュが印刷可能であること、寸法が合うこと、十分な強度があることは示せません。実際のフィクスチャと実際の交差検証が必要です。モックやトポロジーだけのチェックは、ジオメトリが正しいことの証拠にはなりません。
