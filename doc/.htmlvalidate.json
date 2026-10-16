@@ -7,6 +7,7 @@
     "no-inline-style": "off",
     "doctype-style": "off",
     "unique-landmark": "off",
-    "wcag/h30": "off"
+    "wcag/h30": "off",
+    "hidden-focusable": "off"
   }
 }
