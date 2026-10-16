@@ -1,0 +1,39 @@
+---
+title: Queue and Quitting
+description: Cancel, remove, and clear jobs, and what happens when you quit with unsaved work.
+sidebar_position: 4
+---
+
+## Queue order
+
+Jobs run one at a time in the order they were added. New files can join while a job runs. Two different files with the same name are separate jobs; the same file added twice is not.
+
+## Cancel
+
+**Cancel** appears on rows that are Queued, Checking, Repairing, or Verifying. The row becomes **Canceled**, and no output can be saved from it. Other jobs and results are unaffected.
+
+## Remove and Clear Finished
+
+- The **x** button on a row removes it and discards any unsaved repair. It is not shown while the job is active or saving.
+- **Clear Finished** removes every row that is not active, **Repair ready**, or **Saving**. Unsaved repairs are kept, so you cannot lose one by accident.
+
+Removing a row never touches your original file or a file you already saved.
+
+## Quitting with unsaved work
+
+If checks are running or repairs are ready but unsaved, quitting asks **Quit and discard unsaved work?** Active checks are canceled and unsaved repaired copies are removed. Choose **Keep Working** to return, or **Quit** to leave. Original and saved files remain unchanged.
+
+![Quit confirmation shown with unsaved repairs](/app-quit-guard.png)
+
+## Private workspace
+
+Dropped files are copied into a private temporary workspace and the app works on those copies, which is why your originals never change. The workspace is removed on a clean quit, and a leftover one is cleaned up on the next launch.
+
+## Advanced: Merge tiny existing edges
+
+Under **Advanced**, **Merge tiny existing edges** is **off by default**; welding tolerance is zero. When on, it collapses very short edges that already exist in the mesh, within a tolerance given in **STL coordinate units** (the field suggests `0.00001`, which is a starting value, not a recommendation for every model).
+
+- This may move vertices. The amount is recorded in [Details](./details-and-reports.mdx).
+- The value must be finite and between 0 and 1; otherwise new files are not added.
+- It applies only to files added afterward, not to results already approved.
+- It is not general nearest-vertex welding, and units are not inferred.

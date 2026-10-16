@@ -1,0 +1,31 @@
+---
+title: Install and Run
+description: There is no public release yet; build the app locally on a Mac.
+sidebar_position: 2
+---
+
+## No public release yet
+
+There is currently **no public, signed, or notarized release** of zudo-stl-fix. To run the app you build it yourself on a Mac. A locally built app is ad-hoc signed and is not notarized, so macOS may ask you to confirm opening it.
+
+## Build locally
+
+On a Mac with the documented toolchain (see the [Develop section](../develop/index.mdx) for prerequisites, pinned dependencies, and exact commands):
+
+```sh
+make test-app
+make package-local
+```
+
+`make package-local` builds a real `.app` bundle with an architecture-matched frozen helper, checks the nested code, exercises the relocated helper, and creates a local archive. The archive is labeled by the architecture it was built on; there is no universal2 build.
+
+Open the resulting `zudo-stl-fix.app` to start the app.
+
+## Requirements
+
+- macOS 14 is the proposed deployment floor. It has not been runtime-tested on macOS 14 yet; the verified run so far was on a newer macOS on Apple silicon. See [issue #1](https://github.com/Takazudo/zudo-stl-fix/issues/1).
+- The built app needs no user-installed Python, Homebrew, account, or network connection.
+
+:::tip
+Only want to repair STL files from a terminal? The [CLI section](../cli/index.mdx) covers the Python engine without the app.
+:::
