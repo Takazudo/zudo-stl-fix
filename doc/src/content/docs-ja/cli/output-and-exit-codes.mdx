@@ -1,0 +1,70 @@
+---
+title: 出力と終了コード
+description: stl_doctor.py のコンソール出力、JSON レポート、プロセスの終了ステータス。
+sidebar_position: 2
+---
+
+## コンソール出力
+
+入力ファイルごとに 1 行が出力されます。
+
+| モード | 行 | 意味 |
+| --- | --- | --- |
+| `check` | `PASS`、`PASS_WITH_WARNINGS` または `FAIL` に続けて `<name>: N invalid triangle pairs` | 監査ステータスと、不正な三角形ペアの干渉の件数（標準出力）。 |
+| `repair` | `UNCHANGED <name>` | 対応範囲の作業が不要でした。`-fixed` コピーは書き出されません。 |
+| `repair` | `REPAIRED / <status> <name> -> <path>` | 修復済みのバイナリ STL が書き出され、そのバイト列が検証済みのバイト列と一致することが確認されました。 |
+| `repair` | `REFUSED <name>: <reason>`（標準エラー出力） | ジオメトリが保守的な修復範囲の外にあります。 |
+| 両方 | `ERROR <name>: <reason>`（標準エラー出力） | パース失敗やリソース上限などの運用上のエラー。 |
+
+すべてのファイルの処理後に `Report: <path>` が出力されます。このテキストは人間向けの出力としてのみ扱い、パースしないでください。
+
+`repair` モードでは、監査の失敗がある場合、保存されている法線が不正または不整合（1 度を超えるずれ）の場合、あるいは正の `--weld-tolerance` を指定したうえで細長い三角形（スライバー）がある場合に、そのファイルは作業が必要とみなされます。
+
+## JSON レポート
+
+バッチレポートには、ツール名とバージョン、モード、Python と依存パッケージのバージョン、範囲と制限事項の記述、そして `files` 配列が含まれます。各エントリには解決済みの `input` パス、`output`（または null）、`before` の監査結果、そして `action` があります。
+
+| `action` | 意味 |
+| --- | --- |
+| `checked` | `check` モードでの監査のみ。 |
+| `unchanged` | `repair` モードで行うべき作業がありませんでした。`after` は `before` と同じです。 |
+| `repaired` | 出力が書き出されました。`after` と `repair_details` を含みます。 |
+| `refused` | 安全でない、または対応していない修復です。`error` を含みます。 |
+| `error` | 予期しない失敗またはリソース上限です。`error` を含みます。 |
+
+レポートには入力と出力の絶対パスが含まれるため、共有する際は注意してください。
+
+## 終了コード
+
+| コード | 意味 |
+| --- | --- |
+| `0` | すべてのファイルが成功しました。警告があってもコードは変わりません。 |
+| `1` | 少なくとも 1 つのファイルが検査に失敗した（`check` モードで `FAIL`）か、修復が拒否され、かつ運用上のエラーは発生していません。 |
+| `2` | 運用上のエラーです。不正な引数やパス、処理できなかったファイル（リソース上限を含む）、書き出せなかったレポートなどが該当します。`1` より優先されます。 |
+
+:::caution[ワーカーの規約とは異なります]
+[ワーカープロトコル](../reference/worker-protocol.mdx)には独自の終了コードの規約があり、これらのコードは流用していません。
+:::
+
+## 例
+
+修復が必要なファイルを確認してから、指定したディレクトリに修復します。再実行時に以前の結果を置き換えられるようにしています。
+
+```bash
+python engine/stl_doctor.py check fixtures/originals/nuts-v2-60hp-double.stl --report out/check.json
+python engine/stl_doctor.py repair fixtures/originals/nuts-v2-60hp-double.stl \
+  --out-dir out/repaired --report out/repair.json --overwrite
+```
+
+小さな許容値を指定して、既存エッジの整理を有効にします。
+
+```bash
+python engine/stl_doctor.py repair fixtures/originals/nuts-v2-60hp-double.stl \
+  --weld-tolerance 1e-5 --out-dir out/welded --report out/welded.json
+```
+
+大きなメッシュ向けにスキャンの上限を引き上げます（厳密なスキャンは最悪の場合に二次の計算量になるため、上限を大きくすると遅くなることがあります）。
+
+```bash
+python engine/stl_doctor.py check fixtures/originals/bar-60hp.stl --max-faces 50000 --max-pairs 10000000 --report out/limits.json
+```
