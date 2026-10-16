@@ -1,0 +1,42 @@
+---
+title: Statuses
+description: Every status label a file can show and what it means.
+sidebar_position: 1
+---
+
+## Status labels
+
+Each row shows exactly one of these labels.
+
+| Label | Meaning |
+|---|---|
+| Queued | Waiting for earlier files to finish. |
+| Checking | The file is being validated. |
+| Repairing | A supported repair is being applied. |
+| Verifying | The repaired bytes are being re-validated. |
+| No repair needed | The completed check found no supported repair to perform and no warnings. |
+| Checked — review needed | No automatic change was made, but a warning remains. Nothing can be saved. |
+| Repair ready | A repair passed validation and its staged bytes were verified. It is not saved yet. |
+| Saving | The verified repair is being written to your chosen folder. |
+| Saved | The chosen folder contains the verified output. |
+| Cannot repair safely | The mesh has a defect the engine will not resolve conservatively. |
+| Check incomplete | Validation was interrupted, for example by a size or pair limit or a timeout. |
+| Error | An operational failure, such as a worker or protocol problem. |
+| Canceled | You canceled the job. |
+
+Queued, Checking, Repairing, and Verifying are in-progress states: the result is not final. Only **Repair ready** enables saving.
+
+## Warnings versus failures
+
+Warnings are shown as orange lines under the row, in addition to the status, so a warning is never hidden behind an otherwise normal-looking result.
+
+- A **warning** does not stop a result. For example, a repair can be **Repair ready** while tiny-triangle warnings remain, or a healthy file can be **Checked — review needed**. Examples of warnings are tiny triangles and Z coordinates below zero (a placement note: the app does not move or trim geometry).
+- A **failure** is **Cannot repair safely**, **Check incomplete**, **Error**, or **Canceled**. No output can be saved, and a timeout, cancellation, process failure, resource limit, or incomplete scan is never reported as success.
+
+:::note
+Several separate shells are not treated as a defect, but the engine does not certify their containment or orientation and does not repair them.
+:::
+
+## Rejected input
+
+Files that cannot be accepted (for example non-STL names, aliases, symbolic links, remote files, or files larger than 64 MiB) are listed in an orange message area above the queue with a reason; use **Dismiss** to clear it. Adding the same file twice is reported as already in the queue. Other files in the same drop are still accepted.

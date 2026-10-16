@@ -1,0 +1,24 @@
+---
+title: Details and Reports
+description: Inspect what the check found and export a JSON report.
+sidebar_position: 3
+---
+
+## Details
+
+Click **Details** on any row to open a sheet with:
+
+- the status and any message;
+- warnings;
+- triangle counts before and after, and invalid triangle pairs before and after;
+- dimensions and bounds, labeled as STL coordinate units;
+- connected shells, reoriented faces, and vertex displacement, binary export quantization, and bounds change figures;
+- the engine version, and any error reason.
+
+STL files do not specify units, so dimensions are never labeled "mm". The sheet also reminds you that mesh validation does not certify printability, strength, fit, or shell containment.
+
+## Export JSON Report
+
+When a detailed report exists, the sheet shows **Export JSON Report…**. It asks for a folder and saves `<original-stem>-report.json` there, using the same no-overwrite naming as saved files (`-report-2.json` and so on). The result, or an error, is shown on the row.
+
+The report holds the large lists, such as face IDs and intersection details, that are too long for the sheet.

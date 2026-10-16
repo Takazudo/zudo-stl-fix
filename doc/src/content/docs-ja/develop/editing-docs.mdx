@@ -1,0 +1,32 @@
+---
+title: このサイトの編集
+description: ドキュメントサイトのローカル実行と、英語・日本語のミラーリングのルール。
+sidebar_position: 7
+---
+
+## ローカルでの開発
+
+サイトは `doc/` にあり、zudo-doc でビルドします。リポジトリのルートで次のコマンドを実行します。
+
+```sh
+pnpm -C doc install --frozen-lockfile
+pnpm -C doc dev
+pnpm -C doc build
+pnpm -C doc check:html
+pnpm -C doc check:links
+```
+
+`check:html` と `check:links` はビルド済みの `dist/` の出力に対して実行されるため、先にビルドしてください。コンテンツの編集のついでに `doc/package.json` やロックファイルを変更しないでください。
+
+## 執筆ルール
+
+- ページは `doc/src/content/docs/<section>/` 内の `.mdx` ファイルです。
+- フロントマターには `title`、`description`、数値の `sidebar_position` を書きます。
+- タイトルはフロントマターから表示されるため、h1 は追加せず、`## ` から書き始めます。
+- 注記にはディレクティブを使います。`:::note`、`:::tip`、`:::warning` で、`:::note[Title]` のようにタイトルを付けることもできます。
+- ページ間のリンクには、`./testing.mdx` のような相対的な `.mdx` パスを使います。
+- 公開リポジトリなので、マシン固有の絶対パスや非公開の情報は書かないでください。
+
+## 英語と日本語のミラーリング
+
+英語のページは `doc/src/content/docs/` に、日本語のページは `doc/src/content/docs-ja/` にあります。日本語のツリーは英語のツリーと同じパスでミラーリングしているため、どちらかの言語でページを追加したり名前を変更したりしたときは、もう一方の言語にも対応するページが必要です。

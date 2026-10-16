@@ -1,0 +1,52 @@
+---
+title: CLI
+description: Using the stl_doctor.py command-line engine directly.
+sidebar_position: 4
+---
+
+`engine/stl_doctor.py` is the geometry engine behind the app, and it still works as a standalone command-line tool. It checks STL meshes and, in `repair` mode, conservatively repairs folded, exactly planar patches.
+
+:::warning[The CLI is not the app's save path]
+The CLI writes its output with a plain file write (`write_safe`) and then compares the bytes read back. That is **not** the transactional, no-overwrite save the app performs, and the CLI's human-readable stdout is not an API. The app talks to the engine through a [structured worker protocol](../reference/worker-protocol.mdx) instead.
+:::
+
+## Setup
+
+Python 3.10+ and the packages in `engine/requirements.txt` (numpy, scipy, trimesh, shapely) are required. From the repository root:
+
+```bash
+python -m pip install -r engine/requirements.txt
+python engine/stl_doctor.py --help
+```
+
+## Quick examples
+
+Check one STL, and write the JSON report to a path of your choice:
+
+```bash
+python engine/stl_doctor.py check fixtures/originals/bar-30hp.stl --report out/check-report.json
+```
+
+Check every `.stl` file directly inside a directory (not recursive):
+
+```bash
+python engine/stl_doctor.py check fixtures/originals --report out/all-report.json
+```
+
+Repair a file that has invalid triangle pairs. The repaired copy is written to `repaired/nuts-v2-40hp-double-fixed.stl` by default:
+
+```bash
+python engine/stl_doctor.py repair fixtures/originals/nuts-v2-40hp-double.stl
+```
+
+:::info
+Per the engine contract, both original `nuts-v2-*-double.stl` fixtures contain 62 invalid triangle-pair interactions, and the other nine originals have no mesh failures under the performed checks. A healthy input in `repair` mode creates no `-fixed` copy; it is reported as `UNCHANGED`.
+:::
+
+## What the CLI will not do
+
+The CLI never overwrites an input STL, never scales, rotates or translates geometry, and never fills holes, smooths, or voxelizes. Existing-edge cleanup happens only when you pass a positive `--weld-tolerance`. See the [engine contract](../reference/engine-contract.mdx) for the exact scope.
+
+## Pages
+
+<CategoryNav category="cli" />

@@ -26,3 +26,8 @@ artifacts/
 *.provisionprofile
 
 # STL fixtures are deliberately tracked. Do not add a blanket *.stl ignore.
+
+# Docs site (doc/)
+doc/node_modules/
+doc/dist/
+.wrangler/

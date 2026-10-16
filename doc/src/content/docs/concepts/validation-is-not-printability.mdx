@@ -1,0 +1,21 @@
+---
+title: Validation Is Not Printability
+description: Why a validated mesh is not proof the part will print, fit, or be strong enough.
+sidebar_position: 2
+---
+
+## What validation covers
+
+A successful check means the mesh passed the engine's geometric tests, including a complete scan for intersecting triangle pairs, and, for repairs, that the exact bytes to be saved were re-validated.
+
+## What it does not cover
+
+Passing is **not** evidence of printability, fit, wall thickness, strength, or the intent of the source design. The engine does not certify the containment or orientation of multiple shells. A mesh can be valid and still be a bad print.
+
+:::warning
+Always inspect the result in your slicer or CAD tool before relying on it for a print or a fit-critical part.
+:::
+
+## Units and placement
+
+STL files do not state their units, so the app shows dimensions in "STL coordinate units" and never labels them as millimeters. Negative Z is reported as a placement warning only; the app does not move the model onto a print bed.

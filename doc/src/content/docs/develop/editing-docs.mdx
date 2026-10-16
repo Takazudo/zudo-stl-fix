@@ -1,0 +1,32 @@
+---
+title: Editing this site
+description: Running the docs site locally and the EN/JA mirroring rule.
+sidebar_position: 7
+---
+
+## Local development
+
+The site lives in `doc/` and is built with zudo-doc. From the repository root:
+
+```sh
+pnpm -C doc install --frozen-lockfile
+pnpm -C doc dev
+pnpm -C doc build
+pnpm -C doc check:html
+pnpm -C doc check:links
+```
+
+`check:html` and `check:links` run against the built `dist/` output, so build first. Do not change `doc/package.json` or the lockfile as part of a content edit.
+
+## Authoring conventions
+
+- Pages are `.mdx` files in `doc/src/content/docs/<section>/`.
+- Frontmatter has `title`, `description`, and a numeric `sidebar_position`.
+- Do not add an h1; the title is rendered from frontmatter, so start with `## `.
+- Admonitions use directives: `:::note`, `:::tip`, `:::warning`, optionally titled as `:::note[Title]`.
+- Link between pages with relative `.mdx` paths, for example `./testing.mdx`.
+- Public repository: no machine-absolute paths or private information.
+
+## English and Japanese mirroring
+
+English pages live in `doc/src/content/docs/` and Japanese pages in `doc/src/content/docs-ja/`. The Japanese tree mirrors the English one at identical paths, so a page added or renamed in one language needs its counterpart in the other.

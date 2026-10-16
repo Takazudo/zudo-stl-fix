@@ -1,0 +1,52 @@
+---
+title: CLI
+description: コマンドラインエンジン stl_doctor.py を直接使う方法。
+sidebar_position: 4
+---
+
+`engine/stl_doctor.py` はアプリの裏側で動くジオメトリエンジンで、単体のコマンドラインツールとしても引き続き使えます。STL メッシュを検査し、`repair` モードでは、折り重なった厳密に平面なパッチを保守的に修復します。
+
+:::warning[CLI はアプリの保存処理ではありません]
+CLI は出力を通常のファイル書き込み（`write_safe`）で書き出し、そのあと読み戻したバイト列を比較します。これはアプリが行うトランザクショナルで上書きをしない保存とは**異なります**。また、CLI が標準出力に出す人間向けのテキストは API ではありません。アプリは代わりに[構造化されたワーカープロトコル](../reference/worker-protocol.mdx)を通じてエンジンとやり取りします。
+:::
+
+## セットアップ
+
+Python 3.10 以上と、`engine/requirements.txt` に記載されたパッケージ（numpy、scipy、trimesh、shapely）が必要です。リポジトリのルートで次を実行します。
+
+```bash
+python -m pip install -r engine/requirements.txt
+python engine/stl_doctor.py --help
+```
+
+## 簡単な例
+
+STL を 1 つ検査し、JSON レポートを任意のパスに書き出します。
+
+```bash
+python engine/stl_doctor.py check fixtures/originals/bar-30hp.stl --report out/check-report.json
+```
+
+ディレクトリ直下にあるすべての `.stl` ファイルを検査します（サブディレクトリは対象外です）。
+
+```bash
+python engine/stl_doctor.py check fixtures/originals --report out/all-report.json
+```
+
+不正な三角形ペアを含むファイルを修復します。修復済みのコピーは、デフォルトで `repaired/nuts-v2-40hp-double-fixed.stl` に書き出されます。
+
+```bash
+python engine/stl_doctor.py repair fixtures/originals/nuts-v2-40hp-double.stl
+```
+
+:::info
+エンジン契約によると、オリジナルの `nuts-v2-*-double.stl` フィクスチャ 2 つはどちらも 62 件の不正な三角形ペアの干渉を含み、残り 9 つのオリジナルは実施した検査の範囲ではメッシュの失敗がありません。健全な入力を `repair` モードで処理しても `-fixed` コピーは作成されず、`UNCHANGED` として報告されます。
+:::
+
+## CLI が行わないこと
+
+CLI は入力 STL を上書きせず、ジオメトリの拡大縮小・回転・平行移動も行いません。穴埋め、スムージング、ボクセル化も行いません。既存エッジの整理は、正の `--weld-tolerance` を指定したときにのみ実行されます。正確な範囲は[エンジン契約](../reference/engine-contract.mdx)を参照してください。
+
+## ページ一覧
+
+<CategoryNav category="cli" />

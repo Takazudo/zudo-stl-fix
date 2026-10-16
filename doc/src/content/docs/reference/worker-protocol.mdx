@@ -1,0 +1,92 @@
+---
+title: Worker protocol
+description: The version 1 request and NDJSON event protocol between the app and engine/worker.py.
+sidebar_position: 2
+---
+
+`engine/worker.py` runs exactly one job per process. The app (`ProcessWorker` and `WorkerProtocolParser` in `ZudoSTLFixCore`) sends one request on stdin, closes stdin, and reads UTF-8 newline-delimited JSON from stdout. Diagnostics go only to stderr. There is also `python engine/worker.py --self-test`, a build smoke test that runs a real folded-patch repair and prints one JSON line.
+
+## Request
+
+```json
+{
+  "protocol_version": 1,
+  "job_id": "3f2b8c1e-5a0d-4c33-9a57-0d1e6b7a9c10",
+  "operation": "check_and_repair",
+  "input_path": "<job directory>/input.stl",
+  "staging_directory": "<job directory>",
+  "options": { "weld_tolerance": 0.0, "max_faces": 20000, "max_pairs": 2000000 }
+}
+```
+
+The worker requires exactly these fields and rejects anything else.
+
+| Field | Rule |
+| --- | --- |
+| `protocol_version` | Integer `1`. |
+| `job_id` | A UUID string. Every event echoes it. |
+| `operation` | Only `check_and_repair`. |
+| `input_path`, `staging_directory` | Normalized absolute paths with no `..`; the input is an `.stl` directly inside the staging directory and cannot be named `candidate.stl` or `report.json`. |
+| `options.weld_tolerance` | Finite number from 0 to 1 STL units. Default 0; the app sends 0 unless **Merge tiny existing edges** is on. |
+| `options.max_faces` | Integer, 1 to 20000. |
+| `options.max_pairs` | Integer, 1 to 2000000. |
+
+Duplicate JSON members and non-finite numbers are protocol errors. The request is limited to 16 KiB by the worker (the app keeps it under 4 KiB).
+
+## Events
+
+Every event carries `protocol_version`, `job_id` and `event`.
+
+| Event | Fields | Notes |
+| --- | --- | --- |
+| `started` | none beyond the common ones | Exactly one, first. |
+| `progress` | `phase`, `message` | `phase` is `checking`, `repairing` or `verifying`; phases never go backwards. No percentage is invented. `repairing` and `verifying` appear only when repair is attempted. |
+| `result` | see below | Exactly one terminal event, last. |
+
+### Result fields
+
+| Field | Meaning |
+| --- | --- |
+| `outcome` | `unchanged`, `repaired`, `refused`, `incomplete` or `error`. |
+| `validation_status` | The final audit status (`PASS`, `PASS_WITH_WARNINGS`), or null when no complete audit exists. For `refused` it carries the status of the input audit when available, which is usually `FAIL`. |
+| `summary` | `before`, `after`, `repair_details`, `engine_version`, `input_sha256`, `options`. Large face-ID and intersection-detail lists are left to the report file. |
+| `warnings` | Objects `{code, message}`. Codes: `tiny_triangles`, `below_zero_z`, `multiple_shells`, `stored_normals`. |
+| `candidate` | Only for `repaired`: `{relative_path, sha256, byte_size}` of the staged `candidate.stl`. |
+| `report` | Optional `{relative_path, sha256, byte_size}` for `report.json`. |
+| `error` | `{code, message}` when applicable. |
+
+Error codes in use: `unsupported_geometry`, `invalid_input`, `resource_limit`, `permission_denied`, `input_changed`, `verification_failed`, `protocol_error`, `worker_crashed`.
+
+## Bounds
+
+| Limit | Value |
+| --- | --- |
+| Request (worker) | 16 KiB |
+| Input snapshot | 64 MiB |
+| Report | 16 MiB |
+| One event line | 256 KiB |
+| App-side stdout total | 4 MiB, at most 512 events |
+| App-side stderr | 1 MiB |
+| Default job timeout | 120 seconds |
+| Termination grace | SIGTERM, then SIGKILL after 2 seconds |
+
+## Success conditions
+
+The app treats a job as successful (`unchanged` or `repaired`) only when all of these hold:
+
+- Exactly one `started`, valid ordered `progress` events, then one `result`, with a trailing newline and no extra output.
+- Matching `job_id` and protocol version on every line; no duplicate JSON object members.
+- `validation_status` is `PASS` or `PASS_WITH_WARNINGS`, and the `after` audit has no failures, a complete surface-intersection scan, and zero defect pairs.
+- A `candidate` is present if and only if the outcome is `repaired`, and its hash equals the hash in the serialized-bytes audit.
+- Candidate and report files exist as single regular files inside the job directory and match their declared SHA-256 and size.
+- The private input snapshot is unchanged, and the process exited normally with status 0.
+
+Anything else is a protocol error. A file's mere presence or a zero exit code is never enough.
+
+## Exit codes
+
+The worker exits `0` after a valid terminal result for the completed outcomes `unchanged`, `repaired`, `refused` and `incomplete`. An `error` result, or an operational or protocol failure, exits nonzero, and the app reports the error result as a failure. This differs from the [CLI exit codes](../cli/output-and-exit-codes.mdx).
+
+## Cancellation and timeout
+
+The engine's exact-arithmetic loops are not cooperatively cancellable, so the app owns termination. On cancel or timeout it sends SIGTERM, waits up to 2 seconds, then SIGKILLs the worker. Cancellation yields the Canceled state with no savable output. A timeout yields "Check incomplete". A worker that dies, truncates its stream, floods stdout or stderr, leaves pipes open after exit, or emits no result is never treated as success. Cancellation and abrupt termination may leave no terminal event; the app decides those states.

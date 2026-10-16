@@ -1,0 +1,43 @@
+---
+title: 継続的インテグレーション
+description: checks、macOS、docs の各 GitHub Actions ワークフロー。
+sidebar_position: 3
+---
+
+## 概要
+
+`.github/workflows/` には 3 つのワークフローがあります。CI のコストは低く抑えており、高速な Linux のチェックは関係するプッシュのときだけ実行し、重い macOS ビルドは必要なときにだけ実行します。
+
+## checks.yml: Linux でのプッシュ時チェック
+
+`engine/`、`tests/`、`fixtures/`、`scripts/`、`packaging/`、`Makefile`、またはこのワークフロー自体を変更するプッシュで実行されます（手動実行も可能です）。重複実行を避けるため、プルリクエストのトリガーはありません。同じ ref で実行中のランはキャンセルされます。
+
+Ubuntu 上の Python 3.12.14 で、次の処理を行います。
+
+- `engine/requirements.txt` をインストールし、`pip freeze` を出力する
+- エンジンとワーカーのテストスイートを実行する
+- `scripts/verify_fixtures.py --repair` を実行する
+- `engine/worker.py --self-test` を実行する
+- パッケージング用スクリプトをバイトコンパイルし、`scripts/build-macos.sh` の構文をチェックする
+
+## macos.yml: 手動でのネイティブビルド
+
+`workflow_dispatch` でのみ起動し、`runner` として `macos-14`、`macos-15`、`macos-15-intel` のいずれかを選びます。`bash scripts/build-macos.sh` を実行し、ローカル用の zip、そのチェックサム、`BUILD-INFO.txt` を保持期間 7 日のアーティファクトとしてアップロードします。ランナーのラベルはアーキテクチャを保証しないため、アーティファクトのラベルには検出したマシンのアーキテクチャを使います。
+
+```sh
+gh workflow run macos.yml --ref <branch> -f runner=macos-14
+gh run list --workflow macos.yml
+gh run watch <run-id> --exit-status
+```
+
+:::note
+新しく追加したワークフローは、デフォルトブランチに存在するまで GitHub から手動実行できない場合があります。それを回避するためだけにマージしないでください。ローカルの Mac でコマンドを実行するか、ネイティブでの検証を未完了として報告してください。
+:::
+
+どのワークフローも、認証情報を使った署名、アプリのデプロイ、リリースの作成、リポジトリ保護設定の変更は行いません。
+
+## docs.yml: ドキュメントサイト
+
+このワークフローは、このドキュメントサイトをビルドします。`doc/**` を変更するプルリクエストと `main` へのプッシュで、サイトをビルドし、`check:html`、`check:links`、`wrangler` のドライランを実行します。
+
+デプロイ先は Cloudflare Workers Static Assets に設定されていますが、**本番デプロイは認証情報の準備待ちです**。`CLOUDFLARE_API_TOKEN` と `CLOUDFLARE_ACCOUNT_ID` のシークレットが用意されるまで、デプロイのステップは通知を出してスキップされます。セットアップ手順はリポジトリ内の `docs/cloudflare-setup.md` にあります。

@@ -1,0 +1,47 @@
+---
+title: Architecture
+description: How the SwiftUI app, the bundled Python helper, the snapshot store and the exporter fit together.
+sidebar_position: 1
+---
+
+## Two processes, one job at a time
+
+The app is a native SwiftUI program (macOS 14+ proposed, with AppKit adapters where needed). All geometry work happens in a separate, short-lived Python helper process, so the UI stays responsive and a crash or timeout in the engine cannot take the app down.
+
+| Concern | Decision |
+| --- | --- |
+| Native application | SwiftUI, AppKit adapters for file panels and drop integration |
+| Geometry | `engine/stl_doctor.py` with numpy, scipy, trimesh and shapely/GEOS |
+| Process boundary | One worker process per job; jobs run serially |
+| Worker distribution | Architecture-matched Python helper frozen with PyInstaller, embedded in the app bundle |
+| Distribution | Standalone app outside the Mac App Store |
+
+The app resolves the helper through its own bundle (`Contents/Helpers/STLWorker.app/...`), launches it with an explicit executable URL and argument array (no shell), and gives it a minimal environment: `PATH=/usr/bin:/bin`, `LANG=en_US.UTF-8`, `PYTHONNOUSERSITE=1`. It does not use a system Python.
+
+## Responsibilities
+
+The **app** owns file permissions, import snapshots, job state, the process lifecycle, user-visible errors and the final save. The **worker** owns parsing, complete audits, conservative repair, validation of the serialized bytes, and producing a candidate STL plus a detailed JSON report inside the job's private staging directory. The worker never chooses where a result is saved and never receives authority to overwrite the original path.
+
+## Data flow
+
+1. **Snapshot.** A `SnapshotStore` creates a private, app-owned root (mode `0700`) and copies the dropped file into a per-job directory as `input.stl` (mode `0400`). The source must be a local, regular `.stl` file; aliases, symbolic links and remote files are rejected, files are limited to 64 MiB, and the source is re-checked to confirm it did not change while being read. The snapshot's SHA-256 is recorded.
+2. **Worker run.** The app sends one JSON request on stdin and reads newline-delimited JSON events from stdout. See the [worker protocol](./worker-protocol.mdx).
+3. **Verification.** On a result, the app checks the process exit status, verifies any candidate and report artifact against its declared SHA-256 and size, and confirms the private input snapshot was not altered.
+4. **Review.** Only a verified `repaired` result with a candidate becomes "Repair ready". Candidates stay in staging until saved, cleared or the app quits; unsaved results are lost on quit.
+5. **Export.** When the user saves, the app's exporter copies the candidate to a private staging folder on the destination volume, re-verifies the bytes, and publishes it with an atomic hard link that refuses every existing name. The output is named `<stem>-fixed.stl` (then `-fixed-2`, `-fixed-3`, and so on), compared case-insensitively. A report can be exported the same way as `<stem>-report.json`.
+
+:::note
+The app never overwrites. This is separate from the CLI's `--overwrite`, which the app does not expose. See [CLI](../cli/index.mdx).
+:::
+
+## Job states
+
+The queue shows these states: Queued, Checking, Repairing, Verifying, No repair needed, Checked, review needed, Repair ready, Saving, Saved, Cannot repair safely, Check incomplete, Error and Canceled. Warnings on an otherwise unchanged file show as "review needed", distinct from failures.
+
+## Cleanup and privacy
+
+Canceled and failed jobs have their staging directories removed once the worker is reaped. Crash leftovers are reclaimed on the next launch only when an ownership marker (user, UUID, device and inode) and an unlocked lease prove they are app-owned. Model bytes are not logged, and there is no telemetry, runtime download or network use.
+
+## Pending macOS checks
+
+The Swift source and the engine adapter are implemented, but macOS compilation, the frozen helper, signing and notarization are verified separately. See [issue #1](https://github.com/Takazudo/zudo-stl-fix/issues/1).

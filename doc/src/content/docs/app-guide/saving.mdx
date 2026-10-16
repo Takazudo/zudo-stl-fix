@@ -1,0 +1,38 @@
+---
+title: Saving
+description: How fixed files are saved, named, and protected from partial writes.
+sidebar_position: 2
+---
+
+## Per-file and batch save
+
+- **Save…** on a **Repair ready** row saves that one file.
+- **Save Fixed Files…** saves every ready result. It is disabled when nothing is ready.
+
+Both ask you to choose a destination folder. Choosing a destination is deliberate; no folder permission is needed while files are being checked.
+
+## Naming
+
+The default name is `<original-stem>-fixed.stl`. If that name is taken, the app tries `-fixed-2.stl`, `-fixed-3.stl`, and so on. Names that differ only by letter case count as taken, so collisions on case-insensitive volumes are handled too. An existing file is never overwritten.
+
+## How a save is made safe
+
+1. The verified repair is written to a private staging folder inside the destination folder, so staging and the final file are on the same filesystem.
+2. It is published under a new name in a way that refuses to replace any existing entry.
+3. The saved file is re-checked against the hash of the verified repair.
+
+If any step fails, the file is not marked **Saved**, the staging folder is cleaned up, and no misleading final `.stl` is left. Existing files in the folder are not deleted.
+
+A read-only or otherwise unwritable destination therefore fails cleanly: the row goes back to **Repair ready** with a "Save failed" message, and you can choose another folder or retry.
+
+## Batches
+
+One failed save does not block the others. Each file in a batch succeeds or fails independently, and each row shows its own result.
+
+## After saving
+
+A **Reveal** button on a saved row shows the file in Finder. Files with **No repair needed** never produce a copy.
+
+:::note[Still to be exercised by hand]
+The save logic is covered by automated tests, but the save panel, collisions, and read-only destinations have not yet been exercised interactively. See [issue #1](https://github.com/Takazudo/zudo-stl-fix/issues/1).
+:::

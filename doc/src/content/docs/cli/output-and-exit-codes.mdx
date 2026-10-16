@@ -1,0 +1,70 @@
+---
+title: Output and exit codes
+description: Console lines, the JSON report, and the process exit status of stl_doctor.py.
+sidebar_position: 2
+---
+
+## Console output
+
+One line is printed per input file.
+
+| Mode | Line | Meaning |
+| --- | --- | --- |
+| `check` | `PASS`, `PASS_WITH_WARNINGS` or `FAIL`, then `<name>: N invalid triangle pairs` | Audit status and the count of invalid triangle-pair interactions (on stdout). |
+| `repair` | `UNCHANGED <name>` | No supported work was needed; no `-fixed` copy is written. |
+| `repair` | `REPAIRED / <status> <name> -> <path>` | A repaired binary STL was written and its bytes verified against the validated bytes. |
+| `repair` | `REFUSED <name>: <reason>` (stderr) | The geometry is outside the conservative repair scope. |
+| either | `ERROR <name>: <reason>` (stderr) | Operational error such as a parse failure or a resource limit. |
+
+After all files, `Report: <path>` is printed. Treat this text as human output only; do not parse it.
+
+In `repair` mode a file needs work when it has audit failures, invalid or inconsistent stored normals (more than 1 degree off), or, with a positive `--weld-tolerance`, sliver triangles.
+
+## JSON report
+
+The batch report contains the tool name and version, mode, Python and dependency versions, the scope and limitations statements, and a `files` array. Each entry has the resolved `input` path, `output` (or null), the `before` audit, and an `action`:
+
+| `action` | Meaning |
+| --- | --- |
+| `checked` | `check` mode audit only. |
+| `unchanged` | `repair` mode found nothing to do; `after` equals `before`. |
+| `repaired` | Output written; includes `after` and `repair_details`. |
+| `refused` | Unsafe or unsupported repair; includes `error`. |
+| `error` | Unexpected failure or resource limit; includes `error`. |
+
+The report holds absolute input and output paths, so share it with care.
+
+## Exit codes
+
+| Code | Meaning |
+| --- | --- |
+| `0` | All files succeeded. Warnings do not change the code. |
+| `1` | At least one file failed the check (`FAIL` in `check` mode) or a repair was refused, and no operational error occurred. |
+| `2` | An operational error: bad arguments or paths, a file that could not be processed (including a resource limit), or a report that could not be written. This takes precedence over `1`. |
+
+:::caution[Not the worker's convention]
+The [worker protocol](../reference/worker-protocol.mdx) has its own exit convention and does not reuse these codes.
+:::
+
+## Examples
+
+Show a file that needs repair, then repair it into a chosen directory, allowing a re-run to replace earlier results:
+
+```bash
+python engine/stl_doctor.py check fixtures/originals/nuts-v2-60hp-double.stl --report out/check.json
+python engine/stl_doctor.py repair fixtures/originals/nuts-v2-60hp-double.stl \
+  --out-dir out/repaired --report out/repair.json --overwrite
+```
+
+Opt in to existing-edge cleanup with a small tolerance:
+
+```bash
+python engine/stl_doctor.py repair fixtures/originals/nuts-v2-60hp-double.stl \
+  --weld-tolerance 1e-5 --out-dir out/welded --report out/welded.json
+```
+
+Raise the scan limits for a large mesh (the exact scan has quadratic worst-case behavior, so larger limits can be slow):
+
+```bash
+python engine/stl_doctor.py check fixtures/originals/bar-60hp.stl --max-faces 50000 --max-pairs 10000000 --report out/limits.json
+```

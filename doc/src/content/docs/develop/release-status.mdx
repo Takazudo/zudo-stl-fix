@@ -1,0 +1,25 @@
+---
+title: Release status
+description: Only local ad-hoc builds exist; signing and notarization are not done.
+sidebar_position: 6
+---
+
+## No public release exists
+
+The only products are local development builds from `scripts/build-macos.sh`. They are ad-hoc signed, not Developer ID signed, not notarized, and not distributed. A development launch is not evidence that a downloaded copy would pass Gatekeeper.
+
+## What a public release would still need
+
+Public Developer ID signing and notarization is a separately authorized task, and no credential-based signing is enabled in the repository scripts. A future release workflow should:
+
+1. Accept the signing identity, Team ID and notarization profile as private configuration.
+2. Sign nested code from the inside out with the needed hardened-runtime settings, then sign the outer app.
+3. Notarize and staple.
+4. Test the downloaded artifact with Gatekeeper, and verify nested signatures and first launch.
+5. Review licence and source obligations for the shipped dependencies.
+
+:::warning
+Never instruct users to remove quarantine wholesale, disable Gatekeeper, or use administrator access to install the app.
+:::
+
+Release verification belongs in a release workflow, added only when a release is actually requested. Daily commits do not run heavy multi-architecture builds, notarization, or full packaging.
