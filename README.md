@@ -96,3 +96,8 @@ the original handoff, including source documents subsequently edited; use
 No project/model redistribution license has been selected. Bundled dependencies
 retain their own licenses; local packaging collects their notices. Public
 distribution and its signing/notarization review are separate work.
+
+## Documentation
+
+- [`doc/`](doc) is the source of the published documentation site (zudo-doc; English and Japanese). Build it with `pnpm -C doc install --frozen-lockfile && pnpm -C doc build`.
+- [`docs/`](docs) holds engineering specs and the development handoff. It is not published.
