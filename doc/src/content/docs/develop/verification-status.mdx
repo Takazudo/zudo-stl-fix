@@ -1,0 +1,50 @@
+---
+title: Verification status
+description: What passed on macOS arm64, and what is still pending in issue #1.
+sidebar_position: 4
+---
+
+## Summary
+
+The Python engine, worker protocol, and an arm64 native build have been verified. The full interactive acceptance matrix has not. The remaining work is tracked in [issue #1](https://github.com/Takazudo/zudo-stl-fix/issues/1).
+
+:::warning
+A validated mesh is not proof of printability, fit, wall thickness, or strength. None of the results below mean "print ready".
+:::
+
+## Passed on macOS arm64
+
+Recorded on 2026-10-16 on macOS 26.6.2, arm64, Xcode 27.0, Apple Swift 6.4, CPython 3.12.14.
+
+| Check | Result |
+|---|---|
+| `make test-engine` | 17 passed |
+| `make test-worker` | 41 passed |
+| `make verify-fixtures` / `verify-hashes` | 17/17 and 13/13 passed |
+| `engine/worker.py --self-test` | Passed |
+| `swift test --package-path app` (after fixes) | 56 passed; real-worker test skipped without `ZUDO_WORKER_PYTHON` |
+| Real-worker test with `ZUDO_WORKER_PYTHON` set | Passed |
+| `PYTHON=python3.12 bash scripts/build-macos.sh` | Passed, including relocated helper smoke |
+
+The resulting archive is ad-hoc signed, not notarized, and not released.
+
+Interactive checks that were performed on the relocated app: launch from a path with spaces and Japanese characters; opening all 11 originals via `open -a`; one window; the nine healthy originals show **No repair needed** and both defective rails show **Repair ready** with the tiny-triangle warning visible; Save controls enabled only for those two; the quit-with-unsaved-repairs confirmation; stale workspace cleanup after a forced kill; fixture hashes unchanged.
+
+## Defects found and fixed
+
+Running the real app found two defects that unit tests missed: every file failed because a `/private` path prefix was stripped before it reached the worker, and every Finder-opened file created a new window. Both are fixed and covered by tests.
+
+## Still pending
+
+These were not exercised, because the session had no Accessibility permission to drive the UI:
+
+- Finder drag-and-drop onto the window.
+- The save panel, per-file and batch, and independent re-verification of saved STLs.
+- Read-only destinations and name collisions in the UI.
+- Active and queued cancellation in the UI.
+- Details and JSON report export, and Reveal in Finder.
+- Keyboard access, VoiceOver, light appearance, and resizing.
+- The macOS 14 floor, which was not runtime-tested; only the host OS was exercised.
+- x86_64.
+
+Saving, collision, permission, and cancellation logic is covered by Swift tests, not by UI interaction. The full checklist is in `docs/ACCEPTANCE.md`.

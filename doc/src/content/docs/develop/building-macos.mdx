@@ -1,0 +1,78 @@
+---
+title: Building on macOS
+description: Prerequisites, the build script, its artifacts, and BUILD-INFO.
+sidebar_position: 1
+---
+
+## Prerequisites
+
+The source targets macOS 14. Build separately on each architecture you intend to test: there is no universal2 product and no cross-compilation of the Python helper.
+
+You need:
+
+- macOS with Xcode and its command-line tools selected.
+- CPython **3.12.14** of the same architecture as the active shell.
+
+The first build downloads pinned dependencies. Running the built app needs no Python, Homebrew, terminal, account, network access, or dependency installation.
+
+`packaging/requirements-macos.lock` pins every resolved helper and build distribution together with the SHA-256 of its macOS wheels. Pins include NumPy 2.5.4, SciPy 1.18.1, Shapely 2.2.0, Trimesh 4.12.2, and PyInstaller 6.22.3.
+
+:::note
+The wheels for CPython 3.12 on both arm64 and x86_64 were downloaded successfully on Linux. That shows availability, not runtime compatibility. A universal2 PyInstaller wheel does not make the final app universal2.
+:::
+
+## Build commands
+
+Run these from the repository root.
+
+```sh
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -r engine/requirements.txt
+make PYTHON=.venv/bin/python test-engine test-worker verify-fixtures
+.venv/bin/python engine/worker.py --self-test
+swift test --package-path app
+PYTHON=python3.12 bash scripts/build-macos.sh
+```
+
+`scripts/build-macos.sh` does the whole job in one pass:
+
+1. Creates a new build virtual environment and verifies the pinned wheel hashes.
+2. Freezes the actual worker with PyInstaller.
+3. Runs the Swift tests and builds the native executable.
+4. Creates the `.app`, generates third-party notices and build provenance.
+5. Verifies nested ad-hoc signatures.
+6. Runs relocated helper smoke tests.
+
+The Makefile targets `build-helper`, `build-app` and `package-local` are all aliases for this same script, so the helper and native app are always verified together.
+
+## Artifacts
+
+Only after every step passes does the script write a uniquely named directory, `build/macos-<actual-architecture>/verified.XXXXXX/`, containing:
+
+- `zudo-stl-fix.app`
+- `zudo-stl-fix-macos-<actual-architecture>-local.zip`
+- the archive's `.sha256` file
+
+Each invocation gets a fresh directory, so earlier builds cannot leak stale libraries into the tested app.
+
+:::warning
+The archive is a local development artifact. It is ad-hoc signed, not notarized, and not a public release. See [Release status](./release-status.mdx).
+:::
+
+## BUILD-INFO
+
+`Contents/Resources/BUILD-INFO.txt` inside the app records the build environment: macOS, Xcode, SDK version and path, Swift, Python, the installed distributions, the source commit, whether the working tree was dirty, the actual architecture, and the configured target. Keep it with the artifact as evidence.
+
+## Embedded helper and smoke test
+
+The native executable is `Contents/MacOS/ZudoSTLFix`. It finds the helper at `Contents/Helpers/STLWorker.app/Contents/MacOS/stl-worker`, never through `PATH` or a system Python.
+
+To rerun the smoke test against an existing app:
+
+```sh
+.venv/bin/python scripts/smoke_bundle.py '/absolute/path/zudo-stl-fix.app'
+```
+
+The smoke test copies the app to a temporary path containing spaces and Japanese characters, validates nested signatures, checks Mach-O architecture slices, and rejects native dependencies outside the bundle and system libraries. It starts the helper with `PATH=/usr/bin:/bin`, no inherited Python variables and a temporary home.
+
+It then checks all eleven original fixtures, confirms that only the two defective rails become repaired candidates (with their tiny-triangle warnings retained), verifies staged hashes, bounds and complete intersection scans, and reloads the serialized outputs in two further worker processes. This tests helper packaging; it does not test the interactive Finder workflow.
