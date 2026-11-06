@@ -38,6 +38,6 @@ gh run watch <run-id> --exit-status
 
 ## docs.yml: ドキュメントサイト
 
-このワークフローは、このドキュメントサイトをビルドします。`doc/**` を変更するプルリクエストと `main` へのプッシュで、サイトをビルドし、`check:html`、`check:links`、`wrangler` のドライランを実行します。
+このワークフローは、このドキュメントサイトをビルドします。`doc/**` を変更するプルリクエストと `main` へのプッシュで、Node.js 24 でサイトをビルドし、`check:html`、`check:links`、`wrangler` のドライランを実行します。
 
-デプロイ先は Cloudflare Workers Static Assets に設定されていますが、**本番デプロイは認証情報の準備待ちです**。`CLOUDFLARE_API_TOKEN` と `CLOUDFLARE_ACCOUNT_ID` のシークレットが用意されるまで、デプロイのステップは通知を出してスキップされます。セットアップ手順はリポジトリ内の `docs/cloudflare-setup.md` にあります。
+デプロイ先は Cloudflare Workers Static Assets に設定されています。`main` へのプッシュ（または手動実行）では、`CLOUDFLARE_API_TOKEN` と `CLOUDFLARE_ACCOUNT_ID` のシークレットがある場合にだけ、デプロイのジョブがサイトを公開します。シークレットがなければデプロイのステップは通知を出してスキップされ、ジョブ自体は成功します。そのため、デプロイのジョブが成功していても公開されたとは限りません。ジョブのログを確認してください。セットアップ手順はリポジトリ内の `docs/cloudflare-setup.md` にあります。

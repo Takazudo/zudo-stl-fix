@@ -6,7 +6,7 @@ sidebar_position: 7
 
 ## ローカルでの開発
 
-サイトは `doc/` にあり、zudo-doc でビルドします。リポジトリのルートで次のコマンドを実行します。
+サイトは `doc/` にあり、zudo-doc でビルドします。Node.js 24（`doc/package.json` の `engines` フィールド）と pnpm 10.30.3（同じく `packageManager` フィールド）が必要です。リポジトリのルートで次のコマンドを実行します。
 
 ```sh
 pnpm -C doc install --frozen-lockfile
