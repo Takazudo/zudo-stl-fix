@@ -1,0 +1,528 @@
+heavy-guard: queued behind another heavy run (no time limit); will start automatically when it finishes...
+heavy-guard: still waiting (60s so far) — held by: <another local heavy run, redacted>
+Collecting altgraph==0.17.5 (from -r packaging/requirements-macos.lock (line 3))
+  Using cached altgraph-0.17.5-py2.py3-none-any.whl (21 kB)
+Collecting macholib==1.16.4 (from -r packaging/requirements-macos.lock (line 5))
+  Using cached macholib-1.16.4-py2.py3-none-any.whl (38 kB)
+Collecting numpy==2.5.4 (from -r packaging/requirements-macos.lock (line 7))
+  Using cached numpy-2.5.4-cp312-cp312-macosx_14_0_arm64.whl (5.5 MB)
+Collecting packaging==26.3 (from -r packaging/requirements-macos.lock (line 10))
+  Using cached packaging-26.3-py3-none-any.whl (129 kB)
+Collecting pyinstaller==6.22.3 (from -r packaging/requirements-macos.lock (line 12))
+  Using cached pyinstaller-6.22.3-py3-none-macosx_10_13_universal2.whl (1.1 MB)
+Collecting pyinstaller-hooks-contrib==2026.8 (from -r packaging/requirements-macos.lock (line 14))
+  Using cached pyinstaller_hooks_contrib-2026.8-py3-none-any.whl (462 kB)
+Collecting scipy==1.18.1 (from -r packaging/requirements-macos.lock (line 16))
+  Using cached scipy-1.18.1-cp312-cp312-macosx_14_0_arm64.whl (20.5 MB)
+Collecting setuptools==84.0.0 (from -r packaging/requirements-macos.lock (line 19))
+  Using cached setuptools-84.0.0-py3-none-any.whl (818 kB)
+Collecting shapely==2.2.0 (from -r packaging/requirements-macos.lock (line 21))
+  Using cached shapely-2.2.0-cp312-cp312-macosx_11_0_arm64.whl (1.6 MB)
+Collecting trimesh==4.12.2 (from -r packaging/requirements-macos.lock (line 24))
+  Using cached trimesh-4.12.2-py3-none-any.whl (741 kB)
+Installing collected packages: altgraph, setuptools, packaging, numpy, macholib, trimesh, shapely, scipy, pyinstaller-hooks-contrib, pyinstaller
+Successfully installed altgraph-0.17.5 macholib-1.16.4 numpy-2.5.4 packaging-26.3 pyinstaller-6.22.3 pyinstaller-hooks-contrib-2026.8 scipy-1.18.1 setuptools-84.0.0 shapely-2.2.0 trimesh-4.12.2
+
+[notice] A new release of pip is available: 25.0.1 -> 26.3
+[notice] To update, run: $HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/bin/python -m pip install --upgrade pip
+No broken requirements found.
+231 INFO: PyInstaller: 6.22.3, contrib hooks: 2026.8
+232 INFO: Python: 3.12.14
+255 INFO: Platform: macOS-27.0.1-arm64-arm-64bit
+255 INFO: Python environment: $HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv
+270 INFO: Removing temporary files and cleaning cache in $HOME/Library/Application Support/pyinstaller
+11284 INFO: Module search paths (PYTHONPATH):
+['$HOME/repos/myoss/zudo-stl-fix',
+ '$HOME/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python312.zip',
+ '$HOME/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12',
+ '$HOME/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/lib-dynload',
+ '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages',
+ '$HOME/repos/myoss/zudo-stl-fix/engine']
+11611 INFO: Appending 'binaries' from .spec
+11611 INFO: Appending 'datas' from .spec
+11626 INFO: checking Analysis
+11626 INFO: Building Analysis because Analysis-00.toc is non existent
+11626 INFO: Looking for Python shared library...
+11646 INFO: Using Python shared library: $HOME/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/libpython3.12.dylib
+11646 INFO: Running Analysis Analysis-00.toc
+11646 INFO: Target bytecode optimization level: 0
+11646 INFO: Initializing module dependency graph...
+11651 INFO: Initializing module graph hook caches...
+11664 INFO: Analyzing modules for base_library.zip ...
+12667 INFO: Processing standard module hook 'hook-encodings.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+13117 INFO: Processing standard module hook 'hook-math.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+13740 INFO: Processing standard module hook 'hook-pickle.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+14454 INFO: Processing standard module hook 'hook-heapq.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+15357 INFO: Caching module dependency graph...
+15383 INFO: Analyzing $HOME/repos/myoss/zudo-stl-fix/engine/worker.py
+15456 INFO: Processing standard module hook 'hook-platform.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+15488 INFO: Processing standard module hook 'hook-xml.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+15548 INFO: Processing standard module hook 'hook-numpy.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+15711 INFO: Processing pre-safe-import-module hook 'hook-typing_extensions.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+15719 INFO: SetuptoolsInfo: initializing cached setuptools info...
+16811 INFO: Processing standard module hook 'hook-sysconfig.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+16823 INFO: Processing standard module hook 'hook-_osx_support.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+16975 INFO: Processing standard module hook 'hook-webbrowser.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+17264 INFO: Processing standard module hook 'hook-_ctypes.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+17531 INFO: Processing standard module hook 'hook-difflib.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+17717 INFO: Processing standard module hook 'hook-multiprocessing.util.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+18666 INFO: Processing standard module hook 'hook-scipy.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+19357 INFO: Processing standard module hook 'hook-trimesh.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/_pyinstaller_hooks_contrib/stdhooks'
+19510 INFO: Processing standard module hook 'hook-scipy.spatial._ckdtree.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+19681 INFO: Processing standard module hook 'hook-scipy.linalg.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+19758 INFO: Processing standard module hook 'hook-scipy.special._ufuncs.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+21293 INFO: Processing standard module hook 'hook-scipy.stats._stats.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+21516 INFO: Processing standard module hook 'hook-scipy.sparse.csgraph.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+21908 INFO: Processing standard module hook 'hook-scipy.special._ellip_harm_2.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+22100 INFO: Processing standard module hook 'hook-scipy.spatial.transform.rotation.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+22190 INFO: Processing standard module hook 'hook-shapely.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/_pyinstaller_hooks_contrib/stdhooks'
+22740 INFO: Analyzing hidden import 'numpy._configtool'
+22742 INFO: Analyzing hidden import 'numpy._core._exceptions'
+22745 INFO: Analyzing hidden import 'numpy._core._multiarray_tests'
+22745 INFO: Analyzing hidden import 'numpy._core._operand_flag_tests'
+22745 INFO: Analyzing hidden import 'numpy._core._rational_tests'
+22745 INFO: Analyzing hidden import 'numpy._core._simd'
+22752 INFO: Analyzing hidden import 'numpy._core._struct_ufunc_tests'
+22752 INFO: Analyzing hidden import 'numpy._core._umath_tests'
+22759 INFO: Analyzing hidden import 'numpy._core.cversions'
+22761 INFO: Analyzing hidden import 'numpy._pyinstaller'
+22762 INFO: Analyzing hidden import 'numpy._pyinstaller.hook-numpy'
+22799 INFO: Processing pre-safe-import-module hook 'hook-importlib_metadata.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+22806 INFO: Setuptools: 'importlib_metadata' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.importlib_metadata'!
+22812 INFO: Processing standard module hook 'hook-setuptools.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+22825 INFO: Processing pre-safe-import-module hook 'hook-distutils.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+22848 INFO: Processing pre-safe-import-module hook 'hook-jaraco.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+22852 INFO: Setuptools: 'jaraco' appears to be a full setuptools-vendored copy - creating alias to 'setuptools._vendor.jaraco'!
+22858 INFO: Processing pre-safe-import-module hook 'hook-more_itertools.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+22862 INFO: Setuptools: 'more_itertools' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.more_itertools'!
+22926 INFO: Processing pre-safe-import-module hook 'hook-packaging.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+23064 INFO: Processing standard module hook 'hook-setuptools._vendor.jaraco.text.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+23068 INFO: Processing pre-safe-import-module hook 'hook-importlib_resources.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+23074 INFO: Processing pre-safe-import-module hook 'hook-backports.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+23078 INFO: Setuptools: 'backports' appears to be a full setuptools-vendored copy - creating alias to 'setuptools._vendor.backports'!
+23343 INFO: Processing pre-safe-import-module hook 'hook-tomli.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+23345 INFO: Setuptools: 'tomli' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.tomli'!
+23580 INFO: Processing pre-safe-import-module hook 'hook-wheel.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+23585 INFO: Setuptools: 'wheel' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.wheel'!
+23614 INFO: Processing standard module hook 'hook-setuptools._vendor.importlib_metadata.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+23638 INFO: Processing pre-safe-import-module hook 'hook-zipp.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+23641 INFO: Setuptools: 'zipp' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.zipp'!
+23820 INFO: Analyzing hidden import 'numpy._typing._extended_precision'
+23822 INFO: Analyzing hidden import 'numpy._utils._pep440'
+23826 INFO: Analyzing hidden import 'numpy.conftest'
+23829 INFO: Analyzing hidden import 'numpy.core._dtype'
+23830 INFO: Analyzing hidden import 'numpy.core._dtype_ctypes'
+23831 INFO: Analyzing hidden import 'numpy.core._internal'
+23832 INFO: Analyzing hidden import 'numpy.core._multiarray_umath'
+23833 INFO: Analyzing hidden import 'numpy.core.arrayprint'
+23834 INFO: Analyzing hidden import 'numpy.core.defchararray'
+23835 INFO: Analyzing hidden import 'numpy.core.einsumfunc'
+23837 INFO: Analyzing hidden import 'numpy.core.fromnumeric'
+23838 INFO: Analyzing hidden import 'numpy.core.function_base'
+23839 INFO: Analyzing hidden import 'numpy.core.getlimits'
+23840 INFO: Analyzing hidden import 'numpy.core.multiarray'
+23841 INFO: Analyzing hidden import 'numpy.core.numerictypes'
+23842 INFO: Analyzing hidden import 'numpy.core.overrides'
+23843 INFO: Analyzing hidden import 'numpy.core.records'
+23844 INFO: Analyzing hidden import 'numpy.core.shape_base'
+23845 INFO: Analyzing hidden import 'numpy.core.umath'
+23845 INFO: Analyzing hidden import 'numpy.f2py.__main__'
+23847 INFO: Analyzing hidden import 'numpy.f2py._src_pyf'
+23850 INFO: Analyzing hidden import 'numpy.lib._user_array_impl'
+23855 INFO: Analyzing hidden import 'numpy.lib.user_array'
+23857 INFO: Analyzing hidden import 'numpy.linalg.lapack_lite'
+23864 INFO: Analyzing hidden import 'numpy.ma.testutils'
+23869 INFO: Analyzing hidden import 'numpy.typing.mypy_plugin'
+23872 INFO: Analyzing hidden import 'scipy._cyutility'
+23872 INFO: Analyzing hidden import 'scipy._lib._array_api_docs_tables'
+23876 INFO: Analyzing hidden import 'scipy._lib._array_api_no_0d'
+23878 INFO: Analyzing hidden import 'scipy._lib._fpumode'
+23878 INFO: Analyzing hidden import 'scipy._lib._gcutils'
+23879 INFO: Analyzing hidden import 'scipy._lib._public_api'
+23881 INFO: Analyzing hidden import 'scipy._lib._test_ccallback'
+23881 INFO: Analyzing hidden import 'scipy._lib._test_deprecation_call'
+23881 INFO: Analyzing hidden import 'scipy._lib._test_deprecation_def'
+23881 INFO: Analyzing hidden import 'scipy._lib.messagestream'
+23881 INFO: Analyzing hidden import 'scipy.conftest'
+23887 INFO: Analyzing hidden import 'scipy.datasets'
+23896 INFO: Processing pre-safe-import-module hook 'hook-platformdirs.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+23899 INFO: Setuptools: 'platformdirs' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.platformdirs'!
+23924 INFO: Analyzing hidden import 'scipy.differentiate'
+23932 INFO: Analyzing hidden import 'scipy.fft._debug_backends'
+23936 INFO: Analyzing hidden import 'scipy.fftpack'
+23954 INFO: Analyzing hidden import 'scipy.integrate._test_multivariate'
+23954 INFO: Analyzing hidden import 'scipy.interpolate._regrid'
+23962 INFO: Analyzing hidden import 'scipy.interpolate.dfitpack'
+23963 INFO: Analyzing hidden import 'scipy.io'
+23965 INFO: Processing standard module hook 'hook-scipy.io.matlab.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+24073 INFO: Analyzing hidden import 'scipy.linalg._testutils'
+24074 INFO: Analyzing hidden import 'scipy.linalg.cython_blas'
+24074 INFO: Analyzing hidden import 'scipy.linalg.cython_lapack'
+24075 INFO: Analyzing hidden import 'scipy.misc'
+24076 INFO: Analyzing hidden import 'scipy.misc.common'
+24077 INFO: Analyzing hidden import 'scipy.misc.doccer'
+24077 INFO: Analyzing hidden import 'scipy.ndimage._ctest'
+24077 INFO: Analyzing hidden import 'scipy.ndimage._cytest'
+24077 INFO: Analyzing hidden import 'scipy.odr'
+24092 INFO: Analyzing hidden import 'scipy.optimize._tstutils'
+24107 INFO: Analyzing hidden import 'scipy.optimize.cython_optimize'
+24108 INFO: Analyzing hidden import 'scipy.optimize.cython_optimize._zeros'
+24108 INFO: Analyzing hidden import 'scipy.signal'
+24331 INFO: Analyzing hidden import 'scipy.sparse.csgraph._validation'
+24332 INFO: Analyzing hidden import 'scipy.sparse.linalg._eigen._svds_doc'
+24333 INFO: Analyzing hidden import 'scipy.sparse.spfuncs'
+24335 INFO: Analyzing hidden import 'scipy.special._add_newdocs'
+24341 INFO: Analyzing hidden import 'scipy.special._mptestutils'
+24352 INFO: Analyzing hidden import 'scipy.special._precompute'
+24353 INFO: Analyzing hidden import 'scipy.special._precompute.cosine_cdf'
+24355 INFO: Analyzing hidden import 'scipy.special._precompute.expn_asy'
+24357 INFO: Analyzing hidden import 'scipy.special._precompute.gammainc_asy'
+24360 INFO: Analyzing hidden import 'scipy.special._precompute.gammainc_data'
+24362 INFO: Analyzing hidden import 'scipy.special._precompute.hyp2f1_data'
+24382 INFO: Analyzing hidden import 'scipy.special._precompute.lambertw'
+24384 INFO: Analyzing hidden import 'scipy.special._precompute.loggamma'
+24385 INFO: Analyzing hidden import 'scipy.special._precompute.struve_convergence'
+24387 INFO: Analyzing hidden import 'scipy.special._precompute.wright_bessel'
+24393 INFO: Analyzing hidden import 'scipy.special._precompute.wright_bessel_data'
+24395 INFO: Analyzing hidden import 'scipy.special._precompute.wrightomega'
+24396 INFO: Analyzing hidden import 'scipy.special._precompute.zetac'
+24397 INFO: Analyzing hidden import 'scipy.special._test_internal'
+24402 INFO: Analyzing hidden import 'scipy.special._ufuncs_cxx'
+24402 INFO: Analyzing hidden import 'scipy.special.cython_special'
+24406 INFO: Analyzing hidden import 'scipy.stats._continued_fraction'
+24410 INFO: Analyzing hidden import 'scipy.stats._result_classes'
+24411 INFO: Analyzing hidden import 'scipy.stats._sampling'
+24430 INFO: Analyzing hidden import 'scipy.stats.sampling'
+24431 INFO: Analyzing hidden import 'shapely._geos'
+24431 INFO: Analyzing hidden import 'shapely.conftest'
+24432 INFO: Analyzing hidden import 'shapely.geos'
+24433 INFO: Analyzing hidden import 'shapely.plotting'
+24436 INFO: Analyzing hidden import 'shapely.speedups'
+24437 INFO: Analyzing hidden import 'shapely.validation'
+24438 INFO: Analyzing hidden import 'trimesh.__main__'
+24440 INFO: Analyzing hidden import 'trimesh.path.intersections'
+24441 INFO: Analyzing hidden import 'trimesh.viewer.widget'
+24446 INFO: Processing module hooks (post-graph stage)...
+24454 WARNING: Hidden import "scipy.special._cdflib" not found!
+24548 INFO: Performing binary vs. data reclassification (900 entries)
+28732 INFO: Looking for ctypes DLLs
+28824 INFO: Analyzing run-time hooks ...
+28828 INFO: Including run-time hook 'pyi_rth_inspect.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/rthooks'
+28830 INFO: Including run-time hook 'pyi_rth_pkgutil.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/rthooks'
+28832 INFO: Including run-time hook 'pyi_rth_multiprocessing.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/rthooks'
+28834 INFO: Including run-time hook 'pyi_rth_setuptools.py' from '$HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/rthooks'
+28849 INFO: Creating base_library.zip...
+28859 INFO: Looking for dynamic libraries
+30037 INFO: Warnings written to $HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/pyinstaller/worker/warn-worker.txt
+30073 INFO: Graph cross-reference written to $HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/pyinstaller/worker/xref-worker.html
+30353 INFO: checking PYZ
+30354 INFO: Building PYZ because PYZ-00.toc is non existent
+30354 INFO: Building PYZ (ZlibArchive) $HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/pyinstaller/worker/PYZ-00.pyz
+31066 INFO: Building PYZ (ZlibArchive) $HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/pyinstaller/worker/PYZ-00.pyz completed successfully.
+31077 INFO: EXE target arch: arm64
+31077 INFO: Code signing identity: None
+31081 INFO: checking PKG
+31081 INFO: Building PKG because PKG-00.toc is non existent
+31081 INFO: Building PKG (CArchive) stl-worker.pkg
+31123 INFO: Building PKG (CArchive) stl-worker.pkg completed successfully.
+31124 INFO: Bootloader $HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/bootloader/Darwin-64bit/run
+31124 INFO: checking EXE
+31125 INFO: Building EXE because EXE-00.toc is non existent
+31125 INFO: Building EXE from EXE-00.toc
+31125 INFO: Copying bootloader EXE to $HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/pyinstaller/worker/stl-worker
+31204 INFO: Converting EXE to target arch (arm64)
+31298 INFO: Removing signature(s) from EXE
+31369 INFO: Modifying Mach-O image UUID(s) in EXE
+31386 INFO: Appending PKG archive to EXE
+31422 INFO: Fixing EXE headers for code signing
+31554 INFO: Rewriting the executable's macOS SDK version (26.2.0) to match the SDK version of the Python library (15.0.0) in order to avoid inconsistent behavior and potential UI issues in the frozen application.
+31561 INFO: Re-signing the EXE
+31790 INFO: Building EXE from EXE-00.toc completed successfully.
+31802 INFO: checking COLLECT
+31802 INFO: Building COLLECT because COLLECT-00.toc is non existent
+31802 INFO: Removing dir $HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/helper/stl-worker
+32486 INFO: Building COLLECT COLLECT-00.toc
+51514 INFO: Building COLLECT COLLECT-00.toc completed successfully.
+51525 INFO: checking BUNDLE
+51525 INFO: Building BUNDLE because BUNDLE-00.toc is non existent
+51525 INFO: Removing dir $HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/helper/STLWorker.app
+51965 INFO: Building BUNDLE BUNDLE-00.toc
+53437 INFO: Signing the BUNDLE...
+54449 INFO: Building BUNDLE BUNDLE-00.toc completed successfully.
+54457 INFO: Build complete! The results are available in: $HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/helper
+Building for debugging...
+[Planning deferred tasks]
+[22 / 53]
+[23 / 54] ZudoSTLFixCore
+[32 / 96]
+[33 / 96]
+[35 / 96]
+[41 / 96]
+[42 / 96]
+[43 / 96]
+[46 / 96]
+[47 / 96]
+[48 / 96]
+[49 / 96]
+[50 / 96]
+[52 / 96]
+[56 / 96]
+[57 / 96]
+[58 / 96]
+[59 / 96]
+[60 / 96]
+[65 / 96] ZudoSTLFixCore
+[76 / 97] ZudoSTLFixCore
+[86 / 129]
+$HOME/repos/myoss/zudo-stl-fix/app/Sources/ZudoSTLFixCore/Queue.swift:112:110: [1;33mwarning: [1;39m'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope[0;0m [#]8;;https://docs.swift.org/compiler/documentation/diagnostics/implicit-strong-capture\ImplicitStrongCapture]8;;\]
+[0;36m110 |[0;0m             update(job.id) { $0.status = .checking }
+[0;36m111 |[0;0m             let worker = worker
+[0;36m112 |[0;0m             let task = Task { try await worker.run(snapshot: job.snapshot, tolerance: job.tolerance) { [weak self] phase in
+    [0;36m|[0;0m                             |                                                                                |- [1;33mwarning: [1;39m'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope[0;0m [#]8;;https://docs.swift.org/compiler/documentation/diagnostics/implicit-strong-capture\ImplicitStrongCapture]8;;\]
+    [0;36m|[0;0m                             |                                                                                `- [1;39mnote: [1;39mexplicitly assign the capture list item to silence[0;0m
+    [0;36m|[0;0m                             |- [1;39mnote: [1;39m'self' implicitly strongly captured here[0;0m
+    [0;36m|[0;0m                             `- [1;39mnote: [1;39madd 'self' as a capture list item to silence[0;0m
+[0;36m113 |[0;0m                 Task { @MainActor [weak self] in
+[0;36m114 |[0;0m                     self?.update(job.id) { item in
+
+[#ImplicitStrongCapture]: <https://docs.swift.org/compiler/documentation/diagnostics/implicit-strong-capture>
+[87 / 129]
+[95 / 129] ZudoSTLFixCore
+[100 / 130]
+[104 / 130]
+[105 / 130]
+[109 / 130]
+[111 / 130]
+[112 / 141]
+[114 / 141]
+[118 / 141]
+[119 / 141]
+[125 / 141] ZudoSTLFixCoreTests-product
+[130 / 141] ZudoSTLFix-product
+[131 / 141] ZudoSTLFixCoreTests-product
+[133 / 141] ZudoSTLFix-product
+[135 / 141] ZudoSTLFixCoreTests-product
+[136 / 141] ZudoSTLFix-product
+[137 / 141] ZudoSTLFix-product
+[138 / 141] ZudoSTLFixCoreTests-product
+[139 / 141] ZudoSTLFixCoreTests-product
+Build complete! (16.05 sec)
+Test Suite 'All tests' started at 2026-11-08 02:45:16.508.
+Test Suite 'ZudoSTLFixCoreTests.xctest' started at 2026-11-08 02:45:16.510.
+Test Suite 'FilesTests' started at 2026-11-08 02:45:16.510.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testAbandonedSnapshotRootIsReclaimedButLiveRootSurvives]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testAbandonedSnapshotRootIsReclaimedButLiveRootSurvives]' passed (0.030 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testBadHashAndSymlinkCandidateFailWithoutOutput]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testBadHashAndSymlinkCandidateFailWithoutOutput]' passed (0.005 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testConcurrentNameClaimDoesNotOverwrite]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testConcurrentNameClaimDoesNotOverwrite]' passed (0.011 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testCopiedOwnershipMarkerDoesNotAuthorizeAnotherDirectory]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testCopiedOwnershipMarkerDoesNotAuthorizeAnotherDirectory]' passed (0.012 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testDefaultStoreRootIsPhysicalPathTheWorkerAccepts]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testDefaultStoreRootIsPhysicalPathTheWorkerAccepts]' passed (0.195 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testEqualBasenamesAreDistinctIdentities]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testEqualBasenamesAreDistinctIdentities]' passed (0.019 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testExhaustedCaseInsensitiveNamesLeaveNoDebrisAndStayRetryable]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testExhaustedCaseInsensitiveNamesLeaveNoDebrisAndStayRetryable]' passed (2.073 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testInterruptedWriteAndPostPublishCorruptionCleanOwnedFiles]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testInterruptedWriteAndPostPublishCorruptionCleanOwnedFiles]' passed (0.018 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testNameClaimedAfterInventoryFallsThroughToNextSuffix]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testNameClaimedAfterInventoryFallsThroughToNextSuffix]' passed (0.008 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testOneFailedSaveDoesNotPreventLaterSave]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testOneFailedSaveDoesNotPreventLaterSave]' passed (0.006 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testOriginalHardLinkCannotMasqueradeAsCandidate]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testOriginalHardLinkCannotMasqueradeAsCandidate]' passed (0.003 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testOversizeSnapshotIsRejectedBeforeReading]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testOversizeSnapshotIsRejectedBeforeReading]' passed (0.011 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testPhysicalDirectoryKeepsPrivatePrefixForSymlinkedTmp]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testPhysicalDirectoryKeepsPrivatePrefixForSymlinkedTmp]' passed (0.000 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testReadOnlyDestinationFailsWithoutOutput]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testReadOnlyDestinationFailsWithoutOutput]' passed (0.004 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testReportExportSharesCaseInsensitiveSelectionAndExhaustion]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testReportExportSharesCaseInsensitiveSelectionAndExhaustion]' passed (2.156 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testReportUsesVerifiedJSONPublication]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testReportUsesVerifiedJSONPublication]' passed (0.008 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testSaveUsesDeterministicCaseInsensitiveSuffixAndPreservesInputLinks]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testSaveUsesDeterministicCaseInsensitiveSuffixAndPreservesInputLinks]' passed (0.010 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testSnapshotCopiesUnusualUppercaseNameAndRecordsHardLinkIdentity]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testSnapshotCopiesUnusualUppercaseNameAndRecordsHardLinkIdentity]' passed (0.010 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testSnapshotRejectsWrongExtensionFolderRemoteAndSymlink]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testSnapshotRejectsWrongExtensionFolderRemoteAndSymlink]' passed (0.002 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testSourceReplacementDuringSnapshotIsRejected]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testSourceReplacementDuringSnapshotIsRejected]' passed (0.005 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testStaleCleanupPreservesUnmarkedRootsAndSymlinkTargets]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testStaleCleanupPreservesUnmarkedRootsAndSymlinkTargets]' passed (0.003 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testSubstitutedFinalIsPreservedAndSaveFails]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testSubstitutedFinalIsPreservedAndSaveFails]' passed (0.007 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testSubstitutedStageIsNeverPublishedOrDeleted]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testSubstitutedStageIsNeverPublishedOrDeleted]' passed (0.009 seconds).
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testTemporaryParentSymlinkIsCanonicalizedForWorker]' started.
+Test Case '-[ZudoSTLFixCoreTests.FilesTests testTemporaryParentSymlinkIsCanonicalizedForWorker]' passed (0.007 seconds).
+Test Suite 'FilesTests' passed at 2026-11-08 02:45:21.124.
+	 Executed 24 tests, with 0 failures (0 unexpected) in 4.611 (4.614) seconds
+Test Suite 'ProcessTests' started at 2026-11-08 02:45:21.124.
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testCancellationEscalatesForTermResistantWorker]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testCancellationEscalatesForTermResistantWorker]' passed (2.260 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testCompletedWorkerProducesResultOnlyAfterNormalExit]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testCompletedWorkerProducesResultOnlyAfterNormalExit]' passed (0.118 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testInvalidToleranceFailsBeforeLaunchingWorker]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testInvalidToleranceFailsBeforeLaunchingWorker]' passed (0.016 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testMalformedAndDuplicateTerminalStreamsAreRejected]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testMalformedAndDuplicateTerminalStreamsAreRejected]' passed (0.236 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testMissingAndTruncatedResultsAreRejected]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testMissingAndTruncatedResultsAreRejected]' passed (0.274 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testRealWorkerRepairsDefectiveRailFromDefaultTemporaryStore]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testRealWorkerRepairsDefectiveRailFromDefaultTemporaryStore]' passed (2.413 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testRepairedResultWithMissingStagedArtifactIsRejected]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testRepairedResultWithMissingStagedArtifactIsRejected]' passed (0.109 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testStderrFloodIsDrainedAndBounded]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testStderrFloodIsDrainedAndBounded]' passed (0.382 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testStdoutFloodIsRejectedWithoutHanging]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testStdoutFloodIsRejectedWithoutHanging]' passed (0.220 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testSuccessfulTerminalDoesNotBypassTimeout]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testSuccessfulTerminalDoesNotBypassTimeout]' passed (0.214 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testTerminalSuccessFollowedByNonzeroExitOrCrashIsRejected]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testTerminalSuccessFollowedByNonzeroExitOrCrashIsRejected]' passed (0.246 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testTimeoutEscalatesForTermResistantWorker]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testTimeoutEscalatesForTermResistantWorker]' passed (2.268 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testWorkerCannotReturnSuccessAfterChangingSnapshot]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testWorkerCannotReturnSuccessAfterChangingSnapshot]' passed (0.115 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testWorkerClosingStdinImmediatelyDoesNotKillHostWithSIGPIPE]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProcessTests testWorkerClosingStdinImmediatelyDoesNotKillHostWithSIGPIPE]' passed (0.866 seconds).
+Test Suite 'ProcessTests' passed at 2026-11-08 02:45:30.862.
+	 Executed 14 tests, with 0 failures (0 unexpected) in 9.735 (9.738) seconds
+Test Suite 'ProtocolTests' started at 2026-11-08 02:45:30.862.
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testByteByByteFragmentationAndCoalescing]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testByteByByteFragmentationAndCoalescing]' passed (0.003 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testDuplicateMembersIncludingEscapedAndNestedKeysAreRejected]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testDuplicateMembersIncludingEscapedAndNestedKeysAreRejected]' passed (0.003 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testExactlyOneTerminalAndNoEventsAfterTerminal]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testExactlyOneTerminalAndNoEventsAfterTerminal]' passed (0.002 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testIncompleteOrDefectiveScanCannotBeCalledSuccessful]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testIncompleteOrDefectiveScanCannotBeCalledSuccessful]' passed (0.001 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testLineStreamAndEventCountBounds]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testLineStreamAndEventCountBounds]' passed (0.027 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testMalformedUnknownWrongJobAndVersionAreRejected]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testMalformedUnknownWrongJobAndVersionAreRejected]' passed (0.000 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testProgressCannotRegressButRepeatedAndSkippedPhasesAreValid]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testProgressCannotRegressButRepeatedAndSkippedPhasesAreValid]' passed (0.001 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testReadableErrorFormatting]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testReadableErrorFormatting]' passed (0.000 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testRefusedAndIncompleteRemainDistinctFromSuccessAndErrorThrows]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testRefusedAndIncompleteRemainDistinctFromSuccessAndErrorThrows]' passed (0.001 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testStartIsRequiredExactlyOnceAndProgressPhaseIsKnown]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testStartIsRequiredExactlyOnceAndProgressPhaseIsKnown]' passed (0.000 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testStructuredOperationalErrorKeepsExplanationWithNonzeroExit]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testStructuredOperationalErrorKeepsExplanationWithNonzeroExit]' passed (0.000 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testSuccessRequiresCompleteValidationAndCandidateAgreement]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testSuccessRequiresCompleteValidationAndCandidateAgreement]' passed (0.002 seconds).
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testTruncationMissingTerminalAndAbnormalExitsCannotSucceed]' started.
+Test Case '-[ZudoSTLFixCoreTests.ProtocolTests testTruncationMissingTerminalAndAbnormalExitsCannotSucceed]' passed (0.000 seconds).
+Test Suite 'ProtocolTests' passed at 2026-11-08 02:45:30.905.
+	 Executed 13 tests, with 0 failures (0 unexpected) in 0.041 (0.043) seconds
+Test Suite 'QueueTests' started at 2026-11-08 02:45:30.905.
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testAdvancedToleranceSharedByDefaultImport]' started.
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testAdvancedToleranceSharedByDefaultImport]' passed (0.044 seconds).
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testCanceledCompletionCannotResurrectAndNextRuns]' started.
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testCanceledCompletionCannotResurrectAndNextRuns]' passed (0.048 seconds).
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testCanceledRowClearWaitsForWorkerBeforeDeletingSnapshot]' started.
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testCanceledRowClearWaitsForWorkerBeforeDeletingSnapshot]' passed (0.051 seconds).
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testCompletedRefusalRetainsExportableReportWithoutSaveCandidate]' started.
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testCompletedRefusalRetainsExportableReportWithoutSaveCandidate]' passed (0.069 seconds).
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testEveryNonReadyStatusDisablesSave]' started.
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testEveryNonReadyStatusDisablesSave]' passed (0.000 seconds).
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testExhaustedNamesFailOneRowAndStillSaveTheOther]' started.
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testExhaustedNamesFailOneRowAndStillSaveTheOther]' passed (2.083 seconds).
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testInvalidToleranceDoesNotQueue]' started.
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testInvalidToleranceDoesNotQueue]' passed (0.002 seconds).
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testPartialBatchAndSaveFailureRetainsVerifiedCandidate]' started.
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testPartialBatchAndSaveFailureRetainsVerifiedCandidate]' passed (0.052 seconds).
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testQueuedCancellationDuplicatesAndMixedInput]' started.
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testQueuedCancellationDuplicatesAndMixedInput]' passed (0.028 seconds).
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testRefusedAndIncompleteRowsShowWorkerReasonWithoutSave]' started.
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testRefusedAndIncompleteRowsShowWorkerReasonWithoutSave]' passed (0.041 seconds).
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testRepairedWithoutVerifiedCandidateIsExplainedError]' started.
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testRepairedWithoutVerifiedCandidateIsExplainedError]' passed (0.039 seconds).
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testSaveFailureMessageHasSingleSentenceBreak]' started.
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testSaveFailureMessageHasSingleSentenceBreak]' passed (0.000 seconds).
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testSequentialNewImportsAndWarningStatus]' started.
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testSequentialNewImportsAndWarningStatus]' passed (0.062 seconds).
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testShutdownWaitsForActiveSaveAndPreservesPublishedFile]' started.
+Test Case '-[ZudoSTLFixCoreTests.QueueTests testShutdownWaitsForActiveSaveAndPreservesPublishedFile]' passed (0.262 seconds).
+Test Suite 'QueueTests' passed at 2026-11-08 02:45:33.689.
+	 Executed 14 tests, with 0 failures (0 unexpected) in 2.782 (2.784) seconds
+Test Suite 'ZudoSTLFixCoreTests.xctest' passed at 2026-11-08 02:45:33.689.
+	 Executed 65 tests, with 0 failures (0 unexpected) in 17.170 (17.179) seconds
+Test Suite 'All tests' passed at 2026-11-08 02:45:33.689.
+	 Executed 65 tests, with 0 failures (0 unexpected) in 17.170 (17.181) seconds
+collision-exhaustion: 10000 names in 0.030 s
+◇ Test run started.
+↳ Testing Library Version: 2403
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.
+Building for production...
+[Planning deferred tasks]
+[12 / 25] ZudoSTLFixCore
+[12 / 25]
+[13 / 26] ZudoSTLFixCore
+[23 / 64]
+[24 / 64]
+[26 / 64]
+[32 / 64]
+[33 / 64]
+[34 / 64]
+[37 / 64]
+[38 / 64]
+[39 / 64]
+[40 / 64]
+[41 / 64]
+[43 / 64]
+[47 / 64]
+[48 / 64]
+[49 / 64]
+[50 / 64]
+[51 / 64]
+$HOME/repos/myoss/zudo-stl-fix/app/Sources/ZudoSTLFixCore/Queue.swift:112:110: [1;33mwarning: [1;39m'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope[0;0m [#]8;;https://docs.swift.org/compiler/documentation/diagnostics/implicit-strong-capture\ImplicitStrongCapture]8;;\]
+[0;36m110 |[0;0m             update(job.id) { $0.status = .checking }
+[0;36m111 |[0;0m             let worker = worker
+[0;36m112 |[0;0m             let task = Task { try await worker.run(snapshot: job.snapshot, tolerance: job.tolerance) { [weak self] phase in
+    [0;36m|[0;0m                             |                                                                                |- [1;33mwarning: [1;39m'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope[0;0m [#]8;;https://docs.swift.org/compiler/documentation/diagnostics/implicit-strong-capture\ImplicitStrongCapture]8;;\]
+    [0;36m|[0;0m                             |                                                                                `- [1;39mnote: [1;39mexplicitly assign the capture list item to silence[0;0m
+    [0;36m|[0;0m                             |- [1;39[52 / 64] ZudoSTLFixCore
+mnote: [1;39m'self' implicitly strongly captured here[0;0m
+    [0;36m|[0;0m                             `- [1;39mnote: [1;39madd 'self' as a capture list item to silence[0;0m
+[0;36m113 |[0;0m                 Task { @MainActor [weak self] in
+[0;36m114 |[0;0m                     self?.update(job.id) { item in
+
+[#ImplicitStrongCapture]: <https://docs.swift.org/compiler/documentation/diagnostics/implicit-strong-capture>
+[59 / 65] ZudoSTLFixCore
+[60 / 65] ZudoSTLFix-product
+[72 / 96]
+[78 / 96]
+[82 / 96]
+[84 / 96]
+[88 / 96]
+[90 / 96]
+[91 / 96]
+[92 / 96] ZudoSTLFix-product
+[94 / 96] ZudoSTLFix-product
+[95 / 96] ZudoSTLFix-product
+Build complete! (11.52 sec)
+swift-driver version: 1.168.6 $HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/app-stage.iJ9iVZ/zudo-stl-fix.app: replacing existing signature
+{"architecture": "arm64", "embedded_self_test": {"environment": {"GEOS": "3.14.1", "architecture": "arm64", "engine": "1.0.0", "numpy": "2.5.4", "python": "3.12.14", "scipy": "1.18.1", "shapely": "2.2.0", "trimesh": "4.12.2"}, "protocol_version": 1, "self_test": "passed"}}
+PASS bar-30hp.stl: unchanged
+PASS bar-40hp.stl: unchanged
+PASS bar-60hp.stl: unchanged
+PASS nuts-v2-40hp-double.stl: repaired
+PASS nuts-v2-60hp-double.stl: repaired
+PASS nuts-v3-40hp-single.stl: unchanged
+PASS nuts-v3-60hp-single.stl: unchanged
+PASS nylon-double-v2-40hp-double.stl: unchanged
+PASS nylon-double-v2-60hp-double.stl: unchanged
+PASS nylon-single-v3-40hp.stl: unchanged
+PASS nylon-single-v3-60hp.stl: unchanged
+PASS relocated embedded helper: 11 originals and 2 serialized candidate rechecks; Finder/UI not exercised
+Local ad-hoc development app: $HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/verified.x8Hupi/zudo-stl-fix.app
+Local archive (not notarized or released): $HOME/repos/myoss/zudo-stl-fix/build/macos-arm64/verified.x8Hupi/zudo-stl-fix-macos-arm64-local.zip
+heavy-guard: verdict=PASS exit=0 secs=190 min_mem_mb=9938 reason=-
+exit=0 elapsed=267s

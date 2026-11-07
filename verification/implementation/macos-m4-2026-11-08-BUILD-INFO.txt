@@ -1,0 +1,24 @@
+ProductName:		macOS
+ProductVersion:		27.0.1
+BuildVersion:		26A434
+Xcode 27.2
+Build version 27B52
+27.2
+/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
+Apple Swift version 6.4.2 (swiftlang-6.4.2.1.9 clang-2100.4.1.1)
+Target: arm64-apple-macosx27.0.0
+Python 3.12.14
+altgraph==0.17.5
+macholib==1.16.4
+numpy==2.5.4
+packaging==26.3
+pip==25.0.1
+pyinstaller==6.22.3
+pyinstaller-hooks-contrib==2026.8
+scipy==1.18.1
+setuptools==84.0.0
+shapely==2.2.0
+trimesh==4.12.2
+23bbfaa8eb187487419995880091c5f9e8a23a35
+architecture=arm64
+deployment_target=14.0 (not proof of runtime compatibility)
