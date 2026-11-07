@@ -43,8 +43,6 @@ Swift のテストのうち `testRealWorker` だけは、フェイクではな�
 ZUDO_WORKER_PYTHON=.venv/bin/python swift test --package-path app --filter testRealWorker
 ```
 
-`scripts/build-macos.sh` は `ZUDO_WORKER_PYTHON` に自身のビルド環境の Python を設定するため、パッケージングのビルドではこのテストがスキップされず、必ず実行されます。
-
 :::tip
 パスの扱いやワーカープロトコルに手を入れたときは、必ずこのテストを実行してください。実際の不具合（シンボリックリンクされたジョブディレクトリ）がフェイクワーカーのテストをすり抜け、実際のアプリを動かして初めて見つかったことがあります。[検証状況](./verification-status.mdx)を参照してください。
 :::

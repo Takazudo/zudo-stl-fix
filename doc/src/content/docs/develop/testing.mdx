@@ -43,8 +43,6 @@ One Swift test, `testRealWorker`, drives the actual Python worker instead of a f
 ZUDO_WORKER_PYTHON=.venv/bin/python swift test --package-path app --filter testRealWorker
 ```
 
-`scripts/build-macos.sh` sets `ZUDO_WORKER_PYTHON` to its own build environment's Python, so a packaging build always runs this test instead of skipping it.
-
 :::tip
 Run this test whenever you touch path handling or the worker protocol. A real defect (symlinked job directories) slipped past fake-worker tests and was only caught by running the real app; see [Verification status](./verification-status.mdx).
 :::
