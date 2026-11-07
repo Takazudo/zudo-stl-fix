@@ -99,5 +99,5 @@ distribution and its signing/notarization review are separate work.
 
 ## Documentation
 
-- [`doc/`](doc) is the source of the published documentation site (zudo-doc; English and Japanese). Build it with `pnpm -C doc install --frozen-lockfile && pnpm -C doc build`.
+- [`doc/`](doc) is the source of the published documentation site (zudo-doc; English and Japanese). Build it with Node.js 24 and pnpm 10.30.3: `pnpm -C doc install --frozen-lockfile && pnpm -C doc build`.
 - [`docs/`](docs) holds engineering specs and the development handoff. It is not published.

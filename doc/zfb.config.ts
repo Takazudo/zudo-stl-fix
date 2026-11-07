@@ -13,6 +13,8 @@ export default defineConfig(
       },
     },
     githubUrl: "https://github.com/Takazudo/zudo-stl-fix",
+    // zudo-doc 9 made Graphite the implicit default; keep the Classic look.
+    themePack: "default",
     llmsTxt: true,
     sidebarResizer: true,
     sidebarToggle: true,
