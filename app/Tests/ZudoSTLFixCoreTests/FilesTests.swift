@@ -142,6 +142,66 @@ final class FilesTests: XCTestCase {
         XCTAssertFalse(try FileManager.default.contentsOfDirectory(atPath: destination.path).contains { $0.hasPrefix(".zudo") })
     }
 
+    // Mirrors the 2026-11-07 native acceptance folder: part-fixed.stl … part-fixed-10000.stl.
+    private func fillCollisions(_ destination: URL, stem: String, label: String, ext: String) throws {
+        for suffix in 1...10_000 {
+            let name = "\(stem)-\(label)\(suffix == 1 ? "" : "-\(suffix)").\(ext)"
+            let fd = open(destination.appendingPathComponent(suffix % 2 == 0 ? name.uppercased() : name).path,
+                          O_WRONLY | O_CREAT | O_EXCL, 0o600)
+            XCTAssertGreaterThanOrEqual(fd, 0); close(fd)
+        }
+    }
+
+    func testExhaustedCaseInsensitiveNamesLeaveNoDebrisAndStayRetryable() async throws {
+        let source = try temporaryDirectory(), destination = try temporaryDirectory()
+        let candidate = try artifact(in: source)
+        try fillCollisions(destination, stem: "part", label: "fixed", ext: "stl")
+        let before = Set(try FileManager.default.contentsOfDirectory(atPath: destination.path))
+        let exporter = Exporter()
+        let started = Date()
+        do {
+            _ = try await exporter.save(candidate: candidate, stem: "part", directory: destination, protectedInputs: [])
+            XCTFail("Published past the last suffix")
+        } catch LocalFileError.collisions {}
+        print("collision-exhaustion: 10000 names in \(String(format: "%.3f", Date().timeIntervalSince(started))) s")
+        XCTAssertEqual(Set(try FileManager.default.contentsOfDirectory(atPath: destination.path)), before)
+        try FileManager.default.removeItem(at: destination.appendingPathComponent("PART-FIXED-5000.STL"))
+        let retried = try await exporter.save(candidate: candidate, stem: "part", directory: destination, protectedInputs: [])
+        XCTAssertEqual(retried.lastPathComponent, "part-fixed-5000.stl")
+        try FileVerification.verify(VerifiedArtifact(url: retried, sha256: candidate.sha256, byteSize: candidate.byteSize))
+    }
+
+    func testNameClaimedAfterInventoryFallsThroughToNextSuffix() async throws {
+        let source = try temporaryDirectory(), destination = try temporaryDirectory()
+        let candidate = try artifact(in: source)
+        let rival = destination.appendingPathComponent("part-fixed.stl")
+        let exporter = Exporter { phase, _ in
+            if phase == .afterNameInventory { try Data("rival".utf8).write(to: rival, options: .withoutOverwriting) }
+        }
+        let saved = try await exporter.save(candidate: candidate, stem: "part", directory: destination, protectedInputs: [])
+        XCTAssertEqual(saved.lastPathComponent, "part-fixed-2.stl")
+        XCTAssertEqual(try Data(contentsOf: rival), Data("rival".utf8))
+        try FileVerification.verify(VerifiedArtifact(url: saved, sha256: candidate.sha256, byteSize: candidate.byteSize))
+        XCTAssertEqual(Set(try FileManager.default.contentsOfDirectory(atPath: destination.path)),
+                       ["part-fixed.stl", "part-fixed-2.stl"])
+    }
+
+    func testReportExportSharesCaseInsensitiveSelectionAndExhaustion() async throws {
+        let source = try temporaryDirectory(), destination = try temporaryDirectory()
+        let report = try artifact(in: source, name: "report.json", text: "{\"warnings\":[]}")
+        for name in ["PART-REPORT.JSON", "Part-Report-2.json"] { try Data("keep".utf8).write(to: destination.appendingPathComponent(name)) }
+        let saved = try await Exporter().exportReport(candidate: report, stem: "part", directory: destination, protectedInputs: [])
+        XCTAssertEqual(saved.lastPathComponent, "part-report-3.json")
+        let full = try temporaryDirectory()
+        try fillCollisions(full, stem: "part", label: "report", ext: "json")
+        let before = Set(try FileManager.default.contentsOfDirectory(atPath: full.path))
+        do {
+            _ = try await Exporter().exportReport(candidate: report, stem: "part", directory: full, protectedInputs: [])
+            XCTFail("Exported past the last suffix")
+        } catch LocalFileError.collisions {}
+        XCTAssertEqual(Set(try FileManager.default.contentsOfDirectory(atPath: full.path)), before)
+    }
+
     func testOriginalHardLinkCannotMasqueradeAsCandidate() async throws {
         let source = try temporaryDirectory(), destination = try temporaryDirectory()
         let original = try artifact(in: source)
