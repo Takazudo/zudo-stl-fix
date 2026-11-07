@@ -23,7 +23,9 @@ PY="$OUT/venv/bin/python"
 "$PY" -m pip install --require-hashes --only-binary=:all: -r packaging/requirements-macos.lock
 "$PY" -m pip check
 "$PY" -m PyInstaller --noconfirm --clean --distpath "$OUT/helper" --workpath "$OUT/pyinstaller" packaging/worker.spec
-swift test --package-path app
+# Point the opt-in real-worker XCTest at this build's own hash-locked venv so
+# the packaging run exercises engine/worker.py instead of skipping it.
+ZUDO_WORKER_PYTHON="$PY" swift test --package-path app
 swift build --package-path app -c release --arch "$ZUDO_BUILD_ARCH"
 BIN=$(swift build --package-path app -c release --arch "$ZUDO_BUILD_ARCH" --show-bin-path)
 # Build into a new private directory; never recursively delete a user-selected path.

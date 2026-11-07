@@ -40,7 +40,11 @@ PYTHON=python3.12 bash scripts/build-macos.sh
 The last command creates a new build virtual environment, verifies pinned wheel
 hashes, freezes the actual worker, runs Swift tests, builds the native executable,
 creates the `.app`, generates notices and exact build provenance, verifies nested
-ad-hoc signatures, and runs relocated helper smoke tests. Only after these pass
+ad-hoc signatures, and runs relocated helper smoke tests. Its Swift test step sets
+`ZUDO_WORKER_PYTHON` to that build venv's own interpreter, so
+`testRealWorkerRepairsDefectiveRailFromDefaultTemporaryStore` runs the real
+`engine/worker.py` instead of skipping; a plain developer `swift test` still skips
+it unless `ZUDO_WORKER_PYTHON` is set. Only after these pass
 does it produce a uniquely named directory under
 `build/macos-<actual-architecture>/verified.XXXXXX/` containing:
 
@@ -93,10 +97,14 @@ pull-request trigger. `macos.yml` is manual and builds only the selected runner'
 actual architecture. Runner labels are choices, not architecture guarantees; the
 build checks and artifact labels use the detected machine.
 
-Once the manual workflow is available on the repository's default branch:
+The primary native path is a local, architecture-matched Mac running the commands
+above on the branch or pull-request revision under test. The manual workflow is an
+optional, separately authorized alternative that uses paid macOS runners; nothing
+dispatches it automatically. When it is wanted, pass the ref under test (for
+example `main`, or a pull request's head branch):
 
 ```sh
-gh workflow run macos.yml --ref feat/native-stl-fix -f runner=macos-14
+gh workflow run macos.yml --ref <branch> -f runner=macos-14
 gh run list --workflow macos.yml
 gh run watch <run-id> --exit-status
 ```
