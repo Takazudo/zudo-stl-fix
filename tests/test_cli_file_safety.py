@@ -53,6 +53,9 @@ class CLIFileSafetyTests(unittest.TestCase):
         self.assertIn(text, result.stderr)
         self.assertInputsUnchanged()
 
+    def actions(self):
+        return [f["action"] for f in json.loads(self.report.read_text())["files"]]
+
     def assertValidRepair(self, path):
         stl = stl_doctor.load_stl(path)
         after = stl_doctor.audit(stl)
@@ -63,7 +66,8 @@ class CLIFileSafetyTests(unittest.TestCase):
         (self.out / "rail-fixed.stl").symlink_to(self.bar)
         result = self.cli("repair", self.rail, self.bar, "--out-dir", self.out, "--report", self.report, "--overwrite")
         self.assertRefused(result, "is a symbolic link")
-        self.assertFalse(self.report.exists())
+        self.assertEqual(self.actions(), ["error", "unchanged"])
+        self.assertTrue((self.out / "rail-fixed.stl").is_symlink())
 
     def test_output_hard_links_to_own_or_other_input_are_refused(self):
         for source in (self.rail, self.bar):
@@ -72,7 +76,7 @@ class CLIFileSafetyTests(unittest.TestCase):
                 os.link(source, link)
                 result = self.cli("repair", self.rail, self.bar, "--out-dir", self.out, "--report", self.report, "--overwrite")
                 self.assertRefused(result, f"hard link) for input {source}")
-                self.assertFalse(self.report.exists())
+                self.assertEqual(self.actions(), ["error", "unchanged"])
                 link.unlink()
 
     def test_report_hard_link_to_input_is_refused_in_check_and_repair(self):
@@ -115,6 +119,32 @@ class CLIFileSafetyTests(unittest.TestCase):
         self.assertEqual([f["action"] for f in report["files"]], ["repaired", "unchanged"])
         self.assertEqual(sorted(p.name for p in self.out.iterdir()), ["rail-fixed.stl"])
         self.assertEqual(sorted(p.name for p in self.root.iterdir() if p.name.startswith(".")), [])
+
+    def test_unreadable_input_and_stale_unused_output_do_not_block_the_batch(self):
+        missing = self.root / "missing.stl"
+        (self.out / "bar-fixed.stl").symlink_to(self.root / "nowhere")
+        result = self.cli("repair", self.rail, missing, self.bar, "--out-dir", self.out, "--report", self.report, "--overwrite")
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertInputsUnchanged()
+        self.assertEqual(self.actions(), ["repaired", "error", "unchanged"])
+        self.assertValidRepair(self.out / "rail-fixed.stl")
+
+    def test_overwrite_keeps_mode_and_supports_long_names(self):
+        stem = "r" * 230
+        long_input = self.root / f"{stem}.stl"
+        shutil.copyfile(RAIL, long_input)
+        self.hashes[long_input] = sha(RAIL)
+        output = self.out / f"{stem}-fixed.stl"
+        output.write_bytes(b"old")
+        output.chmod(0o640)
+        self.report.write_text("old")
+        self.report.chmod(0o600)
+        result = self.cli("repair", long_input, "--out-dir", self.out, "--report", self.report, "--overwrite")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertInputsUnchanged()
+        self.assertValidRepair(output)
+        self.assertEqual(output.stat().st_mode & 0o777, 0o640)
+        self.assertEqual(self.report.stat().st_mode & 0o777, 0o600)
 
     def test_existing_files_are_kept_without_overwrite(self):
         output = self.out / "rail-fixed.stl"
@@ -166,6 +196,26 @@ class CLIFileSafetyTests(unittest.TestCase):
         self.assertEqual(code, 2)
         self.assertInputsUnchanged()
         self.assertValidRepair(output)
+
+    def test_output_changed_after_publication_is_not_reported_repaired(self):
+        output = self.out / "rail-fixed.stl"
+        real_write = stl_doctor.write_safe
+
+        def tampering_write(path, *args, **kwargs):
+            identity = real_write(path, *args, **kwargs)
+            if path == output:
+                with open(path, "r+b") as f:
+                    f.write(b"tampered")
+            return identity
+
+        with mock.patch.object(stl_doctor, "write_safe", tampering_write), contextlib.redirect_stdout(io.StringIO()), \
+                contextlib.redirect_stderr(io.StringIO()):
+            code = stl_doctor.main(["repair", str(self.rail), "--out-dir", str(self.out), "--report", str(self.report)])
+        self.assertEqual(code, 2)
+        self.assertInputsUnchanged()
+        record = json.loads(self.report.read_text())["files"][0]
+        self.assertEqual((record["action"], record["output"]), ("error", None))
+        self.assertIn("Output changed after verification", record["error"])
 
 
 if __name__ == "__main__":

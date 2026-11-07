@@ -76,12 +76,14 @@ existing-edge cleanup. The CLI is not the native app's transactional save
 implementation.
 
 Outputs and the JSON report never replace an input, even through a symbolic link
-or hard link, and the report never replaces a repaired output. Such paths are
-refused with exit code 2 before anything is written. Without `--overwrite`,
-existing files are kept. With it, an unrelated regular file is replaced by a new
-file through rename, so a link is never written through. A symbolic link at an
-output or report path is refused. Repaired outputs and input hashes are checked
-again after the report is written.
+or hard link, and the report never replaces a repaired output. A report path like
+that stops the run with exit code 2 before anything is written. An output path
+like that is recorded as an error for its file (exit code 2), and the other files
+continue. Without `--overwrite`, existing files are kept. With it, an unrelated
+regular file is replaced by a new file through rename, keeping its permission
+bits, so a link is never written through. A symbolic link at an output or report
+path is refused. Repaired outputs and input hashes are checked again before and
+after the report is written.
 
 ## Repository contents and provenance
 

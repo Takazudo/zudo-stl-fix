@@ -10,6 +10,7 @@ This is a diagnostic/repair utility, not a certified CAD or printability kernel.
 from __future__ import annotations
 
 import argparse
+import contextlib
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from fractions import Fraction as Q
@@ -713,11 +714,11 @@ def write_safe(path: Path, content: bytes, overwrite: bool, protected: dict[tupl
     Without overwrite, the name is created exclusively. With overwrite, a sibling
     temporary file is renamed over the name, so a symlink or hard link that appears
     after preflight is replaced as a directory entry rather than written through.
-    Returns the published file identity.
+    Returns the published file identity after reading the stored bytes back.
     """
     path.parent.mkdir(parents=True, exist_ok=True)
     flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_CLOEXEC", 0)
-    target = path if not overwrite else path.with_name(f".{path.name}.{os.getpid()}.{os.urandom(6).hex()}.tmp")
+    target = path if not overwrite else path.with_name(f".zsf-{os.urandom(8).hex()}.tmp")
     fd = os.open(target, flags, 0o666)
     created = file_identity(os.fstat(fd))
     published = False
@@ -726,23 +727,31 @@ def write_safe(path: Path, content: bytes, overwrite: bool, protected: dict[tupl
             f.write(content)
             f.flush()
             os.fsync(f.fileno())
+            if overwrite:
+                check_replaceable(path, label, protected)
+                previous = existing_entry(path)
+                if previous is not None:
+                    os.fchmod(f.fileno(), previous.st_mode & 0o7777)
         if overwrite:
-            check_replaceable(path, label, protected)
             os.replace(target, path)
         published = True
-    finally:
-        if not published:
-            info = existing_entry(target)
-            if info is not None and file_identity(info) == created:
-                os.unlink(target)
-    verify_published(path, content, created, label)
+        verify_published(path, hashlib.sha256(content).hexdigest(), created, label)
+    except BaseException:
+        remove_owned(path if published else target, created)
+        raise
     return created
 
 
-def verify_published(path: Path, content: bytes, identity: tuple[int, int], label: str = "Output"):
+def remove_owned(path: Path, identity: tuple[int, int]):
+    info = existing_entry(path)
+    if info is not None and file_identity(info) == identity:
+        os.unlink(path)
+
+
+def verify_published(path: Path, digest: str, identity: tuple[int, int], label: str = "Output"):
     fd = os.open(path, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_CLOEXEC", 0))
     with os.fdopen(fd, "rb") as f:
-        if file_identity(os.fstat(f.fileno())) != identity or f.read() != content:
+        if file_identity(os.fstat(f.fileno())) != identity or hashlib.sha256(f.read()).hexdigest() != digest:
             raise OSError(f"{label} on disk differs from validated bytes: {path}")
 
 
@@ -788,9 +797,12 @@ def main(argv=None):
         parser.error("--weld-tolerance is a repair option")
     try:
         inputs = expand_inputs(args.files)
-        # Identity, not path, protects inputs: hard links and symlinks share it.
-        protected = {file_identity(os.stat(p)): f"input {p}" for p in inputs}
-        input_hashes = {p: hashlib.sha256(p.read_bytes()).hexdigest() for p in inputs}
+        # Identity, not path, protects inputs: hard links and symlinks share it. An input
+        # that cannot be inspected here still gets its own per-file error below.
+        protected = {}
+        for p in inputs:
+            with contextlib.suppress(OSError):
+                protected.setdefault(file_identity(os.stat(p)), f"input {p}")
         # Only the parent is resolved: a symlinked report name is refused, not followed.
         report_path = args.report.parent.resolve()/args.report.name
         if report_path.suffix.lower() != ".json" or args.report.resolve() in inputs or report_path in inputs:
@@ -803,19 +815,18 @@ def main(argv=None):
         if len(set(destinations)) != len(destinations):
             raise ValueError("Input files have duplicate basenames; run them into separate output directories")
         report_protected = dict(protected)
+        if args.mode == "repair":
+            for dest in destinations:
+                info = existing_entry(dest)
+                if info is not None:
+                    report_protected.setdefault(file_identity(info), f"output {dest}")
         if args.overwrite:
-            if args.mode == "repair":
-                for dest in destinations:
-                    check_replaceable(dest, "Output", protected)
-                    info = existing_entry(dest)
-                    if info is not None:
-                        report_protected[file_identity(info)] = f"output {dest}"
             check_replaceable(report_path, "--report", report_protected)
     except (OSError, ValueError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
     records, errors, failures = [], False, False
-    published: dict[Path, tuple[tuple[int, int], str]] = {}
+    published: dict[Path, tuple[tuple[int, int], str, dict]] = {}
     for path, dest in zip(inputs, destinations):
         item = {"input": str(path), "output": None}
         try:
@@ -834,15 +845,17 @@ def main(argv=None):
                     item["after"] = before
                     print(f"UNCHANGED          {path.name}", flush=True)
                 else:
-                    if dest.exists() and not args.overwrite:
+                    if existing_entry(dest) is not None and not args.overwrite:
                         raise FileExistsError(f"Output exists: {dest}; choose a new directory or use --overwrite")
+                    if args.overwrite:
+                        check_replaceable(dest, "Output", protected)
                     raw, after, details = repair(stl, before, args.weld_tolerance, args.max_faces, args.max_pairs)
                     # Ensure the original did not change while we worked.
                     if hashlib.sha256(path.read_bytes()).hexdigest() != before["sha256"]:
                         raise UnsafeRepair("Input changed during processing; no output written")
                     # Publication re-reads the stored bytes and checks they match those validated.
                     identity = write_safe(dest, raw, args.overwrite, protected)
-                    published[dest] = (identity, hashlib.sha256(raw).hexdigest())
+                    published[dest] = (identity, hashlib.sha256(raw).hexdigest(), item)
                     report_protected[identity] = f"output {dest}"
                     item.update(action="repaired", output=str(dest), after=after, repair_details=details)
                     print(f"REPAIRED / {after['status']:8s} {path.name} -> {dest}", flush=True)
@@ -855,6 +868,34 @@ def main(argv=None):
             errors = True
             print(f"ERROR              {path.name}: {exc}", file=sys.stderr, flush=True)
         records.append(item)
+    flagged = set()
+
+    def changed_files():
+        changed = []
+        for dest, (identity, digest, item) in published.items():
+            if id(item) in flagged:
+                continue
+            try:
+                verify_published(dest, digest, identity)
+            except OSError as exc:
+                changed.append((item, f"Output changed after verification: {exc}"))
+        for item in records:
+            if id(item) in flagged:
+                continue
+            digest = item.get("before", {}).get("sha256")
+            try:
+                if digest and hashlib.sha256(Path(item["input"]).read_bytes()).hexdigest() != digest:
+                    changed.append((item, "Input changed during the run"))
+            except OSError as exc:
+                changed.append((item, f"Input could not be rechecked: {exc}"))
+        flagged.update(id(item) for item, _ in changed)
+        return changed
+
+    # Recheck before the report so it never calls a changed output repaired.
+    for item, message in changed_files():
+        item.update(action="error", output=None, error=f"OSError: {message}")
+        errors = True
+        print(f"ERROR              {Path(item['input']).name}: {message}", file=sys.stderr, flush=True)
     report = {"tool": "stl_doctor", "version": VERSION, "mode": args.mode, "units": "STL coordinate units; no unit conversion",
               "environment": {"python": platform.python_version(), "numpy": np.__version__, "scipy": scipy.__version__,
                               "trimesh": trimesh.__version__, "shapely": shapely.__version__, "GEOS": shapely.geos_version_string},
@@ -870,17 +911,11 @@ def main(argv=None):
     except Exception as exc:
         print(f"ERROR writing report: {exc}", file=sys.stderr)
         return 2
-    try:
-        for dest, (identity, digest) in published.items():
-            fd = os.open(dest, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0))
-            with os.fdopen(fd, "rb") as f:
-                if file_identity(os.fstat(f.fileno())) != identity or hashlib.sha256(f.read()).hexdigest() != digest:
-                    raise OSError(f"Output changed after verification: {dest}")
-        for path, digest in input_hashes.items():
-            if hashlib.sha256(path.read_bytes()).hexdigest() != digest:
-                raise OSError(f"Input changed during the run: {path}")
-    except OSError as exc:
-        print(f"ERROR after writing report: {exc}", file=sys.stderr)
+    # Report publication creates a new file, so it cannot alias an output; recheck anyway.
+    after_report = changed_files()
+    if after_report:
+        for _, message in after_report:
+            print(f"ERROR after writing report: {message}", file=sys.stderr)
         return 2
     print(f"Report: {report_path}", flush=True)
     return 2 if errors else (1 if failures else 0)
