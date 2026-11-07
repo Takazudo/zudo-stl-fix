@@ -114,7 +114,8 @@ import ZudoSTLFixCore
             .accessibilityLabel("Drop local STL files here to check and conservatively repair")
             if !queue.inputMessages.isEmpty {
                 HStack(alignment: .top) {
-                    ScrollView { Text(queue.inputMessages.suffix(20).joined(separator: "\n")).font(.caption).foregroundStyle(.orange).frame(maxWidth: .infinity, alignment: .leading).textSelection(.enabled) }.frame(maxHeight: 65)
+                    Image(systemName: "exclamationmark.triangle").font(.caption).foregroundStyle(Color.warningText).accessibilityHidden(true)
+                    ScrollView { Text(queue.inputMessages.suffix(20).joined(separator: "\n")).font(.caption).foregroundStyle(Color.warningText).frame(maxWidth: .infinity, alignment: .leading).textSelection(.enabled) }.frame(maxHeight: 65)
                     Button("Dismiss") { queue.clearMessages() }.controlSize(.small)
                 }
             }
@@ -125,6 +126,9 @@ import ZudoSTLFixCore
                             Text(job.name).lineLimit(1).truncationMode(.middle).help(job.snapshot.original.path)
                             HStack(spacing: 6) {
                                 if job.status.active || job.status == .saving { ProgressView().controlSize(.small) }
+                                if let symbol = statusSymbol(job.status) {
+                                    Image(systemName: symbol).font(.callout).foregroundStyle(statusColor(job.status)).accessibilityHidden(true)
+                                }
                                 Text(job.status.rawValue).font(.callout).foregroundStyle(statusColor(job.status))
                             }
                         }
@@ -138,7 +142,7 @@ import ZudoSTLFixCore
                         }
                     }
                     ForEach(Array(job.warnings.enumerated()), id: \.offset) { _, text in
-                        Label(text, systemImage: "exclamationmark.triangle").font(.caption).foregroundStyle(.orange).fixedSize(horizontal: false, vertical: true)
+                        Label(text, systemImage: "exclamationmark.triangle").font(.caption).foregroundStyle(Color.warningText).fixedSize(horizontal: false, vertical: true)
                     }
                     if !job.message.isEmpty { Text(job.message).font(.caption).foregroundStyle(.secondary).lineLimit(4).truncationMode(.tail).textSelection(.enabled).help(job.message) }
                 }.padding(.vertical, 5)
@@ -153,6 +157,7 @@ import ZudoSTLFixCore
                     Text("Off by default. Applies to new files only; this may move vertices and is recorded in Details. Units and printing suitability are not inferred.").font(.caption).foregroundStyle(.secondary)
                 }.padding(.top, 6)
             }
+            .disclosureGroupStyle(FocusVisibleDisclosureStyle())
             HStack {
                 Button("Clear Finished") { queue.clearFinished() }
                 Spacer()
@@ -177,10 +182,50 @@ import ZudoSTLFixCore
     }
     private func statusColor(_ status: JobStatus) -> Color {
         switch status {
-        case .error, .refused: return .red
-        case .incomplete, .review: return .orange
+        case .error, .refused: return .failureText
+        case .incomplete, .review: return .warningText
         case .ready, .saved, .unchanged: return .primary
         default: return .secondary
         }
+    }
+    private func statusSymbol(_ status: JobStatus) -> String? {
+        switch status {
+        case .review: return "exclamationmark.triangle"
+        case .incomplete: return "exclamationmark.circle"
+        case .refused: return "nosign"
+        case .error: return "xmark.octagon"
+        default: return nil
+        }
+    }
+}
+
+/// The stock macOS disclosure draws its keyboard focus ring past the window's leading
+/// edge. A borderless button keeps the ring inside the content inset.
+private struct FocusVisibleDisclosureStyle: DisclosureGroupStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Button { withAnimation(.easeInOut(duration: 0.15)) { configuration.isExpanded.toggle() } } label: {
+                HStack(spacing: 5) {
+                    Image(systemName: "chevron.right").font(.caption.weight(.semibold))
+                        .rotationEffect(.degrees(configuration.isExpanded ? 90 : 0)).accessibilityHidden(true)
+                    configuration.label
+                }.padding(.horizontal, 2).contentShape(Rectangle())
+            }
+            .buttonStyle(.borderless).foregroundStyle(.primary)
+            if configuration.isExpanded { configuration.content }
+        }
+    }
+}
+
+private extension Color {
+    // System orange/red measured 2.0–3.6:1 on the light window/list backgrounds and red 4.47:1
+    // on the dark list; these shades keep the hue and measure at least 5.4:1 in both.
+    static let warningText = adaptive(light: NSColor(srgbRed: 0.60, green: 0.29, blue: 0.0, alpha: 1), dark: .systemOrange)
+    static let failureText = adaptive(light: NSColor(srgbRed: 0.75, green: 0.08, blue: 0.10, alpha: 1),
+                                      dark: NSColor(srgbRed: 1.0, green: 0.42, blue: 0.42, alpha: 1))
+    static func adaptive(light: NSColor, dark: NSColor) -> Color {
+        Color(nsColor: NSColor(name: nil) { appearance in
+            appearance.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua ? dark : light
+        })
     }
 }
