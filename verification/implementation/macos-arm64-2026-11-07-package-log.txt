@@ -24,58 +24,58 @@ Installing collected packages: altgraph, setuptools, packaging, numpy, macholib,
 Successfully installed altgraph-0.17.5 macholib-1.16.4 numpy-2.5.4 packaging-26.3 pyinstaller-6.22.3 pyinstaller-hooks-contrib-2026.8 scipy-1.18.1 setuptools-84.0.0 shapely-2.2.0 trimesh-4.12.2
 
 [notice] A new release of pip is available: 25.0.1 -> 26.3
-[notice] To update, run: /Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/bin/python -m pip install --upgrade pip
+[notice] To update, run: <repo>/build/macos-arm64/venv/bin/python -m pip install --upgrade pip
 No broken requirements found.
 475 INFO: PyInstaller: 6.22.3, contrib hooks: 2026.8
 476 INFO: Python: 3.12.14
 578 INFO: Platform: macOS-27.2-arm64-arm-64bit
-579 INFO: Python environment: /Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv
-650 INFO: Removing temporary files and cleaning cache in /Users/takazudo/Library/Application Support/pyinstaller
+579 INFO: Python environment: <repo>/build/macos-arm64/venv
+650 INFO: Removing temporary files and cleaning cache in $HOME/Library/Application Support/pyinstaller
 17160 INFO: Module search paths (PYTHONPATH):
-['/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native',
- '/Users/takazudo/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python312.zip',
- '/Users/takazudo/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12',
- '/Users/takazudo/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/lib-dynload',
- '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages',
- '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/engine']
+['$HOME/repos/myoss/zudo-stl-fix-wt-native',
+ '$HOME/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python312.zip',
+ '$HOME/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12',
+ '$HOME/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/python3.12/lib-dynload',
+ '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages',
+ '<repo>/engine']
 17378 INFO: Appending 'binaries' from .spec
 17378 INFO: Appending 'datas' from .spec
 17392 INFO: checking Analysis
 17392 INFO: Building Analysis because Analysis-00.toc is non existent
 17392 INFO: Looking for Python shared library...
-17408 INFO: Using Python shared library: /Users/takazudo/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/libpython3.12.dylib
+17408 INFO: Using Python shared library: $HOME/.local/share/uv/python/cpython-3.12.14-macos-aarch64-none/lib/libpython3.12.dylib
 17408 INFO: Running Analysis Analysis-00.toc
 17408 INFO: Target bytecode optimization level: 0
 17408 INFO: Initializing module dependency graph...
 17413 INFO: Initializing module graph hook caches...
 17423 INFO: Analyzing modules for base_library.zip ...
-18018 INFO: Processing standard module hook 'hook-encodings.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-18520 INFO: Processing standard module hook 'hook-math.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-19071 INFO: Processing standard module hook 'hook-pickle.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-19652 INFO: Processing standard module hook 'hook-heapq.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+18018 INFO: Processing standard module hook 'hook-encodings.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+18520 INFO: Processing standard module hook 'hook-math.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+19071 INFO: Processing standard module hook 'hook-pickle.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+19652 INFO: Processing standard module hook 'hook-heapq.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
 20933 INFO: Caching module dependency graph...
-20965 INFO: Analyzing /Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/engine/worker.py
-21017 INFO: Processing standard module hook 'hook-platform.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-21038 INFO: Processing standard module hook 'hook-xml.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-21086 INFO: Processing standard module hook 'hook-numpy.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-21288 INFO: Processing pre-safe-import-module hook 'hook-typing_extensions.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+20965 INFO: Analyzing <repo>/engine/worker.py
+21017 INFO: Processing standard module hook 'hook-platform.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+21038 INFO: Processing standard module hook 'hook-xml.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+21086 INFO: Processing standard module hook 'hook-numpy.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+21288 INFO: Processing pre-safe-import-module hook 'hook-typing_extensions.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
 21295 INFO: SetuptoolsInfo: initializing cached setuptools info...
-22939 INFO: Processing standard module hook 'hook-sysconfig.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-22949 INFO: Processing standard module hook 'hook-_osx_support.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-23088 INFO: Processing standard module hook 'hook-webbrowser.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-23357 INFO: Processing standard module hook 'hook-_ctypes.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-23589 INFO: Processing standard module hook 'hook-difflib.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-23717 INFO: Processing standard module hook 'hook-multiprocessing.util.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-24491 INFO: Processing standard module hook 'hook-scipy.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-25597 INFO: Processing standard module hook 'hook-trimesh.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/_pyinstaller_hooks_contrib/stdhooks'
-25777 INFO: Processing standard module hook 'hook-scipy.spatial._ckdtree.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-25978 INFO: Processing standard module hook 'hook-scipy.linalg.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-26058 INFO: Processing standard module hook 'hook-scipy.special._ufuncs.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-27742 INFO: Processing standard module hook 'hook-scipy.stats._stats.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-27999 INFO: Processing standard module hook 'hook-scipy.sparse.csgraph.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-28406 INFO: Processing standard module hook 'hook-scipy.special._ellip_harm_2.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-28638 INFO: Processing standard module hook 'hook-scipy.spatial.transform.rotation.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-28734 INFO: Processing standard module hook 'hook-shapely.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/_pyinstaller_hooks_contrib/stdhooks'
+22939 INFO: Processing standard module hook 'hook-sysconfig.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+22949 INFO: Processing standard module hook 'hook-_osx_support.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+23088 INFO: Processing standard module hook 'hook-webbrowser.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+23357 INFO: Processing standard module hook 'hook-_ctypes.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+23589 INFO: Processing standard module hook 'hook-difflib.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+23717 INFO: Processing standard module hook 'hook-multiprocessing.util.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+24491 INFO: Processing standard module hook 'hook-scipy.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+25597 INFO: Processing standard module hook 'hook-trimesh.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/_pyinstaller_hooks_contrib/stdhooks'
+25777 INFO: Processing standard module hook 'hook-scipy.spatial._ckdtree.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+25978 INFO: Processing standard module hook 'hook-scipy.linalg.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+26058 INFO: Processing standard module hook 'hook-scipy.special._ufuncs.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+27742 INFO: Processing standard module hook 'hook-scipy.stats._stats.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+27999 INFO: Processing standard module hook 'hook-scipy.sparse.csgraph.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+28406 INFO: Processing standard module hook 'hook-scipy.special._ellip_harm_2.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+28638 INFO: Processing standard module hook 'hook-scipy.spatial.transform.rotation.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+28734 INFO: Processing standard module hook 'hook-shapely.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/_pyinstaller_hooks_contrib/stdhooks'
 29382 INFO: Analyzing hidden import 'numpy._configtool'
 29383 INFO: Analyzing hidden import 'numpy._core._exceptions'
 29386 INFO: Analyzing hidden import 'numpy._core._multiarray_tests'
@@ -87,25 +87,25 @@ No broken requirements found.
 29396 INFO: Analyzing hidden import 'numpy._core.cversions'
 29398 INFO: Analyzing hidden import 'numpy._pyinstaller'
 29399 INFO: Analyzing hidden import 'numpy._pyinstaller.hook-numpy'
-29439 INFO: Processing pre-safe-import-module hook 'hook-importlib_metadata.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+29439 INFO: Processing pre-safe-import-module hook 'hook-importlib_metadata.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
 29442 INFO: Setuptools: 'importlib_metadata' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.importlib_metadata'!
-29446 INFO: Processing standard module hook 'hook-setuptools.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-29458 INFO: Processing pre-safe-import-module hook 'hook-distutils.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
-29512 INFO: Processing pre-safe-import-module hook 'hook-jaraco.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+29446 INFO: Processing standard module hook 'hook-setuptools.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+29458 INFO: Processing pre-safe-import-module hook 'hook-distutils.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+29512 INFO: Processing pre-safe-import-module hook 'hook-jaraco.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
 29520 INFO: Setuptools: 'jaraco' appears to be a full setuptools-vendored copy - creating alias to 'setuptools._vendor.jaraco'!
-29527 INFO: Processing pre-safe-import-module hook 'hook-more_itertools.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+29527 INFO: Processing pre-safe-import-module hook 'hook-more_itertools.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
 29531 INFO: Setuptools: 'more_itertools' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.more_itertools'!
-29595 INFO: Processing pre-safe-import-module hook 'hook-packaging.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
-29771 INFO: Processing standard module hook 'hook-setuptools._vendor.jaraco.text.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-29774 INFO: Processing pre-safe-import-module hook 'hook-importlib_resources.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
-29782 INFO: Processing pre-safe-import-module hook 'hook-backports.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+29595 INFO: Processing pre-safe-import-module hook 'hook-packaging.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+29771 INFO: Processing standard module hook 'hook-setuptools._vendor.jaraco.text.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+29774 INFO: Processing pre-safe-import-module hook 'hook-importlib_resources.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+29782 INFO: Processing pre-safe-import-module hook 'hook-backports.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
 29791 INFO: Setuptools: 'backports' appears to be a full setuptools-vendored copy - creating alias to 'setuptools._vendor.backports'!
-30059 INFO: Processing pre-safe-import-module hook 'hook-tomli.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+30059 INFO: Processing pre-safe-import-module hook 'hook-tomli.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
 30064 INFO: Setuptools: 'tomli' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.tomli'!
-30317 INFO: Processing pre-safe-import-module hook 'hook-wheel.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+30317 INFO: Processing pre-safe-import-module hook 'hook-wheel.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
 30321 INFO: Setuptools: 'wheel' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.wheel'!
-30350 INFO: Processing standard module hook 'hook-setuptools._vendor.importlib_metadata.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
-30375 INFO: Processing pre-safe-import-module hook 'hook-zipp.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+30350 INFO: Processing standard module hook 'hook-setuptools._vendor.importlib_metadata.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+30375 INFO: Processing pre-safe-import-module hook 'hook-zipp.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
 30381 INFO: Setuptools: 'zipp' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.zipp'!
 30541 INFO: Analyzing hidden import 'numpy._typing._extended_precision'
 30542 INFO: Analyzing hidden import 'numpy._utils._pep440'
@@ -145,7 +145,7 @@ No broken requirements found.
 30589 INFO: Analyzing hidden import 'scipy._lib.messagestream'
 30589 INFO: Analyzing hidden import 'scipy.conftest'
 30596 INFO: Analyzing hidden import 'scipy.datasets'
-30601 INFO: Processing pre-safe-import-module hook 'hook-platformdirs.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
+30601 INFO: Processing pre-safe-import-module hook 'hook-platformdirs.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/pre_safe_import_module'
 30603 INFO: Setuptools: 'platformdirs' appears to be a setuptools-vendored copy - creating alias to 'setuptools._vendor.platformdirs'!
 30626 INFO: Analyzing hidden import 'scipy.differentiate'
 30634 INFO: Analyzing hidden import 'scipy.fft._debug_backends'
@@ -154,7 +154,7 @@ No broken requirements found.
 30655 INFO: Analyzing hidden import 'scipy.interpolate._regrid'
 30663 INFO: Analyzing hidden import 'scipy.interpolate.dfitpack'
 30664 INFO: Analyzing hidden import 'scipy.io'
-30667 INFO: Processing standard module hook 'hook-scipy.io.matlab.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
+30667 INFO: Processing standard module hook 'hook-scipy.io.matlab.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks'
 30778 INFO: Analyzing hidden import 'scipy.linalg._testutils'
 30780 INFO: Analyzing hidden import 'scipy.linalg.cython_blas'
 30780 INFO: Analyzing hidden import 'scipy.linalg.cython_lapack'
@@ -207,29 +207,29 @@ No broken requirements found.
 31299 INFO: Performing binary vs. data reclassification (900 entries)
 36432 INFO: Looking for ctypes DLLs
 36529 INFO: Analyzing run-time hooks ...
-36532 INFO: Including run-time hook 'pyi_rth_inspect.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/rthooks'
-36533 INFO: Including run-time hook 'pyi_rth_pkgutil.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/rthooks'
-36534 INFO: Including run-time hook 'pyi_rth_multiprocessing.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/rthooks'
-36536 INFO: Including run-time hook 'pyi_rth_setuptools.py' from '/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/rthooks'
+36532 INFO: Including run-time hook 'pyi_rth_inspect.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/rthooks'
+36533 INFO: Including run-time hook 'pyi_rth_pkgutil.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/rthooks'
+36534 INFO: Including run-time hook 'pyi_rth_multiprocessing.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/rthooks'
+36536 INFO: Including run-time hook 'pyi_rth_setuptools.py' from '<repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/hooks/rthooks'
 36549 INFO: Creating base_library.zip...
 36558 INFO: Looking for dynamic libraries
-38025 INFO: Warnings written to /Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/pyinstaller/worker/warn-worker.txt
-38069 INFO: Graph cross-reference written to /Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/pyinstaller/worker/xref-worker.html
+38025 INFO: Warnings written to <repo>/build/macos-arm64/pyinstaller/worker/warn-worker.txt
+38069 INFO: Graph cross-reference written to <repo>/build/macos-arm64/pyinstaller/worker/xref-worker.html
 38280 INFO: checking PYZ
 38280 INFO: Building PYZ because PYZ-00.toc is non existent
-38280 INFO: Building PYZ (ZlibArchive) /Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/pyinstaller/worker/PYZ-00.pyz
-39035 INFO: Building PYZ (ZlibArchive) /Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/pyinstaller/worker/PYZ-00.pyz completed successfully.
+38280 INFO: Building PYZ (ZlibArchive) <repo>/build/macos-arm64/pyinstaller/worker/PYZ-00.pyz
+39035 INFO: Building PYZ (ZlibArchive) <repo>/build/macos-arm64/pyinstaller/worker/PYZ-00.pyz completed successfully.
 39044 INFO: EXE target arch: arm64
 39044 INFO: Code signing identity: None
 39051 INFO: checking PKG
 39051 INFO: Building PKG because PKG-00.toc is non existent
 39051 INFO: Building PKG (CArchive) stl-worker.pkg
 39092 INFO: Building PKG (CArchive) stl-worker.pkg completed successfully.
-39092 INFO: Bootloader /Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/bootloader/Darwin-64bit/run
+39092 INFO: Bootloader <repo>/build/macos-arm64/venv/lib/python3.12/site-packages/PyInstaller/bootloader/Darwin-64bit/run
 39092 INFO: checking EXE
 39092 INFO: Building EXE because EXE-00.toc is non existent
 39092 INFO: Building EXE from EXE-00.toc
-39092 INFO: Copying bootloader EXE to /Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/pyinstaller/worker/stl-worker
+39092 INFO: Copying bootloader EXE to <repo>/build/macos-arm64/pyinstaller/worker/stl-worker
 39160 INFO: Converting EXE to target arch (arm64)
 42145 INFO: Removing signature(s) from EXE
 42225 INFO: Modifying Mach-O image UUID(s) in EXE
@@ -247,7 +247,7 @@ No broken requirements found.
 71303 INFO: Building BUNDLE BUNDLE-00.toc
 76801 INFO: Signing the BUNDLE...
 79414 INFO: Building BUNDLE BUNDLE-00.toc completed successfully.
-79436 INFO: Build complete! The results are available in: /Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/helper
+79436 INFO: Build complete! The results are available in: <repo>/build/macos-arm64/helper
 Building for debugging...
 [1 / 5]
 Build complete! (0.84 sec)
@@ -409,16 +409,16 @@ Building for production...
 [52 / 67]
 [53 / 67]
 [54 / 67]
-/Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/app/Sources/ZudoSTLFixCore/Queue.swift:112:110: [1;33mwarning: [1;39m'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope[0;0m [#]8;;https://docs.swift.org/compiler/documentation/diagnostics/implicit-strong-capture\ImplicitStrongCapture]8;;\]
-[0;36m110 |[0;0m             update(job.id) { $0.status = .checking }
-[0;36m111 |[0;0m             let worker = worker
-[0;36m112 |[0;0m             let task = Task { try await worker.run(snapshot: job.snapshot, tolerance: job.tolerance) { [weak self] phase in
-    [0;36m|[0;0m                             |                                                                                |- [1;33mwarning: [1;39m'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope[0;0m [#]8;;https://docs.swift.org/compiler/documentation/diagnostics/implicit-strong-capture\ImplicitStrongCapture]8;;\]
-    [0;36m|[0;0m                             |                                                                                `- [1;39mnote: [1;39mexplicitly assign the capture list item to silence[0;0m
-    [0;36m|[0;0m                             |- [1;39mnote: [1;39m'self' implicitly strongly captured here[0;0m
-    [0;36m|[0;0m                             `- [1;39mnote: [1;39madd 'self' as a capture list item to silence[0;0m
-[0;36m113 |[0;0m                 Task { @MainActor [weak self] in
-[0;36m114 |[0;0m                     self?.update(job.id) { item in
+<repo>/app/Sources/ZudoSTLFixCore/Queue.swift:112:110: warning: 'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope [#ImplicitStrongCapture]
+110 |             update(job.id) { $0.status = .checking }
+111 |             let worker = worker
+112 |             let task = Task { try await worker.run(snapshot: job.snapshot, tolerance: job.tolerance) { [weak self] phase in
+    |                             |                                                                                |- warning: 'weak' ownership of capture 'self' differs from implicitly-captured strong reference in outer scope [#ImplicitStrongCapture]
+    |                             |                                                                                `- note: explicitly assign the capture list item to silence
+    |                             |- note: 'self' implicitly strongly captured here
+    |                             `- note: add 'self' as a capture list item to silence
+113 |                 Task { @MainActor [weak self] in
+114 |                     self?.update(job.id) { item in
 
 [#ImplicitStrongCapture]: <https://docs.swift.org/compiler/documentation/diagnostics/implicit-strong-capture>
 [55 / 67] ZudoSTLFixCore
@@ -437,7 +437,7 @@ Building for production...
 [97 / 99] ZudoSTLFix-product
 [98 / 99] ZudoSTLFix-product
 Build complete! (16.11 sec)
-swift-driver version: 1.168.6 /Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/app-stage.GceZqA/zudo-stl-fix.app: replacing existing signature
+swift-driver version: 1.168.6 <repo>/build/macos-arm64/app-stage.GceZqA/zudo-stl-fix.app: replacing existing signature
 {"architecture": "arm64", "embedded_self_test": {"environment": {"GEOS": "3.14.1", "architecture": "arm64", "engine": "1.0.0", "numpy": "2.5.4", "python": "3.12.14", "scipy": "1.18.1", "shapely": "2.2.0", "trimesh": "4.12.2"}, "protocol_version": 1, "self_test": "passed"}}
 PASS bar-30hp.stl: unchanged
 PASS bar-40hp.stl: unchanged
@@ -451,5 +451,5 @@ PASS nylon-double-v2-60hp-double.stl: unchanged
 PASS nylon-single-v3-40hp.stl: unchanged
 PASS nylon-single-v3-60hp.stl: unchanged
 PASS relocated embedded helper: 11 originals and 2 serialized candidate rechecks; Finder/UI not exercised
-Local ad-hoc development app: /Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/verified.aqs9kl/zudo-stl-fix.app
-Local archive (not notarized or released): /Users/takazudo/repos/myoss/zudo-stl-fix-wt-native/build/macos-arm64/verified.aqs9kl/zudo-stl-fix-macos-arm64-local.zip
+Local ad-hoc development app: <repo>/build/macos-arm64/verified.aqs9kl/zudo-stl-fix.app
+Local archive (not notarized or released): <repo>/build/macos-arm64/verified.aqs9kl/zudo-stl-fix-macos-arm64-local.zip
