@@ -13,9 +13,10 @@ private actor ControlledWorker: WorkerServing {
         defer { simultaneous -= 1 }
         return try await withCheckedThrowingContinuation { continuations[snapshot.id] = $0 }
     }
-    func complete(_ id: UUID, outcome: String = "unchanged", warnings: Bool = false, candidate: VerifiedArtifact? = nil, report: VerifiedArtifact? = nil) throws {
-        let payload: [String: Any] = ["protocol_version": 1, "job_id": id.uuidString, "event": "result", "outcome": outcome,
+    func complete(_ id: UUID, outcome: String = "unchanged", warnings: Bool = false, error: [String: Any]? = nil, candidate: VerifiedArtifact? = nil, report: VerifiedArtifact? = nil) throws {
+        var payload: [String: Any] = ["protocol_version": 1, "job_id": id.uuidString, "event": "result", "outcome": outcome,
             "validation_status": "PASS", "summary": [:], "warnings": warnings ? [["code": "review", "message": "Review geometry"]] : []]
+        if let error { payload["error"] = error }
         let event = try JSONDecoder().decode(WorkerEvent.self, from: JSONSerialization.data(withJSONObject: payload))
         continuations.removeValue(forKey: id)?.resume(returning: WorkerResult(event: event, candidate: candidate, report: report))
     }
@@ -48,6 +49,37 @@ private actor ControlledWorker: WorkerServing {
         XCTAssertEqual(queue.jobs[0].status, .review); XCTAssertEqual(queue.jobs[0].warnings, ["Review geometry"])
         let maximum = await worker.maximumSimultaneous; XCTAssertEqual(maximum, 1)
         XCTAssertTrue(queue.readyIDs.isEmpty); await queue.shutdown()
+    }
+    func testRefusedAndIncompleteRowsShowWorkerReasonWithoutSave() async throws {
+        let root = try temp(); defer { try? FileManager.default.removeItem(at: root) }
+        let worker = ControlledWorker(); let queue = JobQueue(store: try SnapshotStore(root: root), worker: worker)
+        await queue.add([try source(root, "open.stl"), try source(root, "huge.stl")])
+        try await eventually { await worker.count == 1 }
+        try await worker.complete(queue.jobs[0].id, outcome: "refused", error: ["code": "unsupported_geometry", "message": "Mesh has 4 boundary edges"])
+        try await eventually { await worker.count == 2 }
+        try await worker.complete(queue.jobs[1].id, outcome: "incomplete", error: ["code": "resource_limit", "message": "Binary STL exceeds the face limit"])
+        try await eventually { queue.jobs[1].status == .incomplete }
+        XCTAssertEqual(queue.jobs[0].status, .refused)
+        XCTAssertEqual(queue.jobs[0].message, "Mesh has 4 boundary edges (unsupported_geometry)")
+        XCTAssertEqual(queue.jobs[1].message, "Binary STL exceeds the face limit (resource_limit)")
+        XCTAssertTrue(queue.readyIDs.isEmpty)
+        await queue.shutdown()
+    }
+    func testSaveFailureMessageHasSingleSentenceBreak() {
+        XCTAssertEqual(saveFailureMessage(LocalFileError.collisions),
+                       "Save failed: Could not find an available output name. Choose another folder or retry.")
+        XCTAssertEqual(saveFailureMessage(LocalFileError.system("Publish output", EACCES)),
+                       "Save failed: Publish output: Permission denied. Choose another folder or retry.")
+    }
+    func testRepairedWithoutVerifiedCandidateIsExplainedError() async throws {
+        let root = try temp(); defer { try? FileManager.default.removeItem(at: root) }
+        let worker = ControlledWorker(); let queue = JobQueue(store: try SnapshotStore(root: root), worker: worker)
+        await queue.add([try source(root, "rail.stl")]); try await eventually { await worker.count == 1 }
+        try await worker.complete(queue.jobs[0].id, outcome: "repaired")
+        try await eventually { queue.jobs[0].status == .error }
+        XCTAssertEqual(queue.jobs[0].message, "The repaired copy could not be verified; no output can be saved.")
+        XCTAssertTrue(queue.readyIDs.isEmpty)
+        await queue.shutdown()
     }
     func testCanceledCompletionCannotResurrectAndNextRuns() async throws {
         let root = try temp(); defer { try? FileManager.default.removeItem(at: root) }

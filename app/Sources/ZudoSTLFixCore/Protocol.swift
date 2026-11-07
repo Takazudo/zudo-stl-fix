@@ -39,6 +39,14 @@ public enum JSONValue: Codable, Sendable, Equatable {
         let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         return (try? String(decoding: encoder.encode(self), as: UTF8.self)) ?? "Unavailable"
     }
+    public var readableError: String {
+        if case .string(let text) = self, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { return text }
+        guard case .object(let object) = self, case .string(let raw)? = object["message"] else { return pretty }
+        let message = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !message.isEmpty else { return pretty }
+        if case .string(let code)? = object["code"], !code.isEmpty { return "\(message) (\(code))" }
+        return message
+    }
 }
 
 public struct ArtifactDescriptor: Codable, Sendable {
@@ -213,7 +221,7 @@ public struct WorkerProtocolParser {
     public func finish(exitStatus: Int32, exitedNormally: Bool) throws -> WorkerEvent {
         guard pending.isEmpty, let terminal else { throw WorkerFailure.protocolError("Truncated stream or missing result") }
         if terminal.outcome == "error" {
-            throw WorkerFailure.crashed(terminal.error?.pretty ?? "Operational error (exit \(exitStatus))")
+            throw WorkerFailure.crashed(terminal.error?.readableError ?? "Operational error (exit \(exitStatus))")
         }
         guard exitedNormally, exitStatus == 0 else { throw WorkerFailure.crashed("Abnormal exit \(exitStatus)") }
         return terminal
