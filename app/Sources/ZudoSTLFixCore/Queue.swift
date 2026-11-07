@@ -134,6 +134,9 @@ public struct Job: Identifiable, Sendable {
                     case "incomplete": item.status = .incomplete
                     default: item.status = .error
                     }
+                    if [.refused, .incomplete, .error].contains(item.status), let reason = result.event.error?.readableError {
+                        item.message = reason
+                    }
                 }
             } catch {
                 update(job.id) { item in

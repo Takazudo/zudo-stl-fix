@@ -110,6 +110,7 @@ import ZudoSTLFixCore
                 guard !urls.isEmpty else { return false }
                 Task { await queue.add(urls) }; return true
             } isTargeted: { targeted = $0 }
+            .accessibilityElement(children: .contain)
             .accessibilityLabel("Drop local STL files here to check and conservatively repair")
             if !queue.inputMessages.isEmpty {
                 HStack(alignment: .top) {

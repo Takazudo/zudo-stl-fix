@@ -130,7 +130,15 @@ final class ProtocolTests: XCTestCase {
         XCTAssertThrowsError(try parser.finish(exitStatus: 1, exitedNormally: true)) { error in
             XCTAssertTrue(error.localizedDescription.contains("Cannot read private snapshot"))
             XCTAssertTrue(error.localizedDescription.contains("permission_denied"))
+            XCTAssertEqual(error.localizedDescription, "Worker failed: Cannot read private snapshot (permission_denied)")
         }
+    }
+    func testReadableErrorFallsBackToJSONWithoutMessage() {
+        XCTAssertEqual(JSONValue.object(["code": .string("x"), "message": .string("Bad / input")]).readableError, "Bad / input (x)")
+        XCTAssertEqual(JSONValue.object(["message": .string("Only message")]).readableError, "Only message")
+        let opaque = JSONValue.object(["code": .string("x")])
+        XCTAssertEqual(opaque.readableError, opaque.pretty)
+        XCTAssertEqual(JSONValue.string("text").readableError, JSONValue.string("text").pretty)
     }
 
     func testDuplicateMembersIncludingEscapedAndNestedKeysAreRejected() throws {
