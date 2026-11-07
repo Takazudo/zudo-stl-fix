@@ -1,5 +1,22 @@
 # Implementation verification — 2026-10-16 (Asia/Tokyo)
 
+> **Evidence index (current status, updated 2026-11-08).** Records are dated and
+> kept as written. Newest first:
+>
+> | Date | Record | What it covers |
+> |---|---|---|
+> | 2026-11-08 | [`macos-arm64-2026-11-08.md`](macos-arm64-2026-11-08.md) | Combined package gate on `fb20af9` (#27 CLI alias safety, #28 collision performance, contrast and focus), packaged-app acceptance of the affected rows, and **live VoiceOver** |
+> | 2026-11-07 | [`macos-arm64-2026-11-07-acceptance.md`](macos-arm64-2026-11-07-acceptance.md) | Broad Finder/UI acceptance on builds of `5ee4481` and `8ae8222` |
+> | 2026-11-07 | [`macos-arm64-2026-11-07.md`](macos-arm64-2026-11-07.md) | Packaging gate with the real-worker XCTest on `5ee4481` |
+> | 2026-10-16 | [`macos-arm64.md`](macos-arm64.md) | First arm64 native build and partial interactive run |
+> | 2026-10-16 | this file | Linux implementation baseline |
+>
+> Still pending (issue #1): **macOS 14 runtime** and **Intel x86_64 build/runtime**.
+> Only macOS 27.2 on arm64 has been exercised. A plain `swift test` skips the
+> real-worker test unless `ZUDO_WORKER_PYTHON` is set. `scripts/build-macos.sh` sets
+> it, so a valid packaging record shows that test passed and was not skipped.
+
+
 ## Provenance and baseline
 
 The owner created initial README commit
