@@ -146,6 +146,18 @@ class CLIFileSafetyTests(unittest.TestCase):
         self.assertEqual(output.stat().st_mode & 0o777, 0o640)
         self.assertEqual(self.report.stat().st_mode & 0o777, 0o600)
 
+    def test_case_variant_basenames_cannot_share_one_output(self):
+        (self.root / "a").mkdir()
+        (self.root / "b").mkdir()
+        first, second = self.root / "a/Part.stl", self.root / "b/part.stl"
+        shutil.copyfile(RAIL, first)
+        shutil.copyfile(RAIL, second)
+        self.hashes.update({first: sha(RAIL), second: sha(RAIL)})
+        result = self.cli("repair", first, second, "--out-dir", self.out, "--report", self.report, "--overwrite")
+        self.assertRefused(result, "duplicate basenames")
+        self.assertEqual(list(self.out.iterdir()), [])
+        self.assertFalse(self.report.exists())
+
     def test_existing_files_are_kept_without_overwrite(self):
         output = self.out / "rail-fixed.stl"
         os.link(self.bar, output)
