@@ -212,7 +212,7 @@ private struct FocusVisibleDisclosureStyle: DisclosureGroupStyle {
                 }.padding(.horizontal, 2).contentShape(Rectangle())
             }
             .buttonStyle(.borderless).foregroundStyle(.primary)
-            if configuration.isExpanded { configuration.content }
+            if configuration.isExpanded { configuration.content.transition(.opacity) }
         }
     }
 }

@@ -229,12 +229,12 @@ final class FilesTests: XCTestCase {
     }
 
     func testInterruptedWriteAndPostPublishCorruptionCleanOwnedFiles() async throws {
-        for checkpoint in [Exporter.Checkpoint.stageWritten, .beforePublication, .afterPublication] {
+        for checkpoint in [Exporter.Checkpoint.stageWritten, .beforePublication, .afterNameInventory, .afterPublication] {
             let source = try temporaryDirectory(), destination = try temporaryDirectory()
             let candidate = try artifact(in: source)
             let exporter = Exporter { phase, url in
                 if phase == checkpoint {
-                    if phase == .stageWritten { throw LocalFileError.system("Injected disk full", ENOSPC) }
+                    if phase == .stageWritten || phase == .afterNameInventory { throw LocalFileError.system("Injected disk full", ENOSPC) }
                     try Data("corrupted".utf8).write(to: url, options: [])
                 }
             }
