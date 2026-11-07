@@ -135,6 +135,38 @@ private actor ControlledWorker: WorkerServing {
         await queue.shutdown()
     }
 
+    func testExhaustedNamesFailOneRowAndStillSaveTheOther() async throws {
+        let root = try temp(); defer { try? FileManager.default.removeItem(at: root) }
+        let destination = root.appendingPathComponent("out", isDirectory: true)
+        try FileManager.default.createDirectory(at: destination, withIntermediateDirectories: false)
+        for suffix in 1...10_000 {
+            let fd = open(destination.appendingPathComponent("first-fixed\(suffix == 1 ? "" : "-\(suffix)").stl").path,
+                          O_WRONLY | O_CREAT | O_EXCL, 0o600)
+            XCTAssertGreaterThanOrEqual(fd, 0); close(fd)
+        }
+        let worker = ControlledWorker()
+        let queue = JobQueue(store: try SnapshotStore(root: root), worker: worker)
+        await queue.add([try source(root, "first.stl"), try source(root, "second.stl")])
+        for index in 0..<2 {
+            try await eventually { await worker.count == index + 1 }
+            let item = queue.jobs[index]
+            let candidate = VerifiedArtifact(url: item.snapshot.input, sha256: item.snapshot.sha256,
+                                             byteSize: try Data(contentsOf: item.snapshot.input).count)
+            try await worker.complete(item.id, outcome: "repaired", warnings: true, candidate: candidate)
+            try await eventually { queue.jobs[index].status == .ready }
+        }
+        await queue.save(queue.readyIDs, to: destination)
+        XCTAssertEqual(queue.jobs[0].status, .ready)
+        XCTAssertTrue(queue.jobs[0].message.contains("Could not find an available output name"))
+        XCTAssertEqual(queue.jobs[1].status, .saved)
+        XCTAssertEqual(queue.jobs[1].savedURL?.lastPathComponent, "second-fixed.stl")
+        XCTAssertEqual(queue.readyIDs, [queue.jobs[0].id])
+        let names = try FileManager.default.contentsOfDirectory(atPath: destination.path)
+        XCTAssertEqual(names.count, 10_001)
+        XCTAssertFalse(names.contains { $0.hasPrefix(".zudo") })
+        await queue.shutdown()
+    }
+
     func testShutdownWaitsForActiveSaveAndPreservesPublishedFile() async throws {
         let root = try temp(); defer { try? FileManager.default.removeItem(at: root) }
         let worker = ControlledWorker()

@@ -258,7 +258,7 @@ public actor SnapshotStore {
 }
 
 public actor Exporter {
-    public enum Checkpoint: Sendable { case stageWritten, beforePublication, afterPublication }
+    public enum Checkpoint: Sendable { case stageWritten, beforePublication, afterNameInventory, afterPublication }
     public typealias Hook = @Sendable (Checkpoint, URL) throws -> Void
     private let hook: Hook?
     public init(hook: Hook? = nil) { self.hook = hook }
@@ -332,15 +332,20 @@ public actor Exporter {
         var stageAtPath = stat()
         guard fstatat(stageDirFD, stage, &stageAtPath, AT_SYMLINK_NOFOLLOW) == 0,
               sameIdentity(stageAtPath, stageIdentity) else { throw LocalFileError.verificationFailed }
+        // One case-folded inventory guides suffix selection; it is only a hint. linkat below
+        // stays authoritative for names created after the inventory.
+        let posix = Locale(identifier: "en_US_POSIX")
+        func folded(_ name: String) -> String { name.folding(options: [.caseInsensitive], locale: posix) }
+        let prefix = folded("\(stem)-\(label)")
+        var taken = Set(try directoryNames(dirFD).lazy.map(folded).filter { $0.hasPrefix(prefix) })
+        try hook?(.afterNameInventory, folder)
         for suffix in 1...10_000 {
             let name = "\(stem)-\(label)\(suffix == 1 ? "" : "-\(suffix)").\(fileExtension)"
-            let folded = name.folding(options: [.caseInsensitive], locale: Locale(identifier: "en_US_POSIX"))
-            let names = try FileManager.default.contentsOfDirectory(atPath: folder.path)
-            if names.contains(where: { $0.folding(options: [.caseInsensitive], locale: Locale(identifier: "en_US_POSIX")) == folded }) { continue }
+            if taken.contains(folded(name)) { continue }
             // Hard-link publication is atomic and refuses EVERY existing entry, including
             // dangling symlinks, input hard links and names on case-insensitive volumes.
             guard linkat(stageDirFD, stage, dirFD, name, 0) == 0 else {
-                if errno == EEXIST { continue }; throw failure("Publish output")
+                if errno == EEXIST { taken.insert(folded(name)); continue }; throw failure("Publish output")
             }
             let output = folder.appendingPathComponent(name)
             do {
@@ -372,6 +377,26 @@ public actor Exporter {
     }
 }
 
+/// Lists the already-verified output directory, not whatever its path names now.
+private func directoryNames(_ dirFD: Int32) throws -> [String] {
+    let copy = dup(dirFD)
+    guard copy >= 0 else { throw failure("Read output folder") }
+    guard let dir = fdopendir(copy) else { close(copy); throw failure("Read output folder") }
+    defer { closedir(dir) }
+    rewinddir(dir)
+    var names: [String] = []
+    while true {
+        errno = 0
+        guard let entry = readdir(dir) else {
+            if errno != 0 { throw failure("Read output folder") }
+            return names
+        }
+        let name = withUnsafeBytes(of: entry.pointee.d_name) { raw in
+            String(decoding: raw.prefix(Int(entry.pointee.d_namlen)), as: UTF8.self)
+        }
+        if name != "." && name != ".." { names.append(name) }
+    }
+}
 private func verifyDescriptor(_ fd: Int32, candidate: VerifiedArtifact) throws {
     let before = try metadata(fd)
     guard regular(before), before.st_size == candidate.byteSize, lseek(fd, 0, SEEK_SET) == 0 else {
