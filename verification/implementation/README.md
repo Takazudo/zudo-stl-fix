@@ -1,10 +1,11 @@
 # Implementation verification — 2026-10-16 (Asia/Tokyo)
 
-> **Evidence index (current status, updated 2026-11-08).** Records are dated and
+> **Evidence index (current status, updated 2026-11-08, M4 run added).** Records are dated and
 > kept as written. Newest first:
 >
 > | Date | Record | What it covers |
 > |---|---|---|
+> | 2026-11-08 | [`macos-m4-2026-11-08.md`](macos-m4-2026-11-08.md) | **Apple M4** (macOS 27.0.1): package gate on `23bbfaa` (same production inputs as `fb20af9`) and full packaged-app acceptance incl. live VoiceOver. No regression; evidence only |
 > | 2026-11-08 | [`macos-arm64-2026-11-08.md`](macos-arm64-2026-11-08.md) | Combined package gate on `fb20af9` (#27 CLI alias safety, #28 collision performance, contrast and focus), packaged-app acceptance of the affected rows, and **live VoiceOver** |
 > | 2026-11-07 | [`macos-arm64-2026-11-07-acceptance.md`](macos-arm64-2026-11-07-acceptance.md) | Broad Finder/UI acceptance on builds of `5ee4481` and `8ae8222` |
 > | 2026-11-07 | [`macos-arm64-2026-11-07.md`](macos-arm64-2026-11-07.md) | Packaging gate with the real-worker XCTest on `5ee4481` |
@@ -12,7 +13,7 @@
 > | 2026-10-16 | this file | Linux implementation baseline |
 >
 > Still pending (issue #1): **macOS 14 runtime** and **Intel x86_64 build/runtime**.
-> Only macOS 27.2 on arm64 has been exercised. A plain `swift test` skips the
+> Only arm64 on macOS 27.x has been exercised: Apple A18 Pro (27.2) and Apple M4 (27.0.1). A plain `swift test` skips the
 > real-worker test unless `ZUDO_WORKER_PYTHON` is set. `scripts/build-macos.sh` sets
 > it, so a valid packaging record shows that test passed and was not skipped.
 
