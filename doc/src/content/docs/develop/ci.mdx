@@ -38,6 +38,6 @@ No workflow signs with credentials, deploys the app, creates a release, or chang
 
 ## docs.yml: documentation site
 
-This workflow builds this documentation site. On pull requests and pushes to `main` that touch `doc/**`, it builds the site and runs `check:html`, `check:links`, and a `wrangler` dry run.
+This workflow builds this documentation site. On pull requests and pushes to `main` that touch `doc/**`, it builds the site on Node.js 24 and runs `check:html`, `check:links`, and a `wrangler` dry run.
 
-Deployment is configured for Cloudflare Workers Static Assets, but **live deployment is pending credentials**. The deploy step skips with a notice until the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets exist. The setup guide is `docs/cloudflare-setup.md` in the repository.
+Deployment is configured for Cloudflare Workers Static Assets. On a push to `main` (or a manual dispatch), the deploy job publishes the site only when the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets exist; otherwise its deploy step skips with a notice, and the job still succeeds. A green deploy job is therefore not proof that the site was published: check the job log. The setup guide is `docs/cloudflare-setup.md` in the repository.
