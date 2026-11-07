@@ -1,0 +1,66 @@
+# Host identity and checks run as separate commands (captured 2026-11-08 03:22 JST, same host and package)
+## host
+$ sysctl -n machdep.cpu.brand_string
+Apple M4
+$ sysctl -n hw.model
+Mac16,12
+$ sysctl -n hw.perflevel0.physicalcpu
+4
+$ sysctl -n hw.perflevel1.physicalcpu
+6
+$ sysctl -n hw.memsize
+34359738368
+$ sysctl -n sysctl.proc_translated
+0
+$ uname -s
+Darwin
+$ uname -m
+arm64
+$ system_profiler SPHardwareDataType (model, chip, cores, memory)
+      Model Name: MacBook Air
+      Model Identifier: Mac16,12
+      Chip: Apple M4
+      Total Number of Cores: 10 (4 Performance and 6 Efficiency)
+      Memory: 32 GB
+$ sw_vers
+ProductName:		macOS
+ProductVersion:		27.0.1
+BuildVersion:		26A434
+$ python3.12 -c 'import platform,sys;print(sys.version);print(platform.machine())'
+3.12.14 (main, Sep  1 2026, 14:09:38) [Clang 22.1.3 ]
+arm64
+## built app (build/macos-arm64/verified.x8Hupi)
+$ lipo -archs Contents/MacOS/ZudoSTLFix
+arm64
+$ lipo -archs Contents/Helpers/STLWorker.app/Contents/MacOS/stl-worker
+arm64
+$ vtool -show-build Contents/MacOS/ZudoSTLFix
+build/macos-arm64/verified.x8Hupi/zudo-stl-fix.app/Contents/MacOS/ZudoSTLFix:
+Load command 11
+      cmd LC_BUILD_VERSION
+  cmdsize 32
+ platform MACOS
+    minos 14.0
+      sdk 14.0
+   ntools 1
+     tool LD
+  version 27106.1
+$ codesign --verify --deep --strict (nested helper, outer app)
+nested OK
+outer OK
+$ codesign --verify --deep --strict <acceptance extraction under ~/zudo-accept 受入 テスト/…/アプリ 置き場/>
+relocated OK
+$ (cd verified.x8Hupi && shasum -a 256 -c zudo-stl-fix-macos-arm64-local.zip.sha256)
+zudo-stl-fix-macos-arm64-local.zip: OK
+## portable checks before the package build (summary lines of the actual run, exit 0)
+Ran 17 tests in 0.088s
+OK
+Ran 54 tests in 29.897s
+OK
+17/17 checks passed
+13/13 checks passed
+$ .venv/bin/python engine/worker.py --self-test
+{"protocol_version":1,"self_test":"passed","environment":{"python":"3.12.14","architecture":"arm64","numpy":"2.5.4","scipy":"1.18.1","trimesh":"4.12.2","shapely":"2.2.0","GEOS":"3.14.1","engine":"1.0.0"}}
+## fixture hashes after acceptance
+$ make PYTHON=.venv/bin/python verify-hashes
+13/13 checks passed
