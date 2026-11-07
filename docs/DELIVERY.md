@@ -1,5 +1,11 @@
 # Delivery plan
 
+> **Status pointer (2026-11-08).** This is the original, historical plan. For the
+> current state, see the evidence index in
+> [`verification/implementation/README.md`](../verification/implementation/README.md)
+> and epic #22. Native arm64 acceptance on macOS 27.2 (including live VoiceOver)
+> is recorded. macOS 14 and Intel x86_64 remain pending in issue #1.
+
 ## Milestone 1 — Reproduce and adapt the engine
 
 Inspect the repo; run the existing tests and fixture verifier first. Keep the original engine behavior and checksums intact. Implement a small versioned worker adapter, error mapping, bounded I/O, and adapter tests. Add a machine-readable self-test and the simplest architecture-matched helper build script.

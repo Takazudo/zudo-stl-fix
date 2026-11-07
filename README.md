@@ -13,6 +13,10 @@ for actual results, and [docs/BUILDING.md](docs/BUILDING.md) for native build an
 smoke-test commands. No public release, Developer ID signing, or notarization has
 been performed.
 
+Current status (2026-11-08): the packaged app has passed the native gate and
+interactive acceptance, including live VoiceOver, on macOS 27.2 arm64 only.
+macOS 14 and Intel x86_64 have not been exercised and remain open in issue #1.
+
 ## Use
 
 Open the built `zudo-stl-fix.app`, drop local `.stl` files or choose **Choose
