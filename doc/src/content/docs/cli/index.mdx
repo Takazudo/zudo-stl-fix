@@ -7,7 +7,7 @@ sidebar_position: 4
 `engine/stl_doctor.py` is the geometry engine behind the app, and it still works as a standalone command-line tool. It checks STL meshes and, in `repair` mode, conservatively repairs folded, exactly planar patches.
 
 :::warning[The CLI is not the app's save path]
-The CLI writes its output with a plain file write (`write_safe`) and then compares the bytes read back. That is **not** the transactional, no-overwrite save the app performs, and the CLI's human-readable stdout is not an API. The app talks to the engine through a [structured worker protocol](../reference/worker-protocol.mdx) instead.
+The CLI creates its outputs as new files, refuses paths that are links to an input or output, and compares the bytes read back (see [alias protection](./options.mdx#alias-protection)). It is still **not** the transactional, no-overwrite save the app performs, and the CLI's human-readable stdout is not an API. The app talks to the engine through a [structured worker protocol](../reference/worker-protocol.mdx) instead.
 :::
 
 ## Setup

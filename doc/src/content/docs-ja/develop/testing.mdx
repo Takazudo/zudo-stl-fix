@@ -1,6 +1,6 @@
 ---
 title: テスト
-description: make ターゲット、Swift のテスト、オプトインの実ワーカーテスト。
+description: make ターゲット、Swift のテスト、実ワーカーテスト。
 sidebar_position: 2
 ---
 
@@ -9,7 +9,7 @@ sidebar_position: 2
 | コマンド | 実行内容 |
 |---|---|
 | `make test-engine` | 元からある 17 個のエンジン回帰テスト（`engine/test_stl_doctor.py`）。 |
-| `make test-worker` | `tests/` 以下のワーカー、プロトコル、パッケージングツールのテスト。 |
+| `make test-worker` | `tests/` 以下のワーカー、プロトコル、パッケージングツール、CLI のファイル安全性のテスト。 |
 | `make verify-fixtures` | `scripts/verify_fixtures.py --repair`：すべての参照ファイルを監査し、欠陥のある 2 本のレールを両方の許容誤差モードで修復します。 |
 | `make verify-hashes` | `scripts/verify_fixtures.py --hashes-only`：不変のフィクスチャのハッシュを確認します。 |
 | `make verify` | 上記 4 つすべて。 |
@@ -35,13 +35,20 @@ swift test --package-path app
 
 プロトコル、キュー、キャンセル、安全な書き出しのロジックをカバーします。macOS でのみ実行できます。
 
-## オプトインの実ワーカーテスト
+## 実ワーカーテスト
 
-Swift のテストのうち `testRealWorker` だけは、フェイクではなく実際の Python ワーカーを動かします。`ZUDO_WORKER_PYTHON` が `engine/requirements.txt` をインストール済みの Python を指していない限り、このテストはスキップされます。
+Swift のテストのうち `testRealWorkerRepairsDefectiveRailFromDefaultTemporaryStore` だけは、フェイクではなく実際の Python ワーカーを動かします。
+
+- **通常の `swift test` では**、`ZUDO_WORKER_PYTHON` が `engine/requirements.txt` をインストール済みの Python を指していない限りスキップされます。スキップは合格ではありません。
+- **パッケージングビルドでは必須です。** `scripts/build-macos.sh` は `ZUDO_WORKER_PYTHON` をビルド用のハッシュ固定 venv に設定するため、このテストは必ず実行され、合格する必要があります。パッケージングの実行結果を証拠として扱えるのは、ログでこのテストがスキップされずに合格している場合だけです。
+
+開発中に実行するには次のようにします。
 
 ```sh
 ZUDO_WORKER_PYTHON=.venv/bin/python swift test --package-path app --filter testRealWorker
 ```
+
+Swift のテストには、フォルダーを 10,000 個の名前で埋める実寸の衝突テストも含まれます。検証するのは動作で、所要時間ではありません。
 
 :::tip
 パスの扱いやワーカープロトコルに手を入れたときは、必ずこのテストを実行してください。実際の不具合（シンボリックリンクされたジョブディレクトリ）がフェイクワーカーのテストをすり抜け、実際のアプリを動かして初めて見つかったことがあります。[検証状況](./verification-status.mdx)を参照してください。

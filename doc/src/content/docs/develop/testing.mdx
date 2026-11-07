@@ -1,6 +1,6 @@
 ---
 title: Testing
-description: The make targets, Swift tests, and the opt-in real-worker test.
+description: The make targets, Swift tests, and the real-worker test.
 sidebar_position: 2
 ---
 
@@ -9,7 +9,7 @@ sidebar_position: 2
 | Command | What it runs |
 |---|---|
 | `make test-engine` | The original 17 engine regression tests (`engine/test_stl_doctor.py`). |
-| `make test-worker` | The worker, protocol and packaging-tool tests under `tests/`. |
+| `make test-worker` | The worker, protocol, packaging-tool and CLI file-safety tests under `tests/`. |
 | `make verify-fixtures` | `scripts/verify_fixtures.py --repair`: audits every reference file and repairs the two defective rails in both tolerance modes. |
 | `make verify-hashes` | `scripts/verify_fixtures.py --hashes-only`: checks the immutable fixture hashes. |
 | `make verify` | All four of the above. |
@@ -35,13 +35,20 @@ swift test --package-path app
 
 These cover the protocol, queue, cancellation, and safe-export logic. They run on macOS only.
 
-## The opt-in real-worker test
+## The real-worker test
 
-One Swift test, `testRealWorker`, drives the actual Python worker instead of a fake. It is skipped unless `ZUDO_WORKER_PYTHON` points to a Python that has `engine/requirements.txt` installed:
+One Swift test, `testRealWorkerRepairsDefectiveRailFromDefaultTemporaryStore`, drives the actual Python worker instead of a fake.
+
+- **In a plain `swift test` run it is skipped** unless `ZUDO_WORKER_PYTHON` points to a Python that has `engine/requirements.txt` installed. A plain run reports it as skipped, and that is not a pass.
+- **In the packaging build it is mandatory.** `scripts/build-macos.sh` sets `ZUDO_WORKER_PYTHON` to its own hash-locked build venv, so the test runs there and must pass. A packaging run is only valid evidence when its log shows this test passed and was not skipped.
+
+To run it during development:
 
 ```sh
 ZUDO_WORKER_PYTHON=.venv/bin/python swift test --package-path app --filter testRealWorker
 ```
+
+The Swift suite also contains full-scale collision tests that fill a folder with 10,000 names. They assert behavior, not timing.
 
 :::tip
 Run this test whenever you touch path handling or the worker protocol. A real defect (symlinked job directories) slipped past fake-worker tests and was only caught by running the real app; see [Verification status](./verification-status.mdx).
