@@ -65,6 +65,22 @@ private actor ControlledWorker: WorkerServing {
         XCTAssertTrue(queue.readyIDs.isEmpty)
         await queue.shutdown()
     }
+    func testSaveFailureMessageHasSingleSentenceBreak() {
+        XCTAssertEqual(saveFailureMessage(LocalFileError.collisions),
+                       "Save failed: Could not find an available output name. Choose another folder or retry.")
+        XCTAssertEqual(saveFailureMessage(LocalFileError.system("Publish output", EACCES)),
+                       "Save failed: Publish output: Permission denied. Choose another folder or retry.")
+    }
+    func testRepairedWithoutVerifiedCandidateIsExplainedError() async throws {
+        let root = try temp(); defer { try? FileManager.default.removeItem(at: root) }
+        let worker = ControlledWorker(); let queue = JobQueue(store: try SnapshotStore(root: root), worker: worker)
+        await queue.add([try source(root, "rail.stl")]); try await eventually { await worker.count == 1 }
+        try await worker.complete(queue.jobs[0].id, outcome: "repaired")
+        try await eventually { queue.jobs[0].status == .error }
+        XCTAssertEqual(queue.jobs[0].message, "The repaired copy could not be verified; no output can be saved.")
+        XCTAssertTrue(queue.readyIDs.isEmpty)
+        await queue.shutdown()
+    }
     func testCanceledCompletionCannotResurrectAndNextRuns() async throws {
         let root = try temp(); defer { try? FileManager.default.removeItem(at: root) }
         let worker = ControlledWorker(); let queue = JobQueue(store: try SnapshotStore(root: root), worker: worker)

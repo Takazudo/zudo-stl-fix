@@ -98,7 +98,7 @@ import ZudoSTLFixCore
         VStack(alignment: .leading, spacing: 12) {
             VStack(spacing: 10) {
                 Image(systemName: "tray.and.arrow.down").font(.largeTitle).accessibilityHidden(true)
-                Text("Drop STL files here").font(.title2)
+                Text("Drop STL files here").font(.title2).accessibilityHidden(true)
                 Button("Choose Files…") { chooseFiles { urls in Task { await queue.add(urls) } } }
                 if queue.importing { ProgressView("Making private copies…").controlSize(.small) }
             }
@@ -140,7 +140,7 @@ import ZudoSTLFixCore
                     ForEach(Array(job.warnings.enumerated()), id: \.offset) { _, text in
                         Label(text, systemImage: "exclamationmark.triangle").font(.caption).foregroundStyle(.orange).fixedSize(horizontal: false, vertical: true)
                     }
-                    if !job.message.isEmpty { Text(job.message).font(.caption).foregroundStyle(.secondary).textSelection(.enabled) }
+                    if !job.message.isEmpty { Text(job.message).font(.caption).foregroundStyle(.secondary).lineLimit(4).truncationMode(.tail).textSelection(.enabled).help(job.message) }
                 }.padding(.vertical, 5)
             }.listStyle(.inset)
             DisclosureGroup("Advanced", isExpanded: $advanced) {

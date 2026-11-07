@@ -133,12 +133,13 @@ final class ProtocolTests: XCTestCase {
             XCTAssertEqual(error.localizedDescription, "Worker failed: Cannot read private snapshot (permission_denied)")
         }
     }
-    func testReadableErrorFallsBackToJSONWithoutMessage() {
+    func testReadableErrorFormatting() {
         XCTAssertEqual(JSONValue.object(["code": .string("x"), "message": .string("Bad / input")]).readableError, "Bad / input (x)")
         XCTAssertEqual(JSONValue.object(["message": .string("Only message")]).readableError, "Only message")
-        let opaque = JSONValue.object(["code": .string("x")])
-        XCTAssertEqual(opaque.readableError, opaque.pretty)
-        XCTAssertEqual(JSONValue.string("text").readableError, JSONValue.string("text").pretty)
+        XCTAssertEqual(JSONValue.string("Permission denied").readableError, "Permission denied")
+        for opaque in [JSONValue.object(["code": .string("x")]), .object(["code": .string("x"), "message": .string("  ")]), .number(3)] {
+            XCTAssertEqual(opaque.readableError, opaque.pretty)
+        }
     }
 
     func testDuplicateMembersIncludingEscapedAndNestedKeysAreRejected() throws {

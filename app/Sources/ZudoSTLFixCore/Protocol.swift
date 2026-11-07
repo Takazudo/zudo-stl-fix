@@ -39,9 +39,11 @@ public enum JSONValue: Codable, Sendable, Equatable {
         let encoder = JSONEncoder(); encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         return (try? String(decoding: encoder.encode(self), as: UTF8.self)) ?? "Unavailable"
     }
-    /// The worker's `{code, message}` error as text for people; other shapes fall back to JSON.
     public var readableError: String {
-        guard case .object(let object) = self, case .string(let message)? = object["message"], !message.isEmpty else { return pretty }
+        if case .string(let text) = self, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { return text }
+        guard case .object(let object) = self, case .string(let raw)? = object["message"] else { return pretty }
+        let message = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !message.isEmpty else { return pretty }
         if case .string(let code)? = object["code"], !code.isEmpty { return "\(message) (\(code))" }
         return message
     }

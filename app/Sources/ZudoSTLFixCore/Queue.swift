@@ -134,8 +134,9 @@ public struct Job: Identifiable, Sendable {
                     case "incomplete": item.status = .incomplete
                     default: item.status = .error
                     }
-                    if [.refused, .incomplete, .error].contains(item.status), let reason = result.event.error?.readableError {
-                        item.message = reason
+                    if [.refused, .incomplete, .error].contains(item.status) {
+                        item.message = result.event.error?.readableError
+                            ?? (item.status == .error ? "The repaired copy could not be verified; no output can be saved." : "")
                     }
                 }
             } catch {
@@ -189,7 +190,7 @@ public struct Job: Identifiable, Sendable {
                 update(id) { $0.status = .saved; $0.savedURL = output }
             } catch {
                 // A failed destination does not invalidate a verified private candidate.
-                update(id) { $0.status = .ready; $0.message = "Save failed: \(error.localizedDescription). Choose another folder or retry." }
+                update(id) { $0.status = .ready; $0.message = saveFailureMessage(error) }
             }
         }
     }
@@ -209,4 +210,10 @@ public struct Job: Identifiable, Sendable {
         if operations > 0 { await withCheckedContinuation { idleWaiters.append($0) } }
         try? await store.cleanup()
     }
+}
+
+func saveFailureMessage(_ error: Error) -> String {
+    var reason = error.localizedDescription.trimmingCharacters(in: .whitespacesAndNewlines)
+    while reason.hasSuffix(".") { reason.removeLast() }
+    return "Save failed: \(reason). Choose another folder or retry."
 }
