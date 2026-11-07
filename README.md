@@ -72,8 +72,18 @@ releases, or deploys anything.
 ```
 
 Default welding is disabled. Add `--weld-tolerance 0.00001` only to request tiny
-existing-edge cleanup. The CLI keeps its existing behavior and is not the native
-app's transactional save implementation.
+existing-edge cleanup. The CLI is not the native app's transactional save
+implementation.
+
+Outputs and the JSON report never replace an input, even through a symbolic link
+or hard link, and the report never replaces a repaired output. A report path like
+that stops the run with exit code 2 before anything is written. An output path
+like that is recorded as an error for its file (exit code 2), and the other files
+continue. Without `--overwrite`, existing files are kept. With it, an unrelated
+regular file is replaced by a new file through rename, keeping its permission
+bits, so a link is never written through. A symbolic link at an output or report
+path is refused. Repaired outputs and input hashes are checked again before and
+after the report is written.
 
 ## Repository contents and provenance
 
