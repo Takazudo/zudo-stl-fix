@@ -38,7 +38,7 @@ PYTHON=python3.12 bash scripts/build-macos.sh
 
 1. Creates a new build virtual environment and verifies the pinned wheel hashes.
 2. Freezes the actual worker with PyInstaller.
-3. Runs the Swift tests and builds the native executable.
+3. Runs the Swift tests with `ZUDO_WORKER_PYTHON` pointing to the build venv, so the real-worker test must run and pass (a plain `swift test` skips it), then builds the native executable.
 4. Creates the `.app`, generates third-party notices and build provenance.
 5. Verifies nested ad-hoc signatures.
 6. Runs relocated helper smoke tests.
