@@ -202,6 +202,41 @@ final class FilesTests: XCTestCase {
         XCTAssertEqual(Set(try FileManager.default.contentsOfDirectory(atPath: full.path)), before)
     }
 
+    // APFS allows 255 characters per name; a legal "<stem>.stl" input of 250-255 characters
+    // could otherwise never be saved, and -fixed-2 / -report names overflow even sooner.
+    func testOverlongOutputNamesShortenTheStemUntilTheyFit() async throws {
+        let source = try temporaryDirectory(), destination = try temporaryDirectory()
+        XCTAssertEqual(pathconf(destination.path, _PC_NAME_MAX), 255)
+        let candidate = try artifact(in: source)
+        let report = try artifact(in: source, name: "report.json", text: "{\"warnings\":[]}")
+        for (stem, unit) in [(String(repeating: "a", count: 251), "a"), (String(repeating: "レ", count: 250), "レ")] {
+            let input = destination.appendingPathComponent(stem + ".stl")
+            try Data("original".utf8).write(to: input)
+            let exporter = Exporter()
+            let first = try await exporter.save(candidate: candidate, stem: stem, directory: destination, protectedInputs: [input])
+            let second = try await exporter.save(candidate: candidate, stem: stem, directory: destination, protectedInputs: [input])
+            let json = try await exporter.exportReport(candidate: report, stem: stem, directory: destination, protectedInputs: [input])
+            XCTAssertEqual(first.lastPathComponent, String(repeating: unit, count: 245) + "-fixed.stl")
+            XCTAssertEqual(second.lastPathComponent, String(repeating: unit, count: 243) + "-fixed-2.stl")
+            XCTAssertEqual(json.lastPathComponent, String(repeating: unit, count: 243) + "-report.json")
+            for saved in [first, second] {
+                try FileVerification.verify(VerifiedArtifact(url: saved, sha256: candidate.sha256, byteSize: candidate.byteSize))
+            }
+            try FileVerification.verify(VerifiedArtifact(url: json, sha256: report.sha256, byteSize: report.byteSize))
+            XCTAssertEqual(try Data(contentsOf: input), Data("original".utf8))
+        }
+        XCTAssertEqual(try FileManager.default.contentsOfDirectory(atPath: destination.path).count, 8)
+        XCTAssertFalse(try FileManager.default.contentsOfDirectory(atPath: destination.path).contains { $0.hasPrefix(".zudo") })
+    }
+
+    func testShortNamesAreNotShortenedNextToLongNeighbours() async throws {
+        let source = try temporaryDirectory(), destination = try temporaryDirectory()
+        let candidate = try artifact(in: source)
+        try Data("keep".utf8).write(to: destination.appendingPathComponent(String(repeating: "p", count: 245) + "-fixed.stl"))
+        let saved = try await Exporter().save(candidate: candidate, stem: "part", directory: destination, protectedInputs: [])
+        XCTAssertEqual(saved.lastPathComponent, "part-fixed.stl")
+    }
+
     func testOriginalHardLinkCannotMasqueradeAsCandidate() async throws {
         let source = try temporaryDirectory(), destination = try temporaryDirectory()
         let original = try artifact(in: source)

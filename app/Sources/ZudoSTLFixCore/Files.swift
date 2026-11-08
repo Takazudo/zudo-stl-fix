@@ -336,17 +336,26 @@ public actor Exporter {
         // stays authoritative for names created after the inventory.
         let posix = Locale(identifier: "en_US_POSIX")
         func folded(_ name: String) -> String { name.folding(options: [.caseInsensitive], locale: posix) }
-        let prefix = folded("\(stem)-\(label)")
-        var taken = Set(try directoryNames(dirFD).lazy.map(folded).filter { $0.hasPrefix(prefix) })
+        // Unfiltered: a stem shortened below no longer shares the full stem's prefix.
+        var taken = Set(try directoryNames(dirFD).lazy.map(folded))
         try hook?(.afterNameInventory, folder)
+        // Shortened only when the destination filesystem reports ENAMETOOLONG; filesystems
+        // count the limit differently (APFS: 255 characters), so ask rather than guess.
+        var base = stem
         for suffix in 1...10_000 {
-            let name = "\(stem)-\(label)\(suffix == 1 ? "" : "-\(suffix)").\(fileExtension)"
-            if taken.contains(folded(name)) { continue }
-            // Hard-link publication is atomic and refuses EVERY existing entry, including
-            // dangling symlinks, input hard links and names on case-insensitive volumes.
-            guard linkat(stageDirFD, stage, dirFD, name, 0) == 0 else {
-                if errno == EEXIST { taken.insert(folded(name)); continue }; throw failure("Publish output")
+            let tail = "-\(label)\(suffix == 1 ? "" : "-\(suffix)").\(fileExtension)"
+            var claimed: String?
+            while claimed == nil {
+                let name = base + tail
+                if taken.contains(folded(name)) { break }
+                // Hard-link publication is atomic and refuses EVERY existing entry, including
+                // dangling symlinks, input hard links and names on case-insensitive volumes.
+                if linkat(stageDirFD, stage, dirFD, name, 0) == 0 { claimed = name; break }
+                if errno == EEXIST { taken.insert(folded(name)); break }
+                if errno == ENAMETOOLONG, base.count > 1 { base.removeLast(); continue }
+                throw failure("Publish output")
             }
+            guard let name = claimed else { continue }
             let output = folder.appendingPathComponent(name)
             do {
                 try hook?(.afterPublication, output)
