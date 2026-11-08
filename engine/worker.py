@@ -9,6 +9,7 @@ import math
 import os
 from pathlib import Path
 import platform
+import re
 import stat
 import struct
 import sys
@@ -176,12 +177,28 @@ class JobFiles:
                 pass
 
 
+def could_be_ascii_stl(raw):
+    """False only when the strict ASCII loader is certain to reject these bytes."""
+    if not raw.isascii():
+        return False
+    # Same whitespace set as str.split()/splitlines() for ASCII text in the loader.
+    start = re.match(rb"[\s\x1c-\x1f]*", raw).end()
+    return start == len(raw) or raw[start:start + 5].lower() == b"solid"
+
+
 def preflight(raw, max_faces):
     """Bound parser allocation before it creates arrays or a tokenized line list."""
-    if len(raw) >= 84 and len(raw) == 84 + 50 * struct.unpack_from("<I", raw, 80)[0]:
-        if struct.unpack_from("<I", raw, 80)[0] > max_faces:
-            raise d.ResourceLimit("Binary STL exceeds the face limit")
-        return
+    if len(raw) >= 84:
+        count = struct.unpack_from("<I", raw, 80)[0]
+        expected = 84 + 50 * count
+        if len(raw) == expected:
+            if count > max_faces:
+                raise d.ResourceLimit("Binary STL exceeds the face limit")
+            return
+        if not could_be_ascii_stl(raw):
+            problem = "truncated" if len(raw) < expected else "longer than declared (trailing data or a damaged header)"
+            raise ValueError(f"Malformed binary STL: the header declares {count} facets ({expected} bytes) "
+                             f"but the file has {len(raw)} bytes; it is {problem}")
     facets, lines = 0, 0
     for line in io.BytesIO(raw):
         lines += 1
