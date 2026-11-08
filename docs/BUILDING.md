@@ -105,8 +105,12 @@ optional, separately authorized alternative that uses paid macOS runners; nothin
 dispatches it automatically. When it is wanted, pass the ref under test (for
 example `main`, or a pull request's head branch):
 
+The workflow needs a GitHub-hosted Apple silicon image running macOS 27 or later with
+Xcode 27. If `macos-latest` still maps to an older image, `build-macos.sh` stops at
+its host check (exit 2) and the workflow cannot be used until GitHub moves the label.
+
 ```sh
-gh workflow run macos.yml --ref <branch> -f runner=macos-14
+gh workflow run macos.yml --ref <branch> -f runner=macos-latest
 gh run list --workflow macos.yml
 gh run watch <run-id> --exit-status
 ```
