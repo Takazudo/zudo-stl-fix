@@ -161,7 +161,7 @@ class WorkerTests(unittest.TestCase):
     def test_truncated_binary_is_invalid_input_regardless_of_newlines(self):
         fixture = ROOT / 'fixtures/originals/nuts-v2-60hp-double.stl'
         original = fixture.read_bytes()
-        # The long cut keeps a >4096-byte newline-free run that used to hit the ASCII line bound.
+        # Long cut: a >4096-byte newline-free run used to hit the ASCII line bound; short cut: no such run.
         for raw in [original[:len(original) // 2 + 7], original[:84 + 50 * 10 + 13]]:
             with self.subTest(size=len(raw)):
                 self.input.write_bytes(raw)
@@ -208,7 +208,7 @@ class WorkerTests(unittest.TestCase):
         self.assert_malformed_binary(*self.execute(), 'truncated')
 
     def test_ascii_like_mismatch_keeps_ascii_bounds(self):
-        for raw in [b' \r\n\x0bSOLID x\n' + b'a' * 5000, b'solid x\n' + b'facet normal 0 0 1\n' * 3]:
+        for raw in [b' \r\n\x0bSOLID x\n' + b'a' * 5000, b'solid x\n' + b'facet normal 0 0 1\n' * 5]:
             with self.subTest(raw=raw[:12]), self.assertRaises(d.ResourceLimit):
                 w.preflight(raw, 1)
 
