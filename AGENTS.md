@@ -32,6 +32,6 @@ On non-macOS hosts, implement and test everything available: engine adapter, pro
 
 Keep changes reviewable and CI inexpensive. Follow an existing branching model; otherwise use one short-lived feature branch from the repository's default branch. Do not add `develop` or multiple release branches without need. Do not weaken existing required checks.
 
-Default proposal: fast engine/protocol tests on one Linux push workflow with path filters; macOS app builds and bundled-helper smoke tests by manual dispatch, plus release verification when a release is actually requested. Avoid duplicate push/PR builds and repeated heavyweight builds per commit. A failed check is still actionable; "low CI" does not mean reporting known failures as green.
+Default proposal: fast engine/protocol tests on one Linux push workflow with path filters; macOS app builds, bundled-helper smoke tests and release binaries run on a local Apple silicon Mac only (owner decision 2026-11-08: no macOS GitHub Actions runners, for cost), and a Linux release workflow only verifies the uploaded release assets. Avoid duplicate push/PR builds and repeated heavyweight builds per commit. A failed check is still actionable; "low CI" does not mean reporting known failures as green.
 
 Implement through the requested milestone, test it, commit it, and open a PR when repository access allows. Do not auto-merge or publish releases unless separately authorized. Report exactly what works, what was tested, the build commands, and the concrete remaining macOS-only checks.
