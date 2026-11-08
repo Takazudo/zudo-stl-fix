@@ -2,7 +2,7 @@
 
 ## Status
 
-Deployment is configured; the live deployment is pending credentials. Until the repository secrets below exist, the `deploy` job in `.github/workflows/docs.yml` logs a notice and skips. The `build` job (including `wrangler deploy --dry-run`) runs without credentials.
+Live at https://zudo-stl-fix-doc.takazudo.workers.dev since 2026-11-08. That first deployment was made from a local Mac (`wrangler deploy` in `doc/` with the owner's personal account, from `main` @ `6fffdbf`), because the repository secrets below do not exist yet. Until they exist, the `deploy` job in `.github/workflows/docs.yml` logs a notice and skips, so later `doc/**` changes on `main` need either the secrets or another local `wrangler deploy` from a clean `main` build.
 
 The site is an assets-only Cloudflare Worker named `zudo-stl-fix-doc` (`doc/wrangler.toml`), serving `doc/dist` on the free `workers.dev` subdomain.
 
