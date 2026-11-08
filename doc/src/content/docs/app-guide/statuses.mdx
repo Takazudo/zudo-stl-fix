@@ -24,6 +24,8 @@ Each row shows exactly one of these labels.
 | Error | An operational failure, such as a worker or protocol problem. |
 | Canceled | You canceled the job. |
 
+A file that cannot be parsed, such as a malformed or truncated binary STL, shows **Error** with an `invalid_input` reason that says what is wrong, for example that the file is shorter than its header declares.
+
 Queued, Checking, Repairing, and Verifying are in-progress states: the result is not final. Only **Repair ready** enables saving.
 
 ## Warnings versus failures

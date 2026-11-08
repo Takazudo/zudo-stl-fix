@@ -6,19 +6,19 @@ sidebar_position: 1
 
 ## 前提条件
 
-ソースは macOS 14 を対象としています。テストしたいアーキテクチャごとに、それぞれのマシンでビルドしてください。universal2 の成果物はなく、Python ヘルパーのクロスコンパイルも行いません。
+サポート対象は **Apple silicon（arm64）上の macOS 27 以降だけ**です。アプリのデプロイメントターゲットは macOS 27.0 で、`scripts/build-macos.sh` は x86_64、Rosetta 経由、macOS 27 より古いホストではビルドを拒否します。universal2 や x86_64 の成果物はありません。
 
 必要なものは次のとおりです。
 
-- Xcode とそのコマンドラインツールが選択された macOS。
-- 現在のシェルと同じアーキテクチャの CPython **3.12.14**。
+- macOS 27 以降が動作し、Xcode とそのコマンドラインツールが選択された Apple silicon の Mac。
+- arm64 用の CPython **3.12.14**。
 
 初回のビルドでは、バージョンを固定した依存関係をダウンロードします。ビルドしたアプリの実行には、Python、Homebrew、ターミナル、アカウント、ネットワーク接続、依存関係のインストールはいずれも不要です。
 
-`packaging/requirements-macos.lock` は、ヘルパーとビルドで使う解決済みのすべてのディストリビューションを、macOS 用 wheel の SHA-256 とともに固定しています。固定バージョンには NumPy 2.5.4、SciPy 1.18.1、Shapely 2.2.0、Trimesh 4.12.2、PyInstaller 6.22.3 が含まれます。
+`packaging/requirements-macos.lock` は、ヘルパーとビルドで使う解決済みのすべてのディストリビューションを、macOS 用 wheel の SHA-256 とともに固定しています。固定バージョンには NumPy 2.5.4、SciPy 1.18.1、Shapely 2.2.0、Trimesh 4.12.2、PyInstaller 6.22.3 が含まれます。ビルドでは arm64 用の wheel だけをインストールし、それらが要求する macOS の最低バージョンはアプリの最低要件である macOS 27 より低くなっています。
 
 :::note
-arm64 と x86_64 の両方について、CPython 3.12 用の wheel が Linux 上で正常にダウンロードできることは確認済みです。これは入手可能であることを示すだけで、実行時の互換性を示すものではありません。また、universal2 の PyInstaller wheel を使っても、最終的なアプリが universal2 になるわけではありません。
+wheel をダウンロードできたことやソースのテストが通ったことは、ネイティブアプリが動作することの証明にはなりません。また、universal2 の PyInstaller wheel を使っても、最終的なアプリが universal2 になるわけではありません。
 :::
 
 ## ビルドコマンド
@@ -56,7 +56,7 @@ Makefile のターゲット `build-helper`、`build-app`、`package-local` は�
 実行のたびに新しいディレクトリが作られるため、以前のビルドの古いライブラリがテスト対象のアプリに紛れ込むことはありません。
 
 :::warning
-このアーカイブはローカル開発用の生成物です。アドホック署名のみで、公証（notarization）はされておらず、公開リリースでもありません。[リリース状況](./release-status.mdx)を参照してください。
+このアーカイブはローカル開発用の生成物です。アドホック署名のみで、公証（notarization）はされておらず、公開リリースでもありません。リリース用のアーカイブは別のスクリプトで作ります。[継続的インテグレーション](./ci.mdx)と[リリース状況](./release-status.mdx)を参照してください。
 :::
 
 ## BUILD-INFO

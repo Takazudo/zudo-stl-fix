@@ -6,7 +6,7 @@ sidebar_position: 6
 
 ## はじめに読むページ
 
-zudo-stl-fix は、Python のジオメトリエンジンを別プロセスのバンドル済みヘルパーとして動かす、macOS 向けのドラッグ＆ドロップアプリ（SwiftUI）です。このセクションでは、ビルド方法、テストの仕組み、CI の構成、そして検証済みの項目と未検証の項目を説明します。
+zudo-stl-fix は、Python のジオメトリエンジンを別プロセスのバンドル済みヘルパーとして動かす、macOS 向けのドラッグ＆ドロップアプリ（SwiftUI）です。このセクションでは、ビルド方法、テストの仕組み、CI の構成、そして検証の記録を説明します。
 
 - アプリをビルドするには、[macOS でのビルド](./building-macos.mdx)を読んでください。
 - チェックを実行するには、[テスト](./testing.mdx)を読んでください。
@@ -14,7 +14,7 @@ zudo-stl-fix は、Python のジオメトリエンジンを別プロセスのバ
 - 何が通ったかの正確な記録は、[検証状況](./verification-status.mdx)にあります。
 
 :::note
-macOS での検証はまだ一部しか完了していません。残りのチェックは [Issue #1](https://github.com/Takazudo/zudo-stl-fix/issues/1) で管理しており、これらのページではそれらが通ったとは一切主張していません。
+サポート対象は Apple silicon（arm64）上の macOS 27 以降だけです。ネイティブのパッケージングゲートとパッケージ化したアプリの受け入れ確認は 2 台の arm64 の Mac で合格しており、プラットフォームについて未完了の検証はありません。[検証状況](./verification-status.mdx)を参照してください。
 :::
 
 <CategoryNav category="develop" />

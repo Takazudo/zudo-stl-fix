@@ -24,7 +24,7 @@ zudo-stl-fix は macOS ネイティブのアプリ（SwiftUI/AppKit）で、**ST
 - すべてを修復するわけではありません。「Cannot repair safely」（安全に修復できない）は想定された結果のひとつです。詳しくは[保守的な修復の範囲](../concepts/conservative-repair-scope.mdx)を参照してください。
 
 :::note[検証の状況]
-アプリは Apple silicon の Mac でビルドと起動を確認済みですが、いくつかの対話的なチェック（Finder からのドラッグ＆ドロップ、保存パネル、UI からのキャンセルなど）はまだ未実施です。進捗は [issue #1](https://github.com/Takazudo/zudo-stl-fix/issues/1) で管理しています。
+アプリが動作するのは Apple silicon（arm64）上の macOS 27 以降だけです。パッケージ化したアプリは、Apple A18 Pro（macOS 27.2）と Apple M4（macOS 27.0.1）で、ネイティブのパッケージングゲートと、実際の VoiceOver を使った確認を含むすべての対話的な受け入れ確認に合格しています。[検証状況](../develop/verification-status.mdx)を参照してください。
 :::
 
 ## コマンドラインのエンジン
