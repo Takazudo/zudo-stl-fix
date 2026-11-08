@@ -10,8 +10,9 @@ This repository contains the implementation and automated tests. **macOS build,
 Finder/UI, and relocated bundled-helper verification must pass before treating
 the app as verified.** See [verification/implementation](verification/implementation)
 for actual results, and [docs/BUILDING.md](docs/BUILDING.md) for native build and
-smoke-test commands. No public release, Developer ID signing, or notarization has
-been performed.
+smoke-test commands. Download the app from
+[GitHub Releases](https://github.com/Takazudo/zudo-stl-fix/releases/latest). Release
+builds are ad-hoc signed only: no Developer ID signing or notarization has been performed.
 
 Current status (2026-11-08): the packaged app has passed the native gate and
 interactive acceptance, including live VoiceOver, on arm64: Apple A18 Pro
@@ -21,7 +22,7 @@ Older macOS versions and Intel/x86_64 are not supported.
 
 ## Use
 
-Open the built `zudo-stl-fix.app`, drop local `.stl` files or choose **Choose
+Open `zudo-stl-fix.app`, drop local `.stl` files or choose **Choose
 Files…**, and let the sequential queue finish. Each row shows its status and
 warnings. **Details** provides audit and repair information. Save an individual
 approved repair or choose **Save Fixed Files…** for the ready results, then use

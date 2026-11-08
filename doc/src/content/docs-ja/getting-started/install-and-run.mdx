@@ -1,16 +1,22 @@
 ---
 title: インストールと起動
-description: 公開リリースはまだないため、Mac 上でアプリをローカルにビルドします。
+description: GitHub Releases からアプリをダウンロードするか、Mac 上でローカルにビルドします。
 sidebar_position: 2
 ---
 
-## 公開リリースはまだありません
+## ダウンロード
 
-現時点で zudo-stl-fix には、**公開リリース、署名済みリリース、公証（notarize）済みリリースのいずれもありません**。アプリを使うには、Mac 上で自分でビルドする必要があります。ローカルでビルドしたアプリはアドホック署名で、公証されていないため、初回起動時に Gatekeeper から確認を求められます。
+1. [最新のリリース](https://github.com/Takazudo/zudo-stl-fix/releases/latest)を開き、`zudo-stl-fix-<version>-macos-arm64.zip` をダウンロードします。
+2. Finder でダブルクリックして展開し、`zudo-stl-fix.app` を `/Applications` に移動します。
+3. アプリを開きます。初回は macOS にブロックされるので、ダイアログを閉じてから **システム設定 → プライバシーとセキュリティ** を開き、**このまま開く** をクリックします。
+
+リリース版はアドホック署名のみで、Developer ID による署名も公証（notarize）も**されていません**。そのため、初回だけ macOS が確認を求めます。
+
+ダウンロードしたファイルを確認するには、同じリリースの `.sha256` ファイルを zip と同じ場所に置き、`shasum -a 256 -c zudo-stl-fix-<version>-macos-arm64.zip.sha256` を実行します。
 
 ## ローカルでビルドする
 
-ドキュメントに記載されたツールチェーンを備えた Mac で、次のコマンドを実行します（前提条件、固定された依存バージョン、正確なコマンドについては [Develop セクション](../develop/index.mdx)を参照してください）。
+自分でビルドする場合は、ドキュメントに記載されたツールチェーンを備えた Mac で、次のコマンドを実行します（前提条件、固定された依存バージョン、正確なコマンドについては [Develop セクション](../develop/index.mdx)を参照してください）。
 
 ```sh
 make test-app
@@ -24,7 +30,7 @@ make package-local
 ## 動作要件
 
 - Apple silicon（arm64）の Mac で macOS 27 以降。それより古い macOS と Intel Mac はサポート対象外です。macOS 27 は Intel Mac では動作しません。
-- ビルドしたアプリは、ユーザーが別途インストールした Python、Homebrew、アカウント、ネットワーク接続のいずれも必要としません。
+- アプリは、ユーザーが別途インストールした Python、Homebrew、アカウント、ネットワーク接続のいずれも必要としません。
 
 :::tip
 ターミナルからSTLファイルを修復できれば十分という場合は、アプリを使わずに Python エンジンを利用する方法を [CLI セクション](../cli/index.mdx)で説明しています。
