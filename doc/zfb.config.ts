@@ -4,6 +4,22 @@ import { zudoDoc } from "@takazudo/zudo-doc/config";
 export default defineConfig(
   zudoDoc({
     siteName: "zudo-stl-fix",
+    logo: "/img/logo.svg",
+    headerBrand: { icon: "/img/brand/zudo-stl-fix-symbol-small.svg" },
+    favicon: {
+      svg: "/favicon.svg",
+      png32: "/favicon-32x32.png",
+      png16: "/favicon-16x16.png",
+      ico: "/favicon.ico",
+    },
+    // zudoDoc shallow-merges nested settings, so retain all metadata roles.
+    metaTags: {
+      description: true,
+      keywords: false,
+      ogImage: "/img/ogp.png",
+      ogSiteName: true,
+      twitterCard: "summary_large_image",
+    },
     chromeBindingsModule: "./src/chrome-bindings.ts",
     siteUrl: "https://zudo-stl-fix.zudolab.dev",
     siteDescription:

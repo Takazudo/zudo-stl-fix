@@ -9,6 +9,36 @@
 @import "@takazudo/zudo-doc/page-loading.css";
 @import "@takazudo/zudo-doc/features.css";
 
+/* ZFB preserves authored URLs in assets/styles[-hash].css; this resolves
+   to public/fonts under either the root or a configured base (brand/README.md). */
+@font-face {
+  font-family: "STL Fix Brand Jost";
+  src: url("../fonts/jost-600.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root:has([data-header-logo][data-header-brand]) {
+  --zdc-header-logo-font: "STL Fix Brand Jost", var(--font-sans);
+  --zdc-header-logo-weight: 600;
+}
+
+html [data-header-logo][data-header-brand],
+html[data-theme-pack] [data-header-logo][data-header-brand] {
+  letter-spacing: normal;
+  text-transform: none;
+  font-style: normal;
+}
+
+html [data-zd-home-hero] [data-zd-site-name] {
+  font-family: "STL Fix Brand Jost", var(--font-sans);
+  font-weight: 600;
+  font-style: normal;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
 /* Override design-token custom properties from the package theme here. */
 :root {
   /* e.g. --color-accent: oklch(0.6 0.2 250); */

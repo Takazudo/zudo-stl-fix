@@ -1,0 +1,20 @@
+{
+  "productName": "zudo-stl-fix",
+  "font": "../../public/fonts/jost-600.woff2",
+  "fontSha256": "fa418d4c46615b4e07e2011eed91a3e399f88bf67bd8bc39e3fee14a04e442b5",
+  "fontWeight": 600,
+  "wordmarkBounds": [
+    15,
+    -16,
+    4753,
+    794
+  ],
+  "lockup": {
+    "width": 699,
+    "height": 128,
+    "symbolSize": 128,
+    "symbolTextGap": 32,
+    "wordmarkInkHeight": 92
+  },
+  "smallSymbolUse": "16\u201332 px; standard above 32 px unless visual context benefits from compact"
+}
