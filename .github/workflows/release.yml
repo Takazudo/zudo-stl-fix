@@ -1,0 +1,51 @@
+name: Release assets
+
+# No macOS runners by owner decision (cost). The macOS arm64 archive is built on a
+# local Apple silicon Mac with scripts/release-macos-local.sh and attached to the
+# Release; this Linux job only verifies the uploaded assets against the tag.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing release tag to verify, e.g. v0.1.0"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.event.release.tag_name || inputs.tag }}
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name || inputs.tag }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.14'
+      - name: Download and verify the locally built macOS archive
+        run: |
+          version=$(python -c 'import plistlib; print(plistlib.load(open("packaging/Info.plist","rb"))["CFBundleShortVersionString"])')
+          if [[ "$TAG" != "v$version" ]]; then
+            echo "::error::Tag $TAG does not match packaging/Info.plist version $version"; exit 1
+          fi
+          commit=$(git rev-parse HEAD)
+          mkdir -p release-assets
+          gh release download "$TAG" --repo "$GITHUB_REPOSITORY" --dir release-assets \
+            --pattern "zudo-stl-fix-${version}-macos-arm64.zip" \
+            --pattern "zudo-stl-fix-${version}-macos-arm64.zip.sha256" || true
+          if ! python scripts/verify_release_asset.py release-assets --version "$version" --commit "$commit"; then
+            echo "::error::Build on an Apple silicon Mac with: scripts/release-macos-local.sh --upload $TAG"
+            exit 1
+          fi

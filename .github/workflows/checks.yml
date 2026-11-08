@@ -9,6 +9,7 @@ on:
       - 'packaging/**'
       - 'Makefile'
       - '.github/workflows/checks.yml'
+      - '.github/workflows/release.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -32,5 +33,5 @@ jobs:
       - run: python -m unittest discover -s tests -p 'test_*.py' -v
       - run: python scripts/verify_fixtures.py --repair
       - run: python engine/worker.py --self-test
-      - run: python -m py_compile scripts/generate_notices.py scripts/smoke_bundle.py
-      - run: bash -n scripts/build-macos.sh
+      - run: python -m py_compile scripts/generate_notices.py scripts/smoke_bundle.py scripts/verify_release_asset.py
+      - run: bash -n scripts/build-macos.sh scripts/release-macos-local.sh
