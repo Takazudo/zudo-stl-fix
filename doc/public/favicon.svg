@@ -1,4 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <rect width="32" height="32" rx="6" fill="#2f6f5e"/>
-  <text x="16" y="23" font-family="system-ui,sans-serif" font-size="20" font-weight="700" fill="white" text-anchor="middle">S</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 512 512" role="img" aria-label="zudo-stl-fix">
+<title>zudo-stl-fix</title>
+<desc>A — Fitted facet. A completed solid with two filled triangular facets in its right face. Seams are transparent.</desc>
+<style>path{fill:#111111}@media(prefers-color-scheme:dark){path{fill:#ffffff}}</style>
+<path fill="currentColor" d="M 256 6.7637 C 247.8279 6.7637 239.6564 9.0167 231.4844 13.5254 L 48.5156 114.4746 C 46.4801 115.5976 44.6189 116.8232 42.8588 118.1086 Q 41.3066 119.2754 43.0526 120.2387 L 248.9954 233.8619 Q 256 237.7266 263.0046 233.8619 L 468.9474 120.2387 Q 470.6934 119.2754 469.1412 118.1086 C 467.3811 116.8232 465.5199 115.5976 463.4844 114.4746 L 280.5156 13.5254 C 272.3436 9.0167 264.1721 6.7637 256 6.7637 Z"/>
+<path fill="currentColor" d="M 24.5205 148.7928 C 24.2013 151.1092 24 153.4951 24 156 L 24 356 C 24 374.6667 32.1715 388.508 48.5156 397.5254 L 231.4844 498.4746 C 233.67 499.6805 235.8557 500.6652 238.0414 501.521 Q 240 502.2559 240 500.1106 L 240 273.4453 Q 240 265.4453 232.9954 261.5807 L 26.7117 147.7693 Q 24.8359 146.7344 24.5205 148.7928 Z"/>
+<path fill="currentColor" d="M 487.8502 155.3195 L 284.6701 491.6175 Q 280.5332 498.4648 287.5378 494.6002 L 463.4844 397.5254 C 479.8285 388.508 488 374.6667 488 356 L 488 156 C 488 155.7751 487.9734 155.5657 487.9594 155.3491 Q 487.9512 155.1523 487.8502 155.3195 Z"/>
+<path fill="currentColor" d="M 439.8997 172.81 L 279.0046 261.5807 Q 272 265.4453 272 273.4453 L 272 450.4434 Q 272 458.4434 276.1369 451.596 L 442.7674 175.7926 Q 446.9043 168.9453 439.8997 172.81 Z"/>
 </svg>
