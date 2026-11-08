@@ -1,6 +1,11 @@
+# Assets-only docs Worker. Deployed only by the deploy job in .github/workflows/docs.yml
+# on pushes to main (no manual deploys, owner decision 2026-11-08).
 name = "zudo-stl-fix-doc"
 compatibility_date = "2026-10-01"
-workers_dev = true
+workers_dev = false
+preview_urls = false
+
+routes = [{ pattern = "zudo-stl-fix.zudolab.dev", custom_domain = true }]
 
 [assets]
 directory = "./dist"

@@ -76,7 +76,7 @@ jobs:
             echo "configured=true" >> "$GITHUB_OUTPUT"
           else
             echo "configured=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::Cloudflare credentials not configured — skipping deploy"
+            echo "::warning::Cloudflare secrets not configured; the docs site was NOT deployed (see docs/cloudflare-setup.md)"
           fi
 
       - if: steps.preflight.outputs.configured == 'true'
