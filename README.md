@@ -14,9 +14,12 @@ smoke-test commands. No public release, Developer ID signing, or notarization ha
 been performed.
 
 Current status (2026-11-08): the packaged app has passed the native gate and
-interactive acceptance, including live VoiceOver, on arm64 only: Apple A18 Pro
-(macOS 27.2) and Apple M4 (macOS 27.0.1).
-macOS 14 and Intel x86_64 have not been exercised and remain open in issue #1.
+interactive acceptance, including live VoiceOver, on arm64: Apple A18 Pro
+(macOS 27.2) and Apple M4 (macOS 27.0.1). The x86_64 build has passed the package
+gate and the core packaged-app rows **under Rosetta 2 on an Apple M4**, which is the
+accepted x86_64 verification (no physical Intel Mac is required; see
+[docs/ACCEPTANCE.md](docs/ACCEPTANCE.md)). macOS 14 runtime has not been exercised
+and remains open in issue #1.
 
 ## Use
 

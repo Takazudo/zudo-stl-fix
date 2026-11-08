@@ -1,10 +1,11 @@
 # Implementation verification — 2026-10-16 (Asia/Tokyo)
 
-> **Evidence index (current status, updated 2026-11-08, M4 run added).** Records are dated and
+> **Evidence index (current status, updated 2026-11-08, x86_64 under Rosetta 2 added).** Records are dated and
 > kept as written. Newest first:
 >
 > | Date | Record | What it covers |
 > |---|---|---|
+> | 2026-11-08 | [`macos-x86_64-rosetta-m4-2026-11-08.md`](macos-x86_64-rosetta-m4-2026-11-08.md) | **x86_64 under Rosetta 2 on Apple M4** (macOS 27.0.1): package gate on `cc2ac93` (67 tests, real-worker test passed) and core packaged-app rows; translated processes confirmed. Accepted x86_64 evidence; not Intel hardware |
 > | 2026-11-08 | [`macos-m4-2026-11-08.md`](macos-m4-2026-11-08.md) | **Apple M4** (macOS 27.0.1): package gate on `23bbfaa` (same production inputs as `fb20af9`) and full packaged-app acceptance incl. live VoiceOver. No regression; evidence only |
 > | 2026-11-08 | [`macos-arm64-2026-11-08.md`](macos-arm64-2026-11-08.md) | Combined package gate on `fb20af9` (#27 CLI alias safety, #28 collision performance, contrast and focus), packaged-app acceptance of the affected rows, and **live VoiceOver** |
 > | 2026-11-07 | [`macos-arm64-2026-11-07-acceptance.md`](macos-arm64-2026-11-07-acceptance.md) | Broad Finder/UI acceptance on builds of `5ee4481` and `8ae8222` |
@@ -12,8 +13,9 @@
 > | 2026-10-16 | [`macos-arm64.md`](macos-arm64.md) | First arm64 native build and partial interactive run |
 > | 2026-10-16 | this file | Linux implementation baseline |
 >
-> Still pending (issue #1): **macOS 14 runtime** and **Intel x86_64 build/runtime**.
-> Only arm64 on macOS 27.x has been exercised: Apple A18 Pro (27.2) and Apple M4 (27.0.1). A plain `swift test` skips the
+> Still pending (issue #1): **macOS 14 runtime**. x86_64 is verified under Rosetta 2 on
+> Apple M4 (owner decision 2026-11-08; a physical Intel Mac is not required). Only macOS 27.x
+> has been exercised: arm64 on Apple A18 Pro (27.2) and Apple M4 (27.0.1), x86_64 translated on the M4. A plain `swift test` skips the
 > real-worker test unless `ZUDO_WORKER_PYTHON` is set. `scripts/build-macos.sh` sets
 > it, so a valid packaging record shows that test passed and was not skipped.
 

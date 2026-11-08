@@ -4,7 +4,7 @@
 > current state, see the evidence index in
 > [`verification/implementation/README.md`](../verification/implementation/README.md)
 > and epic #22. Native arm64 acceptance (including live VoiceOver) is recorded on
-> macOS 27.2 (Apple A18 Pro) and macOS 27.0.1 (Apple M4). macOS 14 and Intel x86_64 remain pending in issue #1.
+> macOS 27.2 (Apple A18 Pro) and macOS 27.0.1 (Apple M4). x86_64 is verified under Rosetta 2 on Apple M4 (the accepted method; no physical Intel Mac). macOS 14 runtime remains pending in issue #1.
 
 ## Milestone 1 — Reproduce and adapt the engine
 
