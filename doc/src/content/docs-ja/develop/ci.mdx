@@ -48,4 +48,4 @@ scripts/release-macos-local.sh --upload v0.1.0
 
 このワークフローは、このドキュメントサイトをビルドします。`doc/**` を変更するプルリクエストと `main` へのプッシュで、Node.js 24 でサイトをビルドし、`check:html`、`check:links`、`wrangler` のドライランを実行します。
 
-デプロイ先は Cloudflare Workers Static Assets に設定されています。`main` へのプッシュ（または手動実行）では、`CLOUDFLARE_API_TOKEN` と `CLOUDFLARE_ACCOUNT_ID` のシークレットがある場合にだけ、デプロイのジョブがサイトを公開します。シークレットがなければデプロイのステップは通知を出してスキップされ、ジョブ自体は成功します。そのため、デプロイのジョブが成功していても公開されたとは限りません。ジョブのログを確認してください。セットアップ手順はリポジトリ内の `docs/cloudflare-setup.md` にあります。
+サイトの公開先は https://zudo-stl-fix.zudolab.dev です（Cloudflare Workers Static Assets、カスタムドメイン）。公開するのはデプロイのジョブだけで、`main` へのプッシュか、`main` での Run workflow のときに動きます。手元のマシンからはデプロイしません。ジョブには `CLOUDFLARE_API_TOKEN` と `CLOUDFLARE_ACCOUNT_ID` のシークレットが必要です。シークレットがなければデプロイのステップは警告を出してスキップされ、ジョブ自体は成功します。そのため、デプロイのジョブが成功していても公開されたとは限りません。ジョブのログを確認してください。セットアップ手順はリポジトリ内の `docs/cloudflare-setup.md` にあります。

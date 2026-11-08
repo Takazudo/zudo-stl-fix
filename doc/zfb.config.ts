@@ -4,6 +4,7 @@ import { zudoDoc } from "@takazudo/zudo-doc/config";
 export default defineConfig(
   zudoDoc({
     siteName: "zudo-stl-fix",
+    siteUrl: "https://zudo-stl-fix.zudolab.dev",
     siteDescription:
       "Local, conservative STL check and repair for macOS: drop files, review the report, save verified copies.",
     locales: {
