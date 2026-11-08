@@ -98,13 +98,25 @@ app (pid 76958, flags `0x34084`) and its worker (pid 76975, `0x34004`).
 | Queued cancellation | `sphere-7` canceled while **Queued** → **Canceled**. It never started, and `sphere-5`/`sphere-6` finished |
 | No unnecessary copies | Before quitting, the private workspace held 18 `input.stl`, 18 `report.json` and exactly **2** `candidate.stl` (the rails). No snapshot remained for error or canceled jobs |
 | Quit and cleanup | A quit Apple Event exited the app and worker, and `$TMPDIR/zudo-stl-fix-<UUID>` was removed. Saved outputs remained |
-| Integrity | Acceptance copies and `fixtures/originals` unchanged (`diff` of SHA-256 lists), `verify_fixtures.py --hashes-only` 13/13 |
+| Same basename | Second session (app pid 1587, translated): `same A/part.stl` (rail copy) → **Repair ready**; `same B/part.stl` (bar copy) → **No repair needed**. Separate rows |
+| Add while busy | While `sphere-8` was **Checking**, `late-sphere.stl` and both `part.stl` were added through LaunchServices and joined as **Queued**. All seven jobs finished |
+| Runtime network | 76 `lsof -nP -i` samples of the app and its workers during those jobs found **0** sockets. This is sampling, not a packet capture |
+| Bundled dependencies | A running x86_64 worker had 79 native libraries / Python files open, all inside `Contents/Helpers/STLWorker.app/` or system paths. Environment `PATH=/usr/bin:/bin` |
+| Quit guard | With the rail copy still **Repair ready**, quitting showed "Quit and discard unsaved work?" (Keep Working / Quit). **Quit** exited the app and worker and removed the workspace |
+| Integrity | Acceptance copies and `fixtures/originals` unchanged (`diff` of SHA-256 lists, checked after both sessions), `verify_fixtures.py --hashes-only` 13/13 |
 
-Not repeated under Rosetta, because none of these depend on the CPU architecture
-of a native SwiftUI app and they were covered natively on arm64 (`macos-m4-2026-11-08.md`):
-live VoiceOver speech, contrast measurement, keyboard traversal, read-only
-destinations, 10,000-name collision exhaustion, and Finder drag-and-drop. The
-runtime network check was not repeated.
+**Inherited, not run under Rosetta** (allowed by the `docs/ACCEPTANCE.md` architecture
+policy; same app sources). Source: the native arm64 acceptance `macos-m4-2026-11-08.md`
+on `23bbfaa`. `git diff 23bbfaa cc2ac93 -- app engine packaging scripts Makefile` touches only
+`engine/worker.py` (#32/#33 diagnostics), `app/Sources/ZudoSTLFixCore/Files.swift` (#35 output naming),
+its tests and `scripts/build-macos.sh`. The presentation layer `app/Sources/ZudoSTLFix/App.swift` and
+`packaging/` are unchanged:
+- Finder launch and drag-and-drop. This run used LaunchServices `open`.
+- Keyboard access, live VoiceOver, light/dark contrast, long names, minimum and resized windows, and the menu/open action.
+
+Read-only destinations and case-insensitive collisions and exhaustion are covered by the
+x86_64 XCTest run above (`testReadOnlyDestinationFailsWithoutOutput`,
+`testExhaustedCaseInsensitiveNamesLeaveNoDebrisAndStayRetryable` and related tests, all passed).
 
 ## Native arm64 regression check
 
@@ -127,5 +139,6 @@ keystrokes (LaunchServices open, `AXPress`, quit Apple Event). No product impact
 
 ## Still open on #1
 
-**macOS 14 runtime** needs a macOS 14 host. The x86_64 item is satisfied under the
-amended requirement by this record.
+**macOS 14 runtime** needs a macOS 14 host. Under the amended requirement, the x86_64
+item is covered by this record: rows run under Rosetta, plus the presentation-only
+rows inherited from native arm64 as listed above.

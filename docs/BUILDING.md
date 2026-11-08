@@ -147,8 +147,8 @@ Before calling the app verified, complete the interactive matrix in
 `ACCEPTANCE.md`: Finder drop/open, all eleven originals, details and visible
 warnings, per-file/batch save, collision/permission failures, cancellation and
 queue continuation, Reveal, accessibility, appearance, resize and quit behavior.
-Test the oldest offered OS (macOS 14) at least once, and each offered architecture
-(x86_64 under Rosetta 2 on Apple silicon). Record observed results;
+Test the oldest offered OS (macOS 14) at least once, and each offered architecture:
+arm64 natively, x86_64 under Rosetta 2 on Apple silicon. Record observed results;
 the deployment setting alone is not proof of macOS 14 runtime support.
 
 ## Notices and future distribution
