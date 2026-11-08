@@ -5,6 +5,7 @@
 >
 > | Date | Record | What it covers |
 > |---|---|---|
+> | 2026-11-08 | [`macos-arm64-27-floor-2026-11-08.md`](macos-arm64-27-floor-2026-11-08.md) | **Platform floor raised to macOS 27, arm64 only**: package gate on `36026fb` (67 tests, real-worker test passed), `minos 27.0`, x86_64 build refused, packaged-app originals and save on macOS 27.0.1 |
 > | 2026-11-08 | [`macos-x86_64-rosetta-m4-2026-11-08.md`](macos-x86_64-rosetta-m4-2026-11-08.md) | **x86_64 under Rosetta 2 on Apple M4** (macOS 27.0.1): package gate on `cc2ac93` and core packaged-app rows. Historical: x86_64 was dropped later the same day |
 > | 2026-11-08 | [`macos-m4-2026-11-08.md`](macos-m4-2026-11-08.md) | **Apple M4** (macOS 27.0.1): package gate on `23bbfaa` (same production inputs as `fb20af9`) and full packaged-app acceptance incl. live VoiceOver. No regression; evidence only |
 > | 2026-11-08 | [`macos-arm64-2026-11-08.md`](macos-arm64-2026-11-08.md) | Combined package gate on `fb20af9` (#27 CLI alias safety, #28 collision performance, contrast and focus), packaged-app acceptance of the affected rows, and **live VoiceOver** |
