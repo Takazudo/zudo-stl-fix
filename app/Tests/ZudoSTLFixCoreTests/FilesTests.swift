@@ -202,6 +202,52 @@ final class FilesTests: XCTestCase {
         XCTAssertEqual(Set(try FileManager.default.contentsOfDirectory(atPath: full.path)), before)
     }
 
+    // APFS allows 255 characters per name; a legal "<stem>.stl" input of 250-255 characters
+    // could otherwise never be saved, and -fixed-2 / -report names overflow even sooner.
+    func testOverlongOutputNamesShareOneShortenedStemThatFits() async throws {
+        let source = try temporaryDirectory(), destination = try temporaryDirectory()
+        let limit = pathconf(destination.path, _PC_NAME_MAX)
+        let candidate = try artifact(in: source)
+        let report = try artifact(in: source, name: "report.json", text: "{\"warnings\":[]}")
+        for stem in [String(repeating: "a", count: 251), String(repeating: "レ", count: 250)] {
+            let input = destination.appendingPathComponent(stem + ".stl")
+            try Data("original".utf8).write(to: input)
+            let exporter = Exporter()
+            let first = try await exporter.save(candidate: candidate, stem: stem, directory: destination, protectedInputs: [input])
+            let second = try await exporter.save(candidate: candidate, stem: stem, directory: destination, protectedInputs: [input])
+            let json = try await exporter.exportReport(candidate: report, stem: stem, directory: destination, protectedInputs: [input])
+            let base = String(first.lastPathComponent.dropLast("-fixed.stl".count))
+            XCTAssertTrue(stem.hasPrefix(base) && base.count < stem.count, first.lastPathComponent)
+            XCTAssertEqual(second.lastPathComponent, base + "-fixed-2.stl")
+            XCTAssertEqual(json.lastPathComponent, base + "-report.json")
+            // Enough room for every suffix and label, so the shared stem never changes.
+            XCTAssertLessThanOrEqual((base + "-report-10000.json").count, limit)
+            for saved in [first, second] {
+                try FileVerification.verify(VerifiedArtifact(url: saved, sha256: candidate.sha256, byteSize: candidate.byteSize))
+            }
+            try FileVerification.verify(VerifiedArtifact(url: json, sha256: report.sha256, byteSize: report.byteSize))
+            XCTAssertEqual(try Data(contentsOf: input), Data("original".utf8))
+        }
+        XCTAssertEqual(try FileManager.default.contentsOfDirectory(atPath: destination.path).count, 8)
+        XCTAssertFalse(try FileManager.default.contentsOfDirectory(atPath: destination.path).contains { $0.hasPrefix(".zudo") })
+    }
+
+    func testShortenedStemDropsTrailingSeparatorsAndRespectsExistingNames() async throws {
+        let source = try temporaryDirectory(), destination = try temporaryDirectory()
+        let candidate = try artifact(in: source)
+        // Spaces and dots fill the region a cut can land in; the shortened stem must not end in them.
+        let stem = String(repeating: "b", count: 200) + String(repeating: " .", count: 25)
+        let first = try await Exporter().save(candidate: candidate, stem: stem, directory: destination, protectedInputs: [])
+        XCTAssertEqual(first.lastPathComponent, String(repeating: "b", count: 200) + "-fixed.stl")
+        let kept = destination.appendingPathComponent(String(repeating: "B", count: 200) + "-FIXED-2.STL")
+        try Data("keep".utf8).write(to: kept)
+        let third = try await Exporter().save(candidate: candidate, stem: stem, directory: destination, protectedInputs: [])
+        XCTAssertEqual(third.lastPathComponent, String(repeating: "b", count: 200) + "-fixed-3.stl")
+        XCTAssertEqual(try Data(contentsOf: kept), Data("keep".utf8))
+        let short = try await Exporter().save(candidate: candidate, stem: "part", directory: destination, protectedInputs: [])
+        XCTAssertEqual(short.lastPathComponent, "part-fixed.stl")
+    }
+
     func testOriginalHardLinkCannotMasqueradeAsCandidate() async throws {
         let source = try temporaryDirectory(), destination = try temporaryDirectory()
         let original = try artifact(in: source)
