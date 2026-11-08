@@ -34,4 +34,4 @@ https://developer.apple.com/developer-id/
 https://developer.apple.com/documentation/security/notarizing-macos-software-before-distribution
 Used to separate local developer builds from signed/notarized public distribution.
 
-The native stack, macOS 14 development floor, proposed caps, queue policy, UI layout and CI cadence are project decisions, not measured properties of an existing app. Current deployment floors, supported package versions and signing requirements must be rechecked when implementing/releasing.
+The native stack, macOS 27 / arm64-only floor (formerly macOS 14), proposed caps, queue policy, UI layout and CI cadence are project decisions, not measured properties of an existing app. Current deployment floors, supported package versions and signing requirements must be rechecked when implementing/releasing.

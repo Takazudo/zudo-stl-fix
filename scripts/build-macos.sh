@@ -10,12 +10,15 @@ cd "$ROOT"
 PYTHON=${PYTHON:-python3.12}
 export ZUDO_BUILD_ARCH
 ZUDO_BUILD_ARCH=$("$PYTHON" -c 'import platform; print(platform.machine())')
-case "$ZUDO_BUILD_ARCH" in arm64|x86_64) ;; *) echo "Unsupported architecture" >&2; exit 2 ;; esac
+# Product floor (owner decision 2026-11-08): macOS 27 on Apple silicon only.
+[[ $ZUDO_BUILD_ARCH == arm64 ]] || { echo "Only arm64 is supported (macOS 27 runs only on Apple silicon)." >&2; exit 2; }
+[[ $(sysctl -n sysctl.proc_translated 2>/dev/null || echo 0) == 0 ]] || { echo "Do not build under Rosetta; use a native arm64 shell." >&2; exit 2; }
+(( $(sw_vers -productVersion | cut -d. -f1) >= 27 )) || { echo "macOS 27 or later is required to build and test." >&2; exit 2; }
 "$PYTHON" -c 'import sys; assert sys.version_info[:3] == (3,12,14), "Use CPython 3.12.14 for the pinned build"'
 if [[ $(uname -m) != "$ZUDO_BUILD_ARCH" ]]; then
   echo "Build Python must match the active shell architecture." >&2; exit 2
 fi
-export MACOSX_DEPLOYMENT_TARGET=14.0
+export MACOSX_DEPLOYMENT_TARGET=27.0
 OUT="$ROOT/build/macos-$ZUDO_BUILD_ARCH"
 mkdir -p "$OUT"
 "$PYTHON" -m venv --clear "$OUT/venv"
@@ -25,15 +28,7 @@ PY="$OUT/venv/bin/python"
 "$PY" -m PyInstaller --noconfirm --clean --distpath "$OUT/helper" --workpath "$OUT/pyinstaller" packaging/worker.spec
 # Point the opt-in real-worker XCTest at this build's own hash-locked venv so
 # the packaging run exercises engine/worker.py instead of skipping it.
-if [[ $(sysctl -n sysctl.proc_translated 2>/dev/null || echo 0) == 1 ]]; then
-  # Under Rosetta 2, swift test lists tests with an arm64-only helper that cannot load
-  # an x86_64 bundle; run the built bundle with xctest's own x86_64 slice instead.
-  swift build --package-path app --build-tests --arch "$ZUDO_BUILD_ARCH"
-  TESTS=$(swift build --package-path app --build-tests --arch "$ZUDO_BUILD_ARCH" --show-bin-path)/ZudoSTLFixCoreTests.xctest
-  ZUDO_WORKER_PYTHON="$PY" arch "-$ZUDO_BUILD_ARCH" "$(xcrun --find xctest)" "$TESTS"
-else
-  ZUDO_WORKER_PYTHON="$PY" swift test --package-path app
-fi
+ZUDO_WORKER_PYTHON="$PY" swift test --package-path app
 swift build --package-path app -c release --arch "$ZUDO_BUILD_ARCH"
 BIN=$(swift build --package-path app -c release --arch "$ZUDO_BUILD_ARCH" --show-bin-path)
 # Build into a new private directory; never recursively delete a user-selected path.
