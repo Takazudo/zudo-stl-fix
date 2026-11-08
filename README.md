@@ -15,11 +15,9 @@ been performed.
 
 Current status (2026-11-08): the packaged app has passed the native gate and
 interactive acceptance, including live VoiceOver, on arm64: Apple A18 Pro
-(macOS 27.2) and Apple M4 (macOS 27.0.1). The x86_64 build has passed the package
-gate and the core packaged-app rows **under Rosetta 2 on an Apple M4**, which is the
-accepted x86_64 verification (no physical Intel Mac is required; see
-[docs/ACCEPTANCE.md](docs/ACCEPTANCE.md)). macOS 14 runtime has not been exercised
-and remains open in issue #1.
+(macOS 27.2) and Apple M4 (macOS 27.0.1). Supported platform: **macOS 27 or later on Apple silicon
+(arm64) only** (owner decision 2026-11-08; see [docs/ACCEPTANCE.md](docs/ACCEPTANCE.md)).
+Older macOS versions and Intel/x86_64 are not supported.
 
 ## Use
 
@@ -61,9 +59,8 @@ make package-local
 
 The package script builds an actual `.app` with an architecture-matched frozen
 helper, checks nested code, exercises the relocated helper, and creates a local
-archive. Artifacts are labeled by the architecture built. macOS 14 is the proposed
-deployment floor; an SDK setting is not evidence of testing on that OS. There is
-no universal2 claim. See [BUILDING](docs/BUILDING.md) for the exact Python version,
+archive. The only product is arm64 with a macOS 27.0 deployment
+target. There is no universal2 or x86_64 product. See [BUILDING](docs/BUILDING.md) for the exact Python version,
 pinned dependencies, prerequisites, and remaining interactive checks.
 
 Linux CI runs engine, worker, and fixture checks on relevant pushes only. Native

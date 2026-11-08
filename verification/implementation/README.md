@@ -1,11 +1,11 @@
 # Implementation verification — 2026-10-16 (Asia/Tokyo)
 
-> **Evidence index (current status, updated 2026-11-08, x86_64 under Rosetta 2 added).** Records are dated and
+> **Evidence index (current status, updated 2026-11-08: platform is macOS 27+ on arm64 only).** Records are dated and
 > kept as written. Newest first:
 >
 > | Date | Record | What it covers |
 > |---|---|---|
-> | 2026-11-08 | [`macos-x86_64-rosetta-m4-2026-11-08.md`](macos-x86_64-rosetta-m4-2026-11-08.md) | **x86_64 under Rosetta 2 on Apple M4** (macOS 27.0.1): package gate on `cc2ac93` (67 tests, real-worker test passed) and core packaged-app rows; translated processes confirmed. Accepted x86_64 evidence; not Intel hardware |
+> | 2026-11-08 | [`macos-x86_64-rosetta-m4-2026-11-08.md`](macos-x86_64-rosetta-m4-2026-11-08.md) | **x86_64 under Rosetta 2 on Apple M4** (macOS 27.0.1): package gate on `cc2ac93` and core packaged-app rows. Historical: x86_64 was dropped later the same day |
 > | 2026-11-08 | [`macos-m4-2026-11-08.md`](macos-m4-2026-11-08.md) | **Apple M4** (macOS 27.0.1): package gate on `23bbfaa` (same production inputs as `fb20af9`) and full packaged-app acceptance incl. live VoiceOver. No regression; evidence only |
 > | 2026-11-08 | [`macos-arm64-2026-11-08.md`](macos-arm64-2026-11-08.md) | Combined package gate on `fb20af9` (#27 CLI alias safety, #28 collision performance, contrast and focus), packaged-app acceptance of the affected rows, and **live VoiceOver** |
 > | 2026-11-07 | [`macos-arm64-2026-11-07-acceptance.md`](macos-arm64-2026-11-07-acceptance.md) | Broad Finder/UI acceptance on builds of `5ee4481` and `8ae8222` |
@@ -13,9 +13,10 @@
 > | 2026-10-16 | [`macos-arm64.md`](macos-arm64.md) | First arm64 native build and partial interactive run |
 > | 2026-10-16 | this file | Linux implementation baseline |
 >
-> Still pending (issue #1): **macOS 14 runtime**. x86_64 is verified under Rosetta 2 on
-> Apple M4 (owner decision 2026-11-08; a physical Intel Mac is not required). Only macOS 27.x
-> has been exercised: arm64 on Apple A18 Pro (27.2) and Apple M4 (27.0.1), x86_64 translated on the M4. A plain `swift test` skips the
+> Supported platform since 2026-11-08 (owner decision): **macOS 27 or later on Apple silicon (arm64) only**.
+> Older macOS and x86_64 are not supported, so no macOS 14 or Intel evidence is required. Native arm64 on
+> macOS 27.x has been exercised on Apple A18 Pro (27.2) and Apple M4 (27.0.1). The x86_64/Rosetta record
+> below predates this decision and is history, not a supported configuration. A plain `swift test` skips the
 > real-worker test unless `ZUDO_WORKER_PYTHON` is set. `scripts/build-macos.sh` sets
 > it, so a valid packaging record shows that test passed and was not skipped.
 

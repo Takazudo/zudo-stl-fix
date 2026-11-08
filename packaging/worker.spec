@@ -27,5 +27,5 @@ exe = EXE(
 coll = COLLECT(exe, a.binaries, a.datas, strip=False, upx=False, name="stl-worker")
 app = BUNDLE(
     coll, name="STLWorker.app", bundle_identifier="com.takazudo.zudostlfix.worker",
-    info_plist={"LSBackgroundOnly": True, "LSMinimumSystemVersion": "14.0"},
+    info_plist={"LSBackgroundOnly": True, "LSMinimumSystemVersion": "27.0"},
 )
