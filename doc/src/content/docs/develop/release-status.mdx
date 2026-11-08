@@ -1,12 +1,12 @@
 ---
 title: Release status
-description: Only local ad-hoc builds exist; signing and notarization are not done.
+description: Releases are ad-hoc signed builds on GitHub Releases; Developer ID signing and notarization are not done.
 sidebar_position: 6
 ---
 
-## No public release exists
+## Releases are on GitHub Releases
 
-No public release has been made yet. Builds are local: `scripts/build-macos.sh` makes development builds, and `scripts/release-macos-local.sh` makes the release archive `zudo-stl-fix-<version>-macos-arm64.zip` (macOS 27 or later, Apple silicon only) and attaches it to a draft GitHub Release for the owner to publish. See [Continuous integration](./ci.mdx).
+The app is published on [GitHub Releases](https://github.com/Takazudo/zudo-stl-fix/releases) as `zudo-stl-fix-<version>-macos-arm64.zip` (macOS 27 or later, Apple silicon only) with a `.sha256` file. Every build is made on a local Apple silicon Mac: `scripts/build-macos.sh` makes development builds, and `scripts/release-macos-local.sh` makes the release archive and attaches it to a draft GitHub Release. The repository's `/l-make-release` Claude Code skill runs the whole flow (version, build, draft, notes, publish, verification). See [Continuous integration](./ci.mdx).
 
 These archives are ad-hoc signed only: not Developer ID signed and not notarized, so Gatekeeper asks for confirmation on first launch. A development launch is not evidence that a downloaded copy would pass Gatekeeper.
 

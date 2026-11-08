@@ -1,12 +1,12 @@
 ---
 title: リリース状況
-description: ビルドはローカルのアドホック署名のみで、公開リリース、署名、公証はまだ行っていません。
+description: リリースは GitHub Releases 上のアドホック署名ビルドです。Developer ID による署名と公証はまだ行っていません。
 sidebar_position: 6
 ---
 
-## 公開リリースは存在しません
+## リリースは GitHub Releases で公開しています
 
-公開リリースはまだ行っていません。ビルドはすべてローカルで行います。`scripts/build-macos.sh` は開発用のビルドを作り、`scripts/release-macos-local.sh` はリリース用のアーカイブ `zudo-stl-fix-<version>-macos-arm64.zip`（macOS 27 以降、Apple silicon のみ）を作って GitHub Release の下書きに添付し、オーナーがそれを公開します。[継続的インテグレーション](./ci.mdx)を参照してください。
+アプリは [GitHub Releases](https://github.com/Takazudo/zudo-stl-fix/releases) で `zudo-stl-fix-<version>-macos-arm64.zip`（macOS 27 以降、Apple silicon のみ）と `.sha256` ファイルとして公開しています。ビルドはすべてローカルの Apple silicon Mac で行います。`scripts/build-macos.sh` は開発用のビルドを作り、`scripts/release-macos-local.sh` はリリース用のアーカイブを作って GitHub Release の下書きに添付します。リポジトリの Claude Code スキル `/l-make-release` が、バージョン決定、ビルド、下書き、リリースノート、公開、検証までの流れ全体を実行します。[継続的インテグレーション](./ci.mdx)を参照してください。
 
 これらのアーカイブはアドホック署名のみで、Developer ID による署名も公証もされていないため、初回起動時に Gatekeeper が確認を求めます。開発環境で起動できたからといって、ダウンロードしたコピーが Gatekeeper を通過する証拠にはなりません。
 
