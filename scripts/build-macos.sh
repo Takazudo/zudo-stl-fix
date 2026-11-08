@@ -25,7 +25,15 @@ PY="$OUT/venv/bin/python"
 "$PY" -m PyInstaller --noconfirm --clean --distpath "$OUT/helper" --workpath "$OUT/pyinstaller" packaging/worker.spec
 # Point the opt-in real-worker XCTest at this build's own hash-locked venv so
 # the packaging run exercises engine/worker.py instead of skipping it.
-ZUDO_WORKER_PYTHON="$PY" swift test --package-path app
+if [[ $(sysctl -n sysctl.proc_translated 2>/dev/null || echo 0) == 1 ]]; then
+  # Under Rosetta 2, swift test lists tests with an arm64-only helper that cannot load
+  # an x86_64 bundle; run the built bundle with xctest's own x86_64 slice instead.
+  swift build --package-path app --build-tests --arch "$ZUDO_BUILD_ARCH"
+  TESTS=$(swift build --package-path app --build-tests --arch "$ZUDO_BUILD_ARCH" --show-bin-path)/ZudoSTLFixCoreTests.xctest
+  ZUDO_WORKER_PYTHON="$PY" arch "-$ZUDO_BUILD_ARCH" "$(xcrun --find xctest)" "$TESTS"
+else
+  ZUDO_WORKER_PYTHON="$PY" swift test --package-path app
+fi
 swift build --package-path app -c release --arch "$ZUDO_BUILD_ARCH"
 BIN=$(swift build --package-path app -c release --arch "$ZUDO_BUILD_ARCH" --show-bin-path)
 # Build into a new private directory; never recursively delete a user-selected path.
