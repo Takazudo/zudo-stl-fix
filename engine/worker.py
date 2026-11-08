@@ -177,13 +177,13 @@ class JobFiles:
                 pass
 
 
-def could_be_ascii_stl(raw):
-    """False only when the strict ASCII loader is certain to reject these bytes."""
-    if not raw.isascii():
-        return False
+def ascii_rejection(raw):
+    """Why the strict ASCII loader is certain to reject these bytes, or None if it might not."""
     # Same whitespace set as str.split()/splitlines() for ASCII text in the loader.
     start = re.match(rb"[\s\x1c-\x1f]*", raw).end()
-    return start == len(raw) or raw[start:start + 5].lower() == b"solid"
+    if start < len(raw) and raw[start:start + 5].lower() != b"solid":
+        return "binary"
+    return None if raw.isascii() else "non-ascii text"
 
 
 def preflight(raw, max_faces):
@@ -195,10 +195,15 @@ def preflight(raw, max_faces):
             if count > max_faces:
                 raise d.ResourceLimit("Binary STL exceeds the face limit")
             return
-        if not could_be_ascii_stl(raw):
+        rejection = ascii_rejection(raw)
+        if rejection:
             problem = "truncated" if len(raw) < expected else "longer than declared (trailing data or a damaged header)"
-            raise ValueError(f"Malformed binary STL: the header declares {count} facets ({expected} bytes) "
-                             f"but the file has {len(raw)} bytes; it is {problem}")
+            binary = (f"the header declares {count} facets ({expected} bytes) "
+                      f"but the file has {len(raw)} bytes; it is {problem}")
+            if rejection == "binary":
+                raise ValueError(f"Malformed binary STL: {binary}")
+            raise ValueError("Malformed STL: it begins like ASCII STL text but contains non-ASCII bytes, "
+                             f"which the strict ASCII parser does not accept; read as binary STL, {binary}")
     facets, lines = 0, 0
     for line in io.BytesIO(raw):
         lines += 1

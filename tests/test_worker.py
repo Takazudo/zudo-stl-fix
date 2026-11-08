@@ -146,10 +146,10 @@ class WorkerTests(unittest.TestCase):
             with self.assertRaises(d.ResourceLimit):
                 w.preflight(raw, 1)
 
-    def assert_malformed_binary(self, code, result, problem):
+    def assert_malformed_binary(self, code, result, problem, kind='Malformed binary STL'):
         self.assertNotEqual(code, 0)
         self.assertEqual((result['outcome'], result['error']['code']), ('error', 'invalid_input'))
-        self.assertIn('Malformed binary STL', result['error']['message'])
+        self.assertIn(kind, result['error']['message'])
         self.assertIn(problem, result['error']['message'])
         self.assertLessEqual(len(result['error']['message']), 1024)
         self.assertIsNone(result['candidate'])
@@ -205,7 +205,14 @@ class WorkerTests(unittest.TestCase):
         self.assertEqual(result['summary']['before']['format'], 'binary STL')
         self.input.write_bytes(header + self.raw[80:-1])  # a solid prefix alone does not force ASCII
         (self.root / 'report.json').unlink()
-        self.assert_malformed_binary(*self.execute(), 'truncated')
+        self.assert_malformed_binary(*self.execute(), 'truncated', 'contains non-ASCII bytes')
+
+    def test_non_ascii_ascii_stl_is_not_called_truncated_binary(self):
+        text = d.trimesh.creation.box().export(file_type='stl_ascii').replace('solid', 'solid 日本 語', 1)
+        self.input.write_bytes(text.encode())
+        code, result = self.execute()
+        self.assert_malformed_binary(code, result, 'begins like ASCII STL text', 'Malformed STL')
+        self.assertNotIn('Malformed binary STL', result['error']['message'])
 
     def test_ascii_like_mismatch_keeps_ascii_bounds(self):
         for raw in [b' \r\n\x0bSOLID x\n' + b'a' * 5000, b'solid x\n' + b'facet normal 0 0 1\n' * 5]:
