@@ -119,8 +119,11 @@ The script runs the full package gate (`build-macos.sh`), writes
 `build/release/zudo-stl-fix-<version>-macos-arm64.zip` and its `.sha256`, verifies them,
 and attaches them to the Release for the tag. If that Release does not exist yet it is
 created as a **draft** at HEAD. Without `--upload` it only writes the files. On a
-managed machine, wrap it in the heavy-run guard like any package gate. Review the
-draft, publish it, and check that `release.yml` passes. The archive is ad hoc signed
+managed machine, wrap it in the heavy-run guard like any package gate. The script refuses
+to upload unless the Release is an unpublished draft targeting the same commit, and it
+stops if a local tag of that name differs from GitHub's (`git fetch --tags` refuses to
+overwrite it; delete the stale local tag). Review the draft, publish it, and check that
+`release.yml` passes. To replace assets later, make a new version instead. The archive is ad hoc signed
 only (no Developer ID signature or notarization), so Gatekeeper asks for
 confirmation on first launch.
 

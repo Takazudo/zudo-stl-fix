@@ -19,17 +19,17 @@
 # The app is ad hoc signed only: not Developer ID signed or notarized.
 set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
-cd "$ROOT"
 
 upload_tag=""
 out_dir="$ROOT/build/release"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --upload) upload_tag=${2:?--upload needs a tag}; shift 2 ;;
-    --out-dir) out_dir=${2:?--out-dir needs a path}; shift 2 ;;
+    --out-dir) mkdir -p "${2:?--out-dir needs a path}"; out_dir=$(cd "$2" && pwd); shift 2 ;;
     *) echo "Unknown argument: $1" >&2; exit 2 ;;
   esac
 done
+cd "$ROOT"
 
 version=$(plutil -extract CFBundleShortVersionString raw packaging/Info.plist)
 archive="zudo-stl-fix-${version}-macos-arm64.zip"
@@ -43,6 +43,13 @@ if [[ -n $upload_tag ]]; then
   [[ -n $(git branch -r --contains "$head") ]] || { echo "Push $head first; the Release must target a commit on GitHub." >&2; exit 2; }
   if tagged=$(git rev-parse --verify --quiet "refs/tags/$upload_tag^{commit}"); then
     [[ $tagged == "$head" ]] || { echo "$upload_tag points to $tagged, not HEAD $head." >&2; exit 2; }
+  fi
+  # Only a draft created for this exact commit may receive assets; published assets are
+  # verified once by release.yml on publish, so they must not be replaced afterwards.
+  if existing=$(gh release view "$upload_tag" --json isDraft,targetCommitish --jq '"\(.isDraft) \(.targetCommitish)"' 2>/dev/null); then
+    [[ $existing == "true $head" ]] || {
+      echo "Release $upload_tag exists as '$existing' (isDraft targetCommitish); need an unpublished draft targeting $head." >&2
+      echo "Delete or retarget that draft, or bump the version for a new release." >&2; exit 2; }
   fi
 fi
 
