@@ -6,8 +6,8 @@ sidebar_position: 5
 
 zudo-stl-fix がどのように構成され、そのエンジンが何を保証するかについての技術リファレンスです。ネイティブの macOS アプリと CLI は 1 つの Python ジオメトリエンジンを共有しており、アプリはそれを別のヘルパープロセスで実行します。
 
-:::info[macOS での検証は未完了です]
-このリファレンスは実装済みのソースについて説明しています。macOS でのネイティブアプリのコンパイル、パッケージング、実行は別途検証する予定で、まだ完了していません。進捗は [issue #1](https://github.com/Takazudo/zudo-stl-fix/issues/1) で確認してください。
+:::info[サポート対象のプラットフォーム]
+ネイティブアプリがサポートするのは Apple silicon（arm64）上の macOS 27 以降だけです。そのプラットフォームで、ビルド、パッケージング、パッケージ化したアプリの動作を検証済みです。[検証状況](../develop/verification-status.mdx)を参照してください。
 :::
 
 <CategoryNav category="reference" />

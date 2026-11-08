@@ -1,40 +1,48 @@
 ---
 title: Continuous integration
-description: The checks, macOS, and docs GitHub Actions workflows.
+description: The checks, release, and docs GitHub Actions workflows, and how release binaries are built on a local Mac.
 sidebar_position: 3
 ---
 
 ## Overview
 
-Three workflows live in `.github/workflows/`. CI is kept inexpensive: fast Linux checks run on relevant pushes, and the heavy macOS build runs only on demand.
+Three workflows live in `.github/workflows/`: `checks.yml`, `release.yml` and `docs.yml`. All of them run on Linux. There are **no macOS GitHub Actions runners**, because they cost money (owner decision, 2026-11-08). Every native build, test and release binary is made on a local Apple silicon Mac running macOS 27 or later.
 
 ## checks.yml: Linux push checks
 
-Runs on pushes that touch `engine/`, `tests/`, `fixtures/`, `scripts/`, `packaging/`, the `Makefile`, or the workflow itself (and on manual dispatch). It has no pull-request trigger, to avoid duplicate runs. In-progress runs on the same ref are cancelled.
+Runs on pushes that touch `engine/`, `tests/`, `fixtures/`, `scripts/`, `packaging/`, the `Makefile`, `checks.yml` itself or `release.yml` (and on manual dispatch). It has no pull-request trigger, to avoid duplicate runs. In-progress runs on the same ref are cancelled.
 
 On Ubuntu with Python 3.12.14 it:
 
 - installs `engine/requirements.txt` and prints `pip freeze`;
-- runs the engine and worker test suites;
+- runs the engine and worker test suites, including the tests of the release-asset verifier;
 - runs `scripts/verify_fixtures.py --repair`;
 - runs `engine/worker.py --self-test`;
-- byte-compiles the packaging scripts and syntax-checks `scripts/build-macos.sh`.
+- byte-compiles the packaging scripts and syntax-checks `scripts/build-macos.sh` and `scripts/release-macos-local.sh`.
 
-## macos.yml: manual native build
+## release.yml: release asset verification
 
-Triggered by `workflow_dispatch` only, with a `runner` choice of `macos-14`, `macos-15`, or `macos-15-intel`. It runs `bash scripts/build-macos.sh` and uploads the local zip, its checksum, and `BUILD-INFO.txt` as a 7-day artifact. The artifact label uses the detected machine architecture, because a runner label is not an architecture guarantee.
+Runs on Linux when a GitHub Release is published, or by manual dispatch with a tag. It downloads the macOS archive and its `.sha256` attached to that Release and runs `scripts/verify_release_asset.py`, which checks:
+
+- the checksum;
+- that the version equals the tag;
+- that the archive was built from the tag's commit with a clean tree;
+- that the executables are arm64 with a macOS 27.0 minimum;
+- that the bundled helper is present.
+
+It builds nothing and never publishes.
+
+## Making a release on a local Mac
+
+On an Apple silicon Mac with macOS 27 or later, from a clean, pushed commit whose `packaging/Info.plist` `CFBundleShortVersionString` is the new version:
 
 ```sh
-gh workflow run macos.yml --ref <branch> -f runner=macos-14
-gh run list --workflow macos.yml
-gh run watch <run-id> --exit-status
+scripts/release-macos-local.sh --upload v0.1.0
 ```
 
-:::note
-GitHub may not allow dispatching a newly added workflow until it exists on the default branch. Do not merge just to get around that; run the local Mac commands, or report native verification as pending.
-:::
+The script runs the full package gate (`build-macos.sh`), writes `build/release/zudo-stl-fix-<version>-macos-arm64.zip` and its `.sha256`, verifies them, and attaches them to the Release for the tag. If that Release does not exist yet, it is created as a **draft**. Without `--upload` it only writes the files. It uploads only to an unpublished draft that targets the same commit; to change assets after publishing, make a new version. The owner reviews and publishes the draft, then checks that `release.yml` passes.
 
-No workflow signs with credentials, deploys the app, creates a release, or changes repository protection.
+No workflow signs with credentials, builds the app, creates or publishes a release, or changes repository protection.
 
 ## docs.yml: documentation site
 

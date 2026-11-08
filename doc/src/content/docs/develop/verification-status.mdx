@@ -1,18 +1,70 @@
 ---
 title: Verification status
-description: What passed on macOS arm64, and what is still pending in issue #1.
+description: What has been verified on macOS 27 or later on Apple silicon, the only supported platform, and the earlier history.
 sidebar_position: 4
 ---
 
 ## Summary
 
-The Python engine, worker protocol, and an arm64 native build have been verified. The full interactive acceptance matrix has not. The remaining work is tracked in [issue #1](https://github.com/Takazudo/zudo-stl-fix/issues/1).
+As of 2026-11-08, the supported platform is **macOS 27 or later on Apple silicon (arm64) only** (owner decision; see `docs/ACCEPTANCE.md`). The packaged app has passed the native package gate and the full interactive acceptance matrix, including a live VoiceOver pass, on two arm64 Macs: an **Apple A18 Pro on macOS 27.2** and an **Apple M4 on macOS 27.0.1**. [Issue #1](https://github.com/Takazudo/zudo-stl-fix/issues/1), which tracked deferred native verification, is closed, and no platform verification is pending. Older macOS versions and Intel x86_64 are not supported, so they are not verification targets.
+
+The evidence is in [`verification/implementation/`](https://github.com/Takazudo/zudo-stl-fix/tree/main/verification/implementation) in the repository.
 
 :::warning
 A validated mesh is not proof of printability, fit, wall thickness, or strength. None of the results below mean "print ready".
 :::
 
-## Passed on macOS arm64
+## Latest: 2026-11-08, Apple M4, macOS 27.0.1
+
+The package was built natively (no Rosetta) from `main` at `23bbfaa`, with the same production sources as the A18 Pro run below. Toolchain: Xcode 27.2, Swift 6.4.2, CPython 3.12.14.
+
+| Check | Result |
+|---|---|
+| `make test-engine` / `test-worker` / `verify-fixtures` / `verify-hashes` | 17, 54, 17/17 and 13/13 passed; `--self-test` passed |
+| `PYTHON=python3.12 bash scripts/build-macos.sh` | Passed. 65 Swift tests, the real-worker test **passed and was not skipped**, signatures and the relocated helper smoke passed |
+| Import and fixtures | Choose Files…, File ▸ Open and Finder drag-and-drop, including mixed, wrong-extension, duplicate and long Japanese names; the expected split of the eleven originals with no unnecessary copies |
+| Saving | Per-file and batch save, a read-only destination, 10,000 colliding names with a partial batch, retry into another folder, case-insensitive collisions for the STL and the report, Reveal in Finder, no leftover staging files. Saved STLs rechecked independently |
+| Failures and lifecycle | Malformed, unsupported, resource-limit and canceled jobs offer no Save. Active and queued cancellation, adding files while busy, the quit guard and stale-workspace cleanup |
+| Accessibility and display | Light and dark appearance, contrast of at least 5:1, icons in addition to color, the minimum window size, keyboard focus, and live VoiceOver |
+
+The full record is `verification/implementation/macos-m4-2026-11-08.md`.
+
+After the macOS 27 / arm64-only change, the package gate was run again on the same M4: deployment target and `LSMinimumSystemVersion` 27.0, 67 Swift tests with the real-worker test not skipped, the relocated helper smoke, and an x86_64 build attempt refused before any build step. The packaged app launched on macOS 27.0.1, sorted the eleven originals as expected and saved both repairs. See `verification/implementation/macos-arm64-27-floor-2026-11-08.md`.
+
+## Fixes verified after the acceptance runs
+
+- A truncated binary STL is now reported as **Error** with `invalid_input` and a reason that says it is truncated ([issue #30](https://github.com/Takazudo/zudo-stl-fix/issues/30)). The M4 run had shown it as **Check incomplete** with a misleading reason; it was already never a success.
+- Repairs of files with very long names can now be saved. The stem is shortened when the destination filesystem cannot hold the name ([issue #34](https://github.com/Takazudo/zudo-stl-fix/issues/34)). See [Saving](../app-guide/saving.mdx).
+
+Both were rechecked natively on macOS 27.
+
+## Also 2026-11-08: Apple A18 Pro, macOS 27.2
+
+The package was built from `fb20af9`, which combines the CLI alias safety fix (#27) with the collision-performance, contrast and focus fixes (#28). Toolchain: Xcode 27.2, Swift 6.4.2, CPython 3.12.14.
+
+| Check | Result |
+|---|---|
+| `make test-engine` / `test-worker` | 17 and 54 passed |
+| `make verify-fixtures` / `verify-hashes` | 17/17 and 13/13 passed |
+| `PYTHON=python3.12 bash scripts/build-macos.sh` | Passed. 65 Swift tests, the real-worker test **passed and was not skipped**, signatures and the relocated helper smoke passed |
+| Eleven originals | Two defective rails **Repair ready** with tiny-triangle warnings; five **No repair needed**; four **Checked — review needed** with below-Z warnings; no redundant copies |
+| Saving into a folder with 10,000 colliding names | Finished in about 0.2 s (about 4 minutes on 2026-11-07). The exhausted row stayed retryable, the other row saved, and no staging files were left |
+| Saved STLs rechecked independently | Watertight, one shell, complete scan, zero invalid pairs, bounds unchanged |
+| Contrast of warning and failure text | At least 5.4:1 in light and dark appearance, with icons in addition to color |
+| Keyboard focus on **Advanced** | Fully visible at the minimum window size, collapsed and expanded |
+| Live VoiceOver | Drop group, Choose Files, file names, states, warnings, row actions, batch save, the Details text and Done are announced. Advanced is announced as a disclosure triangle with its expanded or collapsed state |
+
+The archive is ad-hoc signed, not notarized, and not released. The full record is `verification/implementation/macos-arm64-2026-11-08.md` in the repository.
+
+## History
+
+The records below are kept as history. At the time, the proposed floor was macOS 14 and x86_64 was still planned. Both were dropped on 2026-11-08.
+
+### 2026-11-07, Apple A18 Pro, macOS 27.2
+
+On 2026-11-07, two builds passed the package gate and broad Finder/UI acceptance: Finder drag-and-drop, the open panel, per-file and batch save, read-only destinations, cancellation, quit, stale-workspace cleanup, light and dark appearance, and resizing. That run found and fixed missing failure reasons and the **Choose Files…** accessible name.
+
+### 2026-10-16, macOS 26.6.2
 
 Recorded on 2026-10-16 on macOS 26.6.2, arm64, Xcode 27.0, Apple Swift 6.4, CPython 3.12.14.
 
@@ -30,13 +82,13 @@ The resulting archive is ad-hoc signed, not notarized, and not released.
 
 Interactive checks that were performed on the relocated app: launch from a path with spaces and Japanese characters; opening all 11 originals via `open -a`; one window; the nine healthy originals show **No repair needed** and both defective rails show **Repair ready** with the tiny-triangle warning visible; Save controls enabled only for those two; the quit-with-unsaved-repairs confirmation; stale workspace cleanup after a forced kill; fixture hashes unchanged.
 
-## Defects found and fixed
+#### Defects found and fixed
 
 Running the real app found two defects that unit tests missed: every file failed because a `/private` path prefix was stripped before it reached the worker, and every Finder-opened file created a new window. Both are fixed and covered by tests.
 
-## Still pending
+#### Not exercised on 2026-10-16 (later resolved)
 
-These were not exercised, because the session had no Accessibility permission to drive the UI:
+These were not exercised at the time, because the session had no Accessibility permission to drive the UI. The interactive items were later passed on macOS 27 arm64; the macOS 14 floor and x86_64 were dropped from support instead:
 
 - Finder drag-and-drop onto the window.
 - The save panel, per-file and batch, and independent re-verification of saved STLs.
@@ -47,4 +99,4 @@ These were not exercised, because the session had no Accessibility permission to
 - The macOS 14 floor, which was not runtime-tested; only the host OS was exercised.
 - x86_64.
 
-Saving, collision, permission, and cancellation logic is covered by Swift tests, not by UI interaction. The full checklist is in `docs/ACCEPTANCE.md`.
+At that point, saving, collision, permission, and cancellation logic was covered by Swift tests only. The full checklist is in `docs/ACCEPTANCE.md`.

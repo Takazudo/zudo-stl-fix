@@ -6,11 +6,13 @@ sidebar_position: 6
 
 ## No public release exists
 
-The only products are local development builds from `scripts/build-macos.sh`. They are ad-hoc signed, not Developer ID signed, not notarized, and not distributed. A development launch is not evidence that a downloaded copy would pass Gatekeeper.
+No public release has been made yet. Builds are local: `scripts/build-macos.sh` makes development builds, and `scripts/release-macos-local.sh` makes the release archive `zudo-stl-fix-<version>-macos-arm64.zip` (macOS 27 or later, Apple silicon only) and attaches it to a draft GitHub Release for the owner to publish. See [Continuous integration](./ci.mdx).
 
-## What a public release would still need
+These archives are ad-hoc signed only: not Developer ID signed and not notarized, so Gatekeeper asks for confirmation on first launch. A development launch is not evidence that a downloaded copy would pass Gatekeeper.
 
-Public Developer ID signing and notarization is a separately authorized task, and no credential-based signing is enabled in the repository scripts. A future release workflow should:
+## What Developer ID distribution would still need
+
+Public Developer ID signing and notarization is a separately authorized task, and no credential-based signing is enabled in the repository scripts. A future signed release process should:
 
 1. Accept the signing identity, Team ID and notarization profile as private configuration.
 2. Sign nested code from the inside out with the needed hardened-runtime settings, then sign the outer app.
@@ -22,4 +24,4 @@ Public Developer ID signing and notarization is a separately authorized task, an
 Never instruct users to remove quarantine wholesale, disable Gatekeeper, or use administrator access to install the app.
 :::
 
-Release verification belongs in a release workflow, added only when a release is actually requested. Daily commits do not run heavy multi-architecture builds, notarization, or full packaging.
+Release verification runs in `release.yml` only when a Release is published. Daily commits do not run native builds, notarization, or full packaging.

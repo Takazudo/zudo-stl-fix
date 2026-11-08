@@ -15,6 +15,10 @@ Both ask you to choose a destination folder. Choosing a destination is deliberat
 
 The default name is `<original-stem>-fixed.stl`. If that name is taken, the app tries `-fixed-2.stl`, `-fixed-3.stl`, and so on. Names that differ only by letter case count as taken, so collisions on case-insensitive volumes are handled too. An existing file is never overwritten.
 
+### Very long names
+
+If the destination filesystem cannot hold the full name (APFS allows 255 characters per name), whole characters are removed from the end of the original stem, together with any trailing spaces, dots, hyphens or underscores, until `<stem>-fixed[-N].stl` and `<stem>-report[-N].json` both fit. The repaired STL and its report share the same shortened stem; the `-fixed` or `-report` label, the number and the extension stay intact.
+
 ## How a save is made safe
 
 1. The verified repair is written to a private staging folder inside the destination folder, so staging and the final file are on the same filesystem.
@@ -33,6 +37,6 @@ One failed save does not block the others. Each file in a batch succeeds or fail
 
 A **Reveal** button on a saved row shows the file in Finder. Files with **No repair needed** never produce a copy.
 
-:::note[Still to be exercised by hand]
-The save logic is covered by automated tests, but the save panel, collisions, and read-only destinations have not yet been exercised interactively. See [issue #1](https://github.com/Takazudo/zudo-stl-fix/issues/1).
+:::note[Checked in the packaged app]
+Besides the automated tests, the save panel (per-file and batch), name collisions including case-insensitive ones, read-only destinations, report export and Reveal in Finder were exercised by hand in the packaged app on macOS 27 arm64. See [Verification status](../develop/verification-status.mdx).
 :::
