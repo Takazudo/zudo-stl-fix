@@ -77,6 +77,12 @@ arch -x86_64 make PYTHON=build/venv-x86_64/bin/python test-engine test-worker ve
 arch -x86_64 env PYTHON="$PX" bash scripts/build-macos.sh
 ```
 
+In a translated shell, `swift test` would list tests with an arm64-only helper
+that cannot load the x86_64 test bundle, so the script detects
+`sysctl.proc_translated` = 1 and instead builds the bundle and runs it with the
+x86_64 slice of Xcode's `xctest` (the real-worker XCTest still runs with
+`ZUDO_WORKER_PYTHON` set). Native builds keep using `swift test`.
+
 The result lands in `build/macos-x86_64/verified.XXXXXX/` with x86_64-only Mach-O
 files. Launching it on Apple silicon runs both the app and its helper translated
 (`sysctl.proc_translated` = 1 for each process). Record results as "x86_64 under
