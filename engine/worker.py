@@ -9,6 +9,7 @@ import math
 import os
 from pathlib import Path
 import platform
+import re
 import stat
 import struct
 import sys
@@ -176,12 +177,33 @@ class JobFiles:
                 pass
 
 
+def ascii_rejection(raw):
+    """Why the strict ASCII loader is certain to reject these bytes, or None if it might not."""
+    # Same whitespace set as str.split()/splitlines() for ASCII text in the loader.
+    start = re.match(rb"[\s\x1c-\x1f]*", raw).end()
+    if start < len(raw) and raw[start:start + 5].lower() != b"solid":
+        return "binary"
+    return None if raw.isascii() else "non-ascii text"
+
+
 def preflight(raw, max_faces):
     """Bound parser allocation before it creates arrays or a tokenized line list."""
-    if len(raw) >= 84 and len(raw) == 84 + 50 * struct.unpack_from("<I", raw, 80)[0]:
-        if struct.unpack_from("<I", raw, 80)[0] > max_faces:
-            raise d.ResourceLimit("Binary STL exceeds the face limit")
-        return
+    if len(raw) >= 84:
+        count = struct.unpack_from("<I", raw, 80)[0]
+        expected = 84 + 50 * count
+        if len(raw) == expected:
+            if count > max_faces:
+                raise d.ResourceLimit("Binary STL exceeds the face limit")
+            return
+        rejection = ascii_rejection(raw)
+        if rejection:
+            problem = "truncated" if len(raw) < expected else "longer than declared (trailing data or a damaged header)"
+            binary = (f"the header declares {count} facets ({expected} bytes) "
+                      f"but the file has {len(raw)} bytes; it is {problem}")
+            if rejection == "binary":
+                raise ValueError(f"Malformed binary STL: {binary}")
+            raise ValueError("Malformed STL: it begins like ASCII STL text but contains non-ASCII bytes, "
+                             f"which the strict ASCII parser does not accept; read as binary STL, {binary}")
     facets, lines = 0, 0
     for line in io.BytesIO(raw):
         lines += 1

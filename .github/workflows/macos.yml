@@ -3,14 +3,12 @@ on:
   workflow_dispatch:
     inputs:
       runner:
-        description: 'Runner image (artifact label is detected from actual machine)'
+        description: 'Apple silicon runner image with macOS 27+ and Xcode 27+ (the build refuses older hosts)'
         required: true
         type: choice
-        default: macos-14
+        default: macos-latest
         options:
-          - macos-14
-          - macos-15
-          - macos-15-intel
+          - macos-latest
 permissions:
   contents: read
 concurrency:

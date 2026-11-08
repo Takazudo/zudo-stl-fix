@@ -46,6 +46,7 @@ class WorkerTests(unittest.TestCase):
         self.assertTrue(events)
         self.assertTrue(all(len(line) <= w.MAX_LINE for line in result.stdout.splitlines()))
         self.assertEqual(events[-1]["event"], "result")
+        self.assertEqual(sum(e["event"] == "result" for e in events), 1)
         return result.returncode, events[-1]
 
     def assert_artifact(self, descriptor):
@@ -143,6 +144,79 @@ class WorkerTests(unittest.TestCase):
     def test_ascii_line_bounds(self):
         for raw in [b'solid ' + b'a' * 4096, b'\n' * 1035]:
             with self.assertRaises(d.ResourceLimit):
+                w.preflight(raw, 1)
+
+    def assert_malformed_binary(self, code, result, problem, kind='Malformed binary STL'):
+        self.assertNotEqual(code, 0)
+        self.assertEqual((result['outcome'], result['error']['code']), ('error', 'invalid_input'))
+        self.assertIn(kind, result['error']['message'])
+        self.assertIn(problem, result['error']['message'])
+        self.assertLessEqual(len(result['error']['message']), 1024)
+        self.assertIsNone(result['candidate'])
+        self.assertIsNone(result['validation_status'])
+        self.assertIsNone(result['summary']['before'])
+        self.assertFalse((self.root / 'candidate.stl').exists())
+        self.assert_artifact(result['report'])
+
+    def test_truncated_binary_is_invalid_input_regardless_of_newlines(self):
+        fixture = ROOT / 'fixtures/originals/nuts-v2-60hp-double.stl'
+        original = fixture.read_bytes()
+        # Long cut: a >4096-byte newline-free run used to hit the ASCII line bound; short cut: no such run.
+        for raw in [original[:len(original) // 2 + 7], original[:84 + 50 * 10 + 13]]:
+            with self.subTest(size=len(raw)):
+                self.input.write_bytes(raw)
+                with mock.patch.object(d, 'load_stl_bytes', side_effect=AssertionError('must not parse')):
+                    code, result = self.execute()
+                self.assert_malformed_binary(code, result, 'truncated')
+                self.assertEqual(self.input.read_bytes(), raw)
+                (self.root / 'report.json').unlink()
+        self.assertEqual(fixture.read_bytes(), original)
+
+    def test_truncated_binary_worker_process(self):
+        original = (ROOT / 'fixtures/originals/nuts-v2-60hp-double.stl').read_bytes()
+        raw = original[:len(original) // 2 + 7]
+        self.input.write_bytes(raw)
+        code, result = self.process(w.encode(self.req))
+        self.assert_malformed_binary(code, result, 'truncated')
+        self.assertEqual(result['job_id'], self.req['job_id'])
+        self.assertEqual(self.input.read_bytes(), raw)
+
+    def test_binary_length_boundaries(self):
+        cases = [(self.raw + b'\0', 'longer than declared'), (self.raw[:-1], 'truncated'),
+                 (self.raw[:84], 'truncated')]
+        for raw, problem in cases:
+            with self.subTest(size=len(raw)), self.assertRaisesRegex(ValueError, problem) as caught:
+                w.preflight(raw, 20_000)
+            self.assertNotIsInstance(caught.exception, d.ResourceLimit)
+        for raw in [self.raw[:83], self.raw[:40], b'']:  # incomplete header: rejected by the loader
+            with self.subTest(size=len(raw)):
+                self.input.write_bytes(raw)
+                code, result = self.execute()
+                self.assertNotEqual(code, 0)
+                self.assertEqual(result['error']['code'], 'invalid_input')
+                self.assertIsNone(result['candidate'])
+                (self.root / 'report.json').unlink()
+
+    def test_textual_binary_header_keeps_exact_length_precedence(self):
+        header = b'solid looks like text\nfacet normal 0 0 1\n'.ljust(80, b'\n')
+        self.input.write_bytes(header + self.raw[80:])
+        code, result = self.execute()
+        self.assertEqual((code, result['outcome']), (0, 'unchanged'))
+        self.assertEqual(result['summary']['before']['format'], 'binary STL')
+        self.input.write_bytes(header + self.raw[80:-1])  # a solid prefix alone does not force ASCII
+        (self.root / 'report.json').unlink()
+        self.assert_malformed_binary(*self.execute(), 'truncated', 'contains non-ASCII bytes')
+
+    def test_non_ascii_ascii_stl_is_not_called_truncated_binary(self):
+        text = d.trimesh.creation.box().export(file_type='stl_ascii').replace('solid', 'solid 日本 語', 1)
+        self.input.write_bytes(text.encode())
+        code, result = self.execute()
+        self.assert_malformed_binary(code, result, 'begins like ASCII STL text', 'Malformed STL')
+        self.assertNotIn('Malformed binary STL', result['error']['message'])
+
+    def test_ascii_like_mismatch_keeps_ascii_bounds(self):
+        for raw in [b' \r\n\x0bSOLID x\n' + b'a' * 5000, b'solid x\n' + b'facet normal 0 0 1\n' * 5]:
+            with self.subTest(raw=raw[:12]), self.assertRaises(d.ResourceLimit):
                 w.preflight(raw, 1)
 
     def test_unsupported_open_mesh_refused_without_candidate(self):

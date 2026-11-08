@@ -26,7 +26,9 @@ Test every status and button transition. A canceled/failed/refused/incomplete re
 
 ## macOS smoke test: mandatory before calling the app verified
 
-On each architecture actually offered for distribution:
+On the supported platform (arm64, macOS 27 or later):
+
+> **Platform policy (owner decision, 2026-11-08).** The product supports **macOS 27 or later on Apple silicon (arm64) only**. Older macOS versions and Intel/x86_64 are not supported: macOS 27 does not run on Intel Macs, so an x86_64 build would have no audience. Acceptance runs natively on an arm64 Mac with macOS 27 or later. This replaces the earlier macOS 14 floor and the interim (same day) policy of verifying x86_64 under Rosetta 2; records made under those policies stay as dated history.
 
 1. Build the native app and frozen helper using the documented commands; record macOS, Xcode/SDK, Python, package and architecture versions.
 2. Move the `.app` away from the repository/build tree to a path containing spaces/non-ASCII characters. Launch from Finder with a minimal PATH and no reliance on Homebrew or a user Python environment.

@@ -8,7 +8,7 @@
 | Display name / bundle | `zudo-stl-fix` / `zudo-stl-fix.app` |
 | Swift module | `ZudoSTLFix` |
 | Bundle identifier | `com.takazudo.zudostlfix` as a provisional project identifier, not a registered signing identity |
-| Deployment floor | macOS 14+ proposed; verify dependency and toolchain compatibility on a real Mac |
+| Deployment floor | macOS 27+ on Apple silicon (arm64) only (owner decision 2026-11-08; formerly a proposed macOS 14 floor) |
 | Geometry | Existing `engine/stl_doctor.py` with its NumPy, SciPy, Trimesh, Shapely/GEOS dependencies |
 | Process boundary | One short-lived worker per job; serial queue initially |
 | Worker distribution | Architecture-matched Python helper frozen with PyInstaller, preferably onedir |
@@ -46,7 +46,7 @@ PyInstaller can bundle Python and dependencies for machines without a separate P
 
 Use a documented onedir helper layout to ease native-library inspection. Preserve its relative runtime layout when embedding it in the app. Resolve the helper through the app bundle, not the working directory, a developer home path, PATH, `/usr/bin/python3`, or Homebrew. Choose and document a code-signing-compatible nested-code layout; do not place arbitrary executable libraries in Resources and assume signing will work.
 
-PyInstaller supports architecture-targeted builds, but native dependency slices constrain the result [S3]. Build/test and label native arm64 and x86_64 artifacts separately as available. A tested single-architecture build is acceptable for the first milestone. Never claim universal2 or an untested architecture; do not concatenate frozen executables with `lipo` as a shortcut.
+PyInstaller supports architecture-targeted builds, but native dependency slices constrain the result [S3]. Only native arm64 is built and supported (macOS 27 does not run on Intel Macs). Never claim universal2 or an untested architecture; do not concatenate frozen executables with `lipo` as a shortcut.
 
 Record tested macOS dependency pins and Python/PyInstaller versions after the build. The provided Linux versions are provenance, not a verified macOS lockfile. Exercise NumPy, SciPy, Trimesh, and Shapely constrained triangulation from the **embedded** helper after moving the app away from the checkout and removing Python/Homebrew from PATH.
 

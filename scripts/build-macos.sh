@@ -10,12 +10,15 @@ cd "$ROOT"
 PYTHON=${PYTHON:-python3.12}
 export ZUDO_BUILD_ARCH
 ZUDO_BUILD_ARCH=$("$PYTHON" -c 'import platform; print(platform.machine())')
-case "$ZUDO_BUILD_ARCH" in arm64|x86_64) ;; *) echo "Unsupported architecture" >&2; exit 2 ;; esac
+# Product floor (owner decision 2026-11-08): macOS 27 on Apple silicon only.
+[[ $ZUDO_BUILD_ARCH == arm64 ]] || { echo "Only arm64 is supported (macOS 27 runs only on Apple silicon)." >&2; exit 2; }
+[[ $(sysctl -n sysctl.proc_translated 2>/dev/null || echo 0) == 0 ]] || { echo "Do not build under Rosetta; use a native arm64 shell." >&2; exit 2; }
+(( $(sw_vers -productVersion | cut -d. -f1) >= 27 )) || { echo "macOS 27 or later is required to build and test." >&2; exit 2; }
 "$PYTHON" -c 'import sys; assert sys.version_info[:3] == (3,12,14), "Use CPython 3.12.14 for the pinned build"'
 if [[ $(uname -m) != "$ZUDO_BUILD_ARCH" ]]; then
   echo "Build Python must match the active shell architecture." >&2; exit 2
 fi
-export MACOSX_DEPLOYMENT_TARGET=14.0
+export MACOSX_DEPLOYMENT_TARGET=27.0
 OUT="$ROOT/build/macos-$ZUDO_BUILD_ARCH"
 mkdir -p "$OUT"
 "$PYTHON" -m venv --clear "$OUT/venv"

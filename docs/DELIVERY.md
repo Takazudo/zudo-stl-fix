@@ -3,8 +3,8 @@
 > **Status pointer (2026-11-08).** This is the original, historical plan. For the
 > current state, see the evidence index in
 > [`verification/implementation/README.md`](../verification/implementation/README.md)
-> and epic #22. Native arm64 acceptance on macOS 27.2 (including live VoiceOver)
-> is recorded. macOS 14 and Intel x86_64 remain pending in issue #1.
+> and epic #22. Native arm64 acceptance (including live VoiceOver) is recorded on
+> macOS 27.2 (Apple A18 Pro) and macOS 27.0.1 (Apple M4). Since 2026-11-08 the supported platform is macOS 27 or later on Apple silicon only; older macOS and x86_64 are no longer supported.
 
 ## Milestone 1 — Reproduce and adapt the engine
 

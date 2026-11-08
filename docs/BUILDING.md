@@ -1,7 +1,9 @@
 # Building and checking the native application
 
-The source targets macOS 14. Build separately on each architecture you intend to
-test. There is no universal2 product and no cross-compilation of the Python helper.
+The product supports **macOS 27 or later on Apple silicon (arm64) only** (owner
+decision 2026-11-08; see `docs/ACCEPTANCE.md`). `scripts/build-macos.sh` refuses to
+build on x86_64, under Rosetta, or on a host older than macOS 27. There is no
+universal2 or x86_64 product.
 Neither a wheel download nor a successful source test proves a native app works.
 Read `verification/` for actual results; the commands below are reproducible
 procedures, not assertions that macOS checks have passed.
@@ -9,15 +11,15 @@ procedures, not assertions that macOS checks have passed.
 ## Developer prerequisites
 
 Use macOS, Xcode with its command-line tools selected, and CPython **3.12.14** of
-the same architecture as the active shell. The app's deployment target is 14.0.
+arm64, on an Apple silicon Mac running macOS 27 or later. The app's deployment target is 27.0.
 The first build downloads pinned dependencies; running the built app requires
 no Python, Homebrew, terminal, account, network access, or dependency installation.
 
 `packaging/requirements-macos.lock` pins every resolved helper/build distribution
-and the SHA-256 of its macOS wheels. CPython 3.12 wheels for both arm64 and x86_64
-were downloaded successfully on Linux on 2026-10-16; this establishes availability,
-not runtime compatibility. NumPy 2.5.4 and SciPy 1.18.1 provide macOS 14.0 wheels
-for both architectures. Shapely 2.2.0 provides arm64 11.0 / x86_64 10.13 wheels.
+and the SHA-256 of its macOS wheels. The lock still lists x86_64 wheel
+hashes from 2026-10-16; the arm64-only build installs only the arm64 wheels. The
+arm64 wheels' own minimums (NumPy 2.5.4 and SciPy 1.18.1: macOS 14.0; Shapely 2.2.0:
+11.0) are below the app's macOS 27 floor.
 The remaining pins are Trimesh 4.12.2, PyInstaller 6.22.3, hooks-contrib 2026.8,
 altgraph 0.17.5, macholib 1.16.4, packaging 26.3 and setuptools 84.0.0.
 An available universal2 PyInstaller wheel does not make the final app universal2.
@@ -103,8 +105,12 @@ optional, separately authorized alternative that uses paid macOS runners; nothin
 dispatches it automatically. When it is wanted, pass the ref under test (for
 example `main`, or a pull request's head branch):
 
+The workflow needs a GitHub-hosted Apple silicon image running macOS 27 or later with
+Xcode 27. If `macos-latest` still maps to an older image, `build-macos.sh` stops at
+its host check (exit 2) and the workflow cannot be used until GitHub moves the label.
+
 ```sh
-gh workflow run macos.yml --ref <branch> -f runner=macos-14
+gh workflow run macos.yml --ref <branch> -f runner=macos-latest
 gh run list --workflow macos.yml
 gh run watch <run-id> --exit-status
 ```
@@ -118,8 +124,8 @@ Before calling the app verified, complete the interactive matrix in
 `ACCEPTANCE.md`: Finder drop/open, all eleven originals, details and visible
 warnings, per-file/batch save, collision/permission failures, cancellation and
 queue continuation, Reveal, accessibility, appearance, resize and quit behavior.
-Test the oldest offered OS on each offered architecture. Record observed results;
-the deployment setting alone is not proof of macOS 14 runtime support.
+Test natively on arm64 with macOS 27 or later, the supported floor. Record
+observed results.
 
 ## Notices and future distribution
 
