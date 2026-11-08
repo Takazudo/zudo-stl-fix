@@ -336,26 +336,18 @@ public actor Exporter {
         // stays authoritative for names created after the inventory.
         let posix = Locale(identifier: "en_US_POSIX")
         func folded(_ name: String) -> String { name.folding(options: [.caseInsensitive], locale: posix) }
-        // Unfiltered: a stem shortened below no longer shares the full stem's prefix.
-        var taken = Set(try directoryNames(dirFD).lazy.map(folded))
+        let base = try fittedStem(stem, stageDirFD: stageDirFD, stage: stage)
+        let prefix = folded("\(base)-\(label)")
+        var taken = Set(try directoryNames(dirFD).lazy.map(folded).filter { $0.hasPrefix(prefix) })
         try hook?(.afterNameInventory, folder)
-        // Shortened only when the destination filesystem reports ENAMETOOLONG; filesystems
-        // count the limit differently (APFS: 255 characters), so ask rather than guess.
-        var base = stem
         for suffix in 1...10_000 {
-            let tail = "-\(label)\(suffix == 1 ? "" : "-\(suffix)").\(fileExtension)"
-            var claimed: String?
-            while claimed == nil {
-                let name = base + tail
-                if taken.contains(folded(name)) { break }
-                // Hard-link publication is atomic and refuses EVERY existing entry, including
-                // dangling symlinks, input hard links and names on case-insensitive volumes.
-                if linkat(stageDirFD, stage, dirFD, name, 0) == 0 { claimed = name; break }
-                if errno == EEXIST { taken.insert(folded(name)); break }
-                if errno == ENAMETOOLONG, base.count > 1 { base.removeLast(); continue }
-                throw failure("Publish output")
+            let name = "\(base)-\(label)\(suffix == 1 ? "" : "-\(suffix)").\(fileExtension)"
+            if taken.contains(folded(name)) { continue }
+            // Hard-link publication is atomic and refuses EVERY existing entry, including
+            // dangling symlinks, input hard links and names on case-insensitive volumes.
+            guard linkat(stageDirFD, stage, dirFD, name, 0) == 0 else {
+                if errno == EEXIST { taken.insert(folded(name)); continue }; throw failure("Publish output")
             }
-            guard let name = claimed else { continue }
             let output = folder.appendingPathComponent(name)
             do {
                 try hook?(.afterPublication, output)
@@ -383,6 +375,26 @@ public actor Exporter {
             }
         }
         throw LocalFileError.collisions
+    }
+}
+
+/// The longest name tail any publication uses; fitting it gives an STL and its report one stem.
+private let longestTail = "-report-10000.json"
+
+/// Keeps the stem unless the destination filesystem rejects stem + longestTail as too long
+/// (APFS allows 255 characters; other filesystems count differently, so ask rather than guess).
+/// Probes inside the private, empty staging folder on the same filesystem, never the output folder.
+private func fittedStem(_ stem: String, stageDirFD: Int32, stage: String) throws -> String {
+    var base = stem
+    while true {
+        let probe = base + longestTail
+        if linkat(stageDirFD, stage, stageDirFD, probe, 0) == 0 {
+            guard unlinkat(stageDirFD, probe, 0) == 0 else { throw failure("Remove name probe") }
+            return base
+        }
+        guard errno == ENAMETOOLONG, base.count > 1 else { throw failure("Check output name length") }
+        base.removeLast()
+        while base.count > 1, let last = base.last, last.isWhitespace || ".-_".contains(last) { base.removeLast() }
     }
 }
 
