@@ -28,6 +28,8 @@ Test every status and button transition. A canceled/failed/refused/incomplete re
 
 On each architecture actually offered for distribution:
 
+> **Architecture policy (owner decision, 2026-11-08).** arm64 is verified natively on Apple silicon. The x86_64 build is verified by building **and** running it **under Rosetta 2 on Apple silicon**; a physical Intel Mac is not required and is not part of acceptance. Records must label such results "x86_64 under Rosetta 2" (with the host chip) and must not present them as native Intel results. The x86_64 build stays offered; this changes how it is verified, not whether it is supported. The macOS 14 runtime requirement is separate and unchanged: Rosetta does not change the OS version.
+
 1. Build the native app and frozen helper using the documented commands; record macOS, Xcode/SDK, Python, package and architecture versions.
 2. Move the `.app` away from the repository/build tree to a path containing spaces/non-ASCII characters. Launch from Finder with a minimal PATH and no reliance on Homebrew or a user Python environment.
 3. Drop all 11 original fixtures. Confirm the two rails produce repair-ready results and the other nine are unchanged with relevant warnings preserved. Save only approved results; independently rerun the engine verifier on the saved STLs.
