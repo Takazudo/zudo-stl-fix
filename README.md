@@ -63,9 +63,10 @@ archive. The only product is arm64 with a macOS 27.0 deployment
 target. There is no universal2 or x86_64 product. See [BUILDING](docs/BUILDING.md) for the exact Python version,
 pinned dependencies, prerequisites, and remaining interactive checks.
 
-Linux CI runs engine, worker, and fixture checks on relevant pushes only. Native
-build/helper verification is a separate manual workflow. Neither workflow merges,
-releases, or deploys anything.
+Linux CI runs engine, worker, and fixture checks on relevant pushes only. There are no
+macOS CI runners: native builds and release binaries are made on a local Apple silicon
+Mac with `scripts/release-macos-local.sh`, and the Linux `release.yml` only verifies the
+assets attached to a published Release. No workflow merges, publishes or signs anything.
 
 ## Command-line engine
 

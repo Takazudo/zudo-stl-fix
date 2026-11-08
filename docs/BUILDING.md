@@ -91,34 +91,41 @@ starts two further worker processes to reload/revalidate those serialized output
 It also rechecks every original fixture hash. This tests helper packaging, not the
 interactive Finder workflow or an independent geometry kernel.
 
-## CI and manual verification
+## CI and releases
 
-`checks.yml` runs Linux engine/worker tests, real fixtures, the self-test and build
-script syntax checks on relevant pushes only. It intentionally has no duplicate
-pull-request trigger. `macos.yml` is manual and builds only the selected runner's
-actual architecture. Runner labels are choices, not architecture guarantees; the
-build checks and artifact labels use the detected machine.
+There are **no macOS GitHub Actions runners** (owner decision 2026-11-08: they cost
+money). Every native build, test and release binary is made on a local Apple silicon
+Mac running macOS 27 or later.
 
-The primary native path is a local, architecture-matched Mac running the commands
-above on the branch or pull-request revision under test. The manual workflow is an
-optional, separately authorized alternative that uses paid macOS runners; nothing
-dispatches it automatically. When it is wanted, pass the ref under test (for
-example `main`, or a pull request's head branch):
+- `checks.yml` runs the Linux engine/worker tests, real fixtures, the self-test,
+  build-script syntax checks and the release-asset verifier tests, on relevant pushes
+  only (no duplicate pull-request trigger).
+- `release.yml` runs on Linux when a GitHub Release is published (or by manual
+  dispatch with a tag). It downloads the macOS archive and `.sha256` attached to that
+  Release and runs `scripts/verify_release_asset.py`: checksum, version equals the
+  tag, built from the tag's commit with a clean tree, arm64 executables, macOS 27.0
+  minimum, bundled helper present. It builds nothing and never publishes.
 
-The workflow needs a GitHub-hosted Apple silicon image running macOS 27 or later with
-Xcode 27. If `macos-latest` still maps to an older image, `build-macos.sh` stops at
-its host check (exit 2) and the workflow cannot be used until GitHub moves the label.
+### Making a release
+
+On the local Mac, from a clean, pushed commit whose `packaging/Info.plist`
+`CFBundleShortVersionString` is the new version (for example `0.1.0`):
 
 ```sh
-gh workflow run macos.yml --ref <branch> -f runner=macos-latest
-gh run list --workflow macos.yml
-gh run watch <run-id> --exit-status
+scripts/release-macos-local.sh --upload v0.1.0
 ```
 
-GitHub may not permit dispatch of a newly added workflow before it exists on the
-default branch. Do not merge just to bypass that limitation; run the local Mac
-commands or report native verification pending. No workflow signs with credentials,
-deploys, creates a release, or changes repository protection.
+The script runs the full package gate (`build-macos.sh`), writes
+`build/release/zudo-stl-fix-<version>-macos-arm64.zip` and its `.sha256`, verifies them,
+and attaches them to the Release for the tag. If that Release does not exist yet it is
+created as a **draft** at HEAD. Without `--upload` it only writes the files. On a
+managed machine, wrap it in the heavy-run guard like any package gate. The script refuses
+to upload unless the Release is an unpublished draft targeting the same commit, and it
+stops if a local tag of that name differs from GitHub's (`git fetch --tags` refuses to
+overwrite it; delete the stale local tag). Review the draft, publish it, and check that
+`release.yml` passes. To replace assets later, make a new version instead. The archive is ad hoc signed
+only (no Developer ID signature or notarization), so Gatekeeper asks for
+confirmation on first launch.
 
 Before calling the app verified, complete the interactive matrix in
 `ACCEPTANCE.md`: Finder drop/open, all eleven originals, details and visible

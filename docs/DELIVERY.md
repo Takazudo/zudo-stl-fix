@@ -34,7 +34,7 @@ Deliverable: real source, tests, build/package scripts, current README, a test-r
 
 Respect any existing repository policy. For a new repo, prefer one fast Linux workflow triggered by relevant source/test pushes; avoid also duplicating the same work on every PR event. Run engine/protocol tests with caching and cancel obsolete runs on the same branch. Include fixture checks when engine or fixtures change.
 
-Provide a macOS workflow on manual dispatch for native builds and embedded-helper smoke tests. Add a release verification path only when release automation is being implemented/authorized. Heavy multi-architecture builds, notarization and full packaging should not run on every daily commit. Document how to trigger the Mac check at a milestone and before distribution.
+(Superseded 2026-11-08 by owner decision: no macOS GitHub Actions runners. Native builds, smoke tests and release binaries are made on a local Apple silicon Mac; `release.yml` only verifies uploaded assets on Linux. See `docs/BUILDING.md`.) Originally: provide a macOS workflow on manual dispatch for native builds and embedded-helper smoke tests. Heavy multi-architecture builds, notarization and full packaging should not run on every daily commit. Document how to trigger the Mac check at a milestone and before distribution.
 
 Do not remove branch protections, spoof checks, ignore known failures, force-merge, or auto-publish. Follow the repo's branches; do not invent a `develop` branch. Merge or release only when separately authorized.
 
