@@ -43,7 +43,7 @@ complete `metaTags` options. Package-owned chrome paints the header and hero
 symbols as currentColor masks. The header icon stays decorative and the brand
 link's accessible name stays `zudo-stl-fix`.
 
-`src/styles/global.css` scopes Jost to those two live names. ZFB 5.2.2 leaves
+`src/styles/global.css` scopes Jost to those two live names. ZFB 6.0.1 leaves
 project-authored CSS URLs unchanged and emits the stylesheet under `assets/`:
 `../fonts/jost-600.woff2` therefore resolves relative to the emitted stylesheet,
 not this source file. It works on root, nested and locale routes and applies a
