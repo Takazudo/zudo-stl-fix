@@ -20,12 +20,12 @@
     "check:html": "html-validate \"dist/**/*.html\""
   },
   "dependencies": {
-    "@takazudo/zfb": "5.2.2",
-    "@takazudo/zfb-md-wasm": "5.2.2",
-    "@takazudo/zfb-runtime": "5.2.2",
-    "@takazudo/zudo-doc": "^9.1.5",
-    "@takazudo/zudo-doc-history-server": "^9.1.5",
-    "diff": "^8.0.3",
+    "@takazudo/zfb": "6.0.1",
+    "@takazudo/zfb-md-wasm": "6.0.1",
+    "@takazudo/zfb-runtime": "6.0.1",
+    "@takazudo/zudo-doc": "^10.0.3",
+    "@takazudo/zudo-doc-history-server": "^10.0.3",
+    "diff": "^8.0.4",
     "zod": "^4.3.6"
   },
   "devDependencies": {
