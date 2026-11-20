@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import plistlib
 import selectors
 import shutil
 import signal
@@ -137,6 +138,14 @@ def main():
         root = Path(temp).resolve()
         app = root / "moved app 日本語.app"
         subprocess.run(["/usr/bin/ditto", str(args.app.resolve()), str(app)], check=True)
+        with (app / "Contents/Info.plist").open("rb") as stream:
+            info = plistlib.load(stream)
+        assert info.get("CFBundleIconFile") == "AppIcon.icns", "Missing app icon declaration"
+        icon = app / "Contents/Resources/AppIcon.icns"
+        assert icon.is_file(), "Missing bundled app icon"
+        # Exercise Apple's decoder against the resource in the relocated bundle.
+        subprocess.run(["/usr/bin/iconutil", "--convert", "iconset", "--output",
+                        str(root / "AppIcon.iconset"), str(icon)], check=True)
         inspect_native_dependencies(app)
         subprocess.run(["/usr/bin/codesign", "--verify", "--deep", "--strict", str(app)], check=True)
         helper = app / "Contents/Helpers/STLWorker.app/Contents/MacOS/stl-worker"
