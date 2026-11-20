@@ -38,6 +38,7 @@ APP="$STAGE/zudo-stl-fix.app"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Helpers" "$APP/Contents/Resources"
 cp "$BIN/ZudoSTLFix" "$APP/Contents/MacOS/ZudoSTLFix"
 cp packaging/Info.plist "$APP/Contents/Info.plist"
+cp packaging/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 ditto "$OUT/helper/STLWorker.app" "$APP/Contents/Helpers/STLWorker.app"
 "$PY" scripts/generate_notices.py "$APP/Contents/Resources/ThirdPartyNotices"
 {

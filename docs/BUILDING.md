@@ -61,6 +61,34 @@ commit, dirty working-tree status, actual architecture and the configured target
 Keep this evidence with the artifact. The archive is a local development artifact,
 not a public release or a notarized distribution.
 
+## App icon
+
+`packaging/AppIcon.icns` reuses the website's approved Fitted facet cube from
+`doc/public/img/brand/zudo-stl-fix-symbol-black.svg` and its `-small-black.svg`
+variant. The exact vector paths sit on a white rounded backing with transparent
+outer margins, so the black mark stays visible against light and dark desktops.
+The compact artwork is used at 16pt and 32pt, including their Retina versions;
+the standard artwork is used at 128pt, 256pt and 512pt. The ICNS contains all ten
+1×/2× representations, up to 1024 pixels.
+
+The normal build copies this checked-in file into `Contents/Resources` before
+signing, and `CFBundleIconFile` in `packaging/Info.plist` selects it. No image tool
+or website dependency is needed to build the app. The relocated bundle smoke
+also checks the declaration and resource, then decodes it using macOS `iconutil`.
+
+To regenerate the icon after an intentional brand change, use Python 3 and
+Inkscape on PATH (the checked-in asset was generated with Inkscape 1.4):
+
+```sh
+python3 scripts/generate_app_icon.py
+```
+
+For visual confirmation, run the normal `scripts/build-macos.sh` command above
+and open the **new `.app` path printed by that build**. Check its Finder icon and
+the running app's Dock and Command-Tab icons. Quit any older running copy first.
+A bare `swift run` executable does not have the packaged bundle metadata/resources
+and is not the icon verification path.
+
 ## Embedded helper and smoke test
 
 The real native executable is `Contents/MacOS/ZudoSTLFix`. It resolves the helper
